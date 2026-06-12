@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/nf-core/datasync/master/nextflow_schema.json",
+    "$id": "https://raw.githubusercontent.com/nf-core/datasync/main/nextflow_schema.json",
     "title": "nf-core/datasync pipeline parameters",
     "description": "A simple sysops pipeline that can be used to synchronize, integrity check and permanently archive data.",
     "type": "object",
