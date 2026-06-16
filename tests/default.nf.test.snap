@@ -2,11 +2,20 @@
     "-profile test": {
         "content": [
             {
+                "MD5SUM": {
+                    "md5sum": 9.5
+                },
+                "SHASUM": {
+                    "sha256sum": 9.5
+                },
                 "Workflow": {
                     "nf-core/datasync": "v1.0dev"
                 }
             },
             [
+                "md5sum",
+                "md5sum/human_grch38_sequence.md5",
+                "md5sum/test_fastq.md5",
                 "multiqc",
                 "multiqc/multiqc_data",
                 "multiqc/multiqc_data/llms-full.txt",
@@ -18,16 +27,33 @@
                 "multiqc/multiqc_data/multiqc_sources.txt",
                 "multiqc/multiqc_report.html",
                 "pipeline_info",
-                "pipeline_info/nf_core_datasync_software_mqc_versions.yml"
+                "pipeline_info/nf_core_datasync_software_mqc_versions.yml",
+                "shasum",
+                "shasum/GenomeSize.xml.old.sha256",
+                "shasum/GenomeSize.xml.sha256",
+                "shasum/genome.dict.old.sha256",
+                "shasum/genome.dict.sha256",
+                "shasum/genome.fa.fai.sha256",
+                "shasum/genome.fa.sha256",
+                "shasum/test2_1.fastq.gz.sha256"
             ],
             [
-                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
+                "human_grch38_sequence.md5:md5,0547c2f89caeb0e8e7d67da583e09d90",
+                "test_fastq.md5:md5,0ff44f0431e9fe66e5df9fa93ba3e675",
+                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
+                "GenomeSize.xml.old.sha256:md5,068e91cdcc084710caf61a0859ac2be9",
+                "GenomeSize.xml.sha256:md5,e7a175f04cab11ce0a245133d70de9fb",
+                "genome.dict.old.sha256:md5,77492c77f911887b269de347e157d4ca",
+                "genome.dict.sha256:md5,0021eaba625d4dc9fcec55eb7384426e",
+                "genome.fa.fai.sha256:md5,99f227079c0fd354f272c0046482ff1a",
+                "genome.fa.sha256:md5,9bdb272c4b51342a0f139fbc14d0a57e",
+                "test2_1.fastq.gz.sha256:md5,1cc66562f32a8a74d6f8a908a80d312e"
             ]
         ],
+        "timestamp": "2026-06-16T17:30:38.905202155",
         "meta": {
-            "nf-test": "0.9.2",
-            "nextflow": "26.04.3"
-        },
-        "timestamp": "2026-06-12T19:01:37.766797147"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.1"
+        }
     }
 }
