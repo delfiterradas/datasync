@@ -9,6 +9,8 @@ Initial release of nf-core/datasync, created with the [nf-core](https://nf-co.re
 
 ### `Added`
 
+- [[#31](https://github.com/nf-core/datasync/pull/31)] - Compute checksum for each input file ([@delfiterradas](https://github.com/delfiterradas), review by [@atrigila](https://github.com/atrigila)).
+
 ### `Fixed`
 
 ### `Dependencies`
