@@ -31,6 +31,15 @@ workflow DATASYNC {
     ch_versions = channel.empty()
     ch_multiqc_files = channel.empty()
 
+    MD5SUM(
+        ch_samplesheet,
+        false
+    )
+
+    SHASUM(
+        ch_samplesheet.transpose()
+    )
+
     //
     // Collate and save software versions
     //
