@@ -39,7 +39,7 @@
             ],
             [
                 "human_grch38_sequence.md5:md5,0547c2f89caeb0e8e7d67da583e09d90",
-                "test_fastq.md5:md5,0ff44f0431e9fe66e5df9fa93ba3e675",
+                "test_fastq.md5:md5,145df327e566f16b545fbca236f9bb62",
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
                 "GenomeSize.xml.old.sha256:md5,068e91cdcc084710caf61a0859ac2be9",
                 "GenomeSize.xml.sha256:md5,e7a175f04cab11ce0a245133d70de9fb",
@@ -47,10 +47,10 @@
                 "genome.dict.sha256:md5,0021eaba625d4dc9fcec55eb7384426e",
                 "genome.fa.fai.sha256:md5,99f227079c0fd354f272c0046482ff1a",
                 "genome.fa.sha256:md5,9bdb272c4b51342a0f139fbc14d0a57e",
-                "test2_1.fastq.gz.sha256:md5,1cc66562f32a8a74d6f8a908a80d312e"
+                "test2_1.fastq.gz.sha256:md5,3407e7acd19b8bb0f0b731a046e7943f"
             ]
         ],
-        "timestamp": "2026-06-16T17:30:38.905202155",
+        "timestamp": "2026-06-16T18:04:56.374326627",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.1"
