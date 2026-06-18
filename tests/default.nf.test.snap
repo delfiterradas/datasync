@@ -14,8 +14,13 @@
             },
             [
                 "md5sum",
-                "md5sum/human_grch38_sequence.md5",
-                "md5sum/test_fastq.md5",
+                "md5sum/GenomeSize.xml.md5",
+                "md5sum/GenomeSize.xml.old.md5",
+                "md5sum/genome.dict.md5",
+                "md5sum/genome.dict.old.md5",
+                "md5sum/genome.fa.fai.md5",
+                "md5sum/genome.fa.md5",
+                "md5sum/test2_1.fastq.gz.md5",
                 "multiqc",
                 "multiqc/multiqc_data",
                 "multiqc/multiqc_data/llms-full.txt",
@@ -38,8 +43,13 @@
                 "shasum/test2_1.fastq.gz.sha256"
             ],
             [
-                "human_grch38_sequence.md5:md5,0547c2f89caeb0e8e7d67da583e09d90",
-                "test_fastq.md5:md5,145df327e566f16b545fbca236f9bb62",
+                "GenomeSize.xml.md5:md5,0c1c07f13ddcd6f479f8312b0c7d9843",
+                "GenomeSize.xml.old.md5:md5,8273ac6aa130edf9e628cf0cf2566855",
+                "genome.dict.md5:md5,cf34a65ce7a3e827c66eadb2d5522551",
+                "genome.dict.old.md5:md5,4dfbb85cd00197e03f43f999b39addab",
+                "genome.fa.fai.md5:md5,8fc26b8f3ce6b83f9860ae9a2347d046",
+                "genome.fa.md5:md5,cca9026fcc32a789c00d9070edac5809",
+                "test2_1.fastq.gz.md5:md5,145df327e566f16b545fbca236f9bb62",
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
                 "GenomeSize.xml.old.sha256:md5,068e91cdcc084710caf61a0859ac2be9",
                 "GenomeSize.xml.sha256:md5,e7a175f04cab11ce0a245133d70de9fb",
@@ -50,10 +60,10 @@
                 "test2_1.fastq.gz.sha256:md5,3407e7acd19b8bb0f0b731a046e7943f"
             ]
         ],
-        "timestamp": "2026-06-16T18:04:56.374326627",
+        "timestamp": "2026-06-18T03:05:43.540206333",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.1"
+            "nextflow": "26.04.4"
         }
     }
 }
