@@ -109,16 +109,6 @@ workflow PIPELINE_INITIALISATION {
 
     channel
         .fromList(samplesheetToList(input, "${projectDir}/assets/schema_input.json"))
-        .map {
-            meta, input_path ->
-                def target = file(input_path)
-                if (target.isDirectory()) {
-                    def all_files = files("${input_path}/**", type: 'file')
-                    [meta, all_files]
-                } else {
-                    [meta, [target]]
-                }
-        }
         .set { ch_samplesheet }
 
     emit:
