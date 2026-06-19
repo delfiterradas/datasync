@@ -1,0 +1,49 @@
+{
+    "-profile test_full": {
+        "content": [
+            {
+                "MD5SUM": {
+                    "md5sum": 9.5
+                },
+                "SHASUM": {
+                    "sha256sum": 9.5
+                },
+                "Workflow": {
+                    "nf-core/datasync": "v1.0dev"
+                }
+            },
+            [
+                "md5sum",
+                "md5sum/human_grch38_sequence.md5",
+                "md5sum/test_fastq.md5",
+                "multiqc",
+                "multiqc/multiqc_data",
+                "multiqc/multiqc_data/llms-full.txt",
+                "multiqc/multiqc_data/multiqc.log",
+                "multiqc/multiqc_data/multiqc.parquet",
+                "multiqc/multiqc_data/multiqc_citations.txt",
+                "multiqc/multiqc_data/multiqc_data.json",
+                "multiqc/multiqc_data/multiqc_software_versions.txt",
+                "multiqc/multiqc_data/multiqc_sources.txt",
+                "multiqc/multiqc_report.html",
+                "pipeline_info",
+                "pipeline_info/nf_core_datasync_software_mqc_versions.yml",
+                "shasum",
+                "shasum/human_grch38_sequence.sha256",
+                "shasum/test_fastq.sha256"
+            ],
+            [
+                "human_grch38_sequence.md5:md5,4dd34e25c530b2c6e4637014711acc44",
+                "test_fastq.md5:md5,145df327e566f16b545fbca236f9bb62",
+                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
+                "human_grch38_sequence.sha256:md5,e3d6d2705970f75961eff5d5c09ce4d8",
+                "test_fastq.sha256:md5,3407e7acd19b8bb0f0b731a046e7943f"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.4"
+        },
+        "timestamp": "2026-06-19T20:54:12.524244888"
+    }
+}
