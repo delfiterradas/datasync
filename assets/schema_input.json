@@ -33,7 +33,7 @@
             "sample",
             "input"
         ],
-        "oneOf": [
+        "anyOf": [
             { "required" : ["checksum_md5"] },
             { "required" : ["checksum_sha"] }
         ]
