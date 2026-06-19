@@ -53,7 +53,8 @@ workflow DATASYNC {
     MD5SUM.output.checksum.view()
 
     SHASUM(
-        ch_samplesheet.input
+        ch_samplesheet.input,
+        false
     )
 
     //
