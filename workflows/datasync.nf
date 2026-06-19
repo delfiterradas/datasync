@@ -31,22 +31,29 @@ workflow DATASYNC {
     ch_versions = channel.empty()
     ch_multiqc_files = channel.empty()
 
-    ch_samplesheet_without_md5 = ch_samplesheet.map { meta, files ->
-        def filtered_files = files.findAll { file ->
-            !file.name.endsWith('.md5')
-        }
-
-        tuple(meta, filtered_files)
+    ch_samplesheet = ch_samplesheet.multiMap {
+        meta, input_path, md5, sha ->
+            input: [ meta, input_path ]
+            checksum: [ meta, md5, sha ]
     }
+
+    ch_checksum = ch_samplesheet.checksum.branch {
+        meta, md5, sha ->
+            md5: !md5.isEmpty()
+                return [ meta, md5 ]
+            sha: !sha.isEmpty()
+                return [ meta, sha ]
+    }
+
     MD5SUM(
-        ch_samplesheet_without_md5.transpose(),
-        true
+        ch_samplesheet.input,
+        false
     )
 
     MD5SUM.output.checksum.view()
 
     SHASUM(
-        ch_samplesheet.transpose()
+        ch_samplesheet.input
     )
 
     //

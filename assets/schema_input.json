@@ -17,8 +17,25 @@
                 "type": "string",
                 "pattern": "^\\S+$",
                 "errorMessage": "Input path must be provided and cannot contain spaces"
+            },
+            "checksum_md5": {
+                "type": "string",
+                "pattern": "^\\S+$",
+                "errorMessage": "Checksum_md5 cannot contain spaces"
+            },
+            "checksum_sha": {
+                "type": "string",
+                "pattern": "^\\S+$",
+                "errorMessage": "Checksum_sha cannot contain spaces"
             }
         },
-        "required": ["sample", "input"]
+        "required": [
+            "sample",
+            "input"
+        ],
+        "oneOf": [
+            { "required" : ["checksum_md5"] },
+            { "required" : ["checksum_sha"] }
+        ]
     }
 }
