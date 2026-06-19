@@ -44,13 +44,11 @@ workflow DATASYNC {
             sha: !sha.isEmpty()
                 return [ meta, sha ]
     }
-
+    
     MD5SUM(
         ch_samplesheet.input,
         false
     )
-
-    MD5SUM.output.checksum.view()
 
     SHASUM(
         ch_samplesheet.input
