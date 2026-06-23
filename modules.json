@@ -5,11 +5,6 @@
         "https://github.com/nf-core/modules.git": {
             "modules": {
                 "nf-core": {
-                    "fastqc": {
-                        "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
-                        "installed_by": ["modules"]
-                    },
                     "md5sum": {
                         "branch": "master",
                         "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
@@ -22,7 +17,7 @@
                     },
                     "shasum": {
                         "branch": "master",
-                        "git_sha": "ef2ee0358c7d03231834aeac816991aeb20debd7",
+                        "git_sha": "429d56ab5b5879549f71bf9905104f39d0c3bff4",
                         "installed_by": ["modules"]
                     }
                 }

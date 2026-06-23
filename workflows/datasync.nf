@@ -33,13 +33,27 @@ workflow DATASYNC {
     ch_versions = channel.empty()
     ch_multiqc_files = channel.empty()
 
+    ch_samplesheet = ch_samplesheet.multiMap {
+        meta, input_path, md5, sha ->
+            input: [ meta, input_path ]
+            checksum: [ meta, md5, sha ]
+    }
+
+    ch_checksum = ch_samplesheet.checksum.branch {
+        meta, md5, sha ->
+            md5: !md5.isEmpty()
+                return [ meta, md5 ]
+            sha: !sha.isEmpty()
+                return [ meta, sha ]
+    }
     MD5SUM(
-        ch_samplesheet,
+        ch_samplesheet.input,
         false
     )
 
     SHASUM(
-        ch_samplesheet.transpose()
+        ch_samplesheet.input,
+        false
     )
 
     //
