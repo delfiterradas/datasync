@@ -32,10 +32,6 @@
         "required": [
             "sample",
             "input"
-        ],
-        "anyOf": [
-            { "required" : ["checksum_md5"] },
-            { "required" : ["checksum_sha"] }
         ]
     }
 }
