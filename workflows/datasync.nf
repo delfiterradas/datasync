@@ -50,7 +50,8 @@ workflow DATASYNC {
     )
 
     SHASUM(
-        ch_samplesheet.input
+        ch_samplesheet.input,
+        false
     )
 
     //
