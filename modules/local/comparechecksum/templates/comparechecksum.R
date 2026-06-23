@@ -116,10 +116,3 @@ writeLines(
     versions,
     "versions.yml"
 )
-
-# ------------------------------------------------------------
-# Console summary
-# ------------------------------------------------------------
-
-cat("\nChecksum comparison complete\n")
-print(table(report\$status))
