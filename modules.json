@@ -17,7 +17,7 @@
                     },
                     "shasum": {
                         "branch": "master",
-                        "git_sha": "ef2ee0358c7d03231834aeac816991aeb20debd7",
+                        "git_sha": "429d56ab5b5879549f71bf9905104f39d0c3bff4",
                         "installed_by": ["modules"]
                     }
                 }
