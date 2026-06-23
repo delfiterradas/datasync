@@ -29,9 +29,6 @@
                 "errorMessage": "Checksum_sha cannot contain spaces"
             }
         },
-        "required": [
-            "sample",
-            "input"
-        ]
+        "required": ["sample", "input"]
     }
 }
