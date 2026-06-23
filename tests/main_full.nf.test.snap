@@ -31,15 +31,15 @@
                 "shasum/demultiplex.sha256"
             ],
             [
-                "demultiplex.md5:md5,d949186254af955f49ad9c8c0ea2a33c",
+                "demultiplex.md5:md5,ab5b41890200d7aed339157e7a898667",
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
-                "demultiplex.sha256:md5,db74d30dff39da108b2f9dc0cdc90779"
+                "demultiplex.sha256:md5,ee93070f17fc2392309c9b411958ca76"
             ]
         ],
-        "timestamp": "2026-06-23T15:41:43.847937556",
+        "timestamp": "2026-06-23T17:43:27.311534744",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.4"
+            "nextflow": "25.10.4"
         }
     }
 }
