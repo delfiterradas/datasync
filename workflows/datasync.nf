@@ -5,6 +5,7 @@
 */
 include { MD5SUM                 } from '../modules/nf-core/md5sum/main'
 include { MULTIQC                } from '../modules/nf-core/multiqc/main'
+include { RCLONE                 } from '../modules/nf-core/rclone/main'
 include { SHASUM                 } from '../modules/nf-core/shasum/main'
 include { paramsSummaryMap       } from 'plugin/nf-schema'
 include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
@@ -25,6 +26,7 @@ workflow DATASYNC {
     multiqc_logo
     multiqc_methods_description
     outdir
+    rclone_output_path
 
     main:
 
@@ -38,6 +40,14 @@ workflow DATASYNC {
 
     SHASUM(
         ch_samplesheet.transpose()
+    )
+
+    //
+    // MODULE: Rclone data copying
+    //
+    RCLONE(
+        ch_samplesheet.input,
+        rclone_output_path
     )
 
     //
