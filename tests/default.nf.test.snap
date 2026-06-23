@@ -33,14 +33,10 @@
                 "shasum/test_fastq.sha256"
             ],
             [
-                "human_grch38_sequence.md5:md5,5bfe720bd56b2849fe80c5f4e19b828d",
-                "test_fastq.md5:md5,145df327e566f16b545fbca236f9bb62",
-                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
-                "human_grch38_sequence.sha256:md5,977284c71f44223095224aba476805eb",
-                "test_fastq.sha256:md5,3407e7acd19b8bb0f0b731a046e7943f"
+                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
             ]
         ],
-        "timestamp": "2026-06-23T17:52:29.444424755",
+        "timestamp": "2026-06-23T19:18:17.852339994",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
