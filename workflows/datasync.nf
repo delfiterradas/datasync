@@ -3,6 +3,7 @@
     IMPORT MODULES / SUBWORKFLOWS / FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
+include { COMPARECHECKSUM        } from '../modules/local/comparechecksum/main'
 include { MD5SUM                 } from '../modules/nf-core/md5sum/main'
 include { MULTIQC                } from '../modules/nf-core/multiqc/main'
 include { SHASUM                 } from '../modules/nf-core/shasum/main'
@@ -37,25 +38,36 @@ workflow DATASYNC {
             checksum: [ meta, md5, sha ]
     }
 
-    ch_checksum = ch_samplesheet.checksum.branch {
-        meta, md5, sha ->
-            md5: !md5.isEmpty()
-                return [ meta, md5 ]
-            sha: !sha.isEmpty()
-                return [ meta, sha ]
-    }
-
     MD5SUM(
         ch_samplesheet.input,
         false
     )
 
-    MD5SUM.output.checksum.view()
-
     SHASUM(
         ch_samplesheet.input,
         false
     )
+
+    // Group input md5sum/shasum with their respective generated checksum
+    ch_checksum = ch_samplesheet.checksum
+        .join(MD5SUM.out.checksum)
+        .join(SHASUM.out.checksum)
+        .flatMap { meta, md5, sha, out_md5, out_sha ->
+            def checksum_tuple = []
+            // If checksum is empty it will read the md5/shasum from meta
+            if (md5) {
+                checksum_tuple << tuple(meta, md5, out_md5)
+            } else if (sha) {
+                checksum_tuple << tuple(meta, sha, out_sha)
+            } else if (meta.md5) {
+                checksum_tuple << tuple(meta, md5, out_md5)
+            } else if (meta.sha) {
+                checksum_tuple << tuple(meta, sha, out_sha)
+            }
+            return checksum_tuple
+        }
+
+    COMPARECHECKSUM(ch_checksum)
 
     //
     // Collate and save software versions

@@ -109,6 +109,19 @@ workflow PIPELINE_INITIALISATION {
 
     channel
         .fromList(samplesheetToList(input, "${projectDir}/assets/schema_input.json"))
+        .map { meta, input_path, checksum_md5, checksum_sha ->
+            def md5 = checksum_md5 ? checksum_md5.toString() : ""
+            def sha = checksum_sha ? checksum_sha.toString() : ""
+            if (md5.contains(".")) {
+                [ meta, input_path, file(checksum_md5), [] ]
+            } else if (sha.contains(".")) {
+                [ meta, input_path, [], file(checksum_sha) ]
+            } else if (!sha.isEmpty()) {
+                [ meta + [sha: sha], input_path, [], [] ]
+            } else if (!md5.isEmpty()) {
+                [ meta + [md5: md5], input_path, [], [] ]
+            }
+        }
         .set { ch_samplesheet }
 
     emit:
