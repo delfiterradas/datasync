@@ -44,7 +44,6 @@ workflow DATASYNC {
             sha: !sha.isEmpty()
                 return [ meta, sha ]
     }
-    
     MD5SUM(
         ch_samplesheet.input,
         false
