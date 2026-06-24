@@ -57,13 +57,11 @@ workflow DATASYNC {
             // If checksum is empty it will read the md5/shasum from meta
             if (md5) {
                 checksum_tuple << tuple(meta, md5, out_md5)
-            } else if (sha) {
-                checksum_tuple << tuple(meta, sha, out_sha)
-            } else if (meta.md5) {
-                checksum_tuple << tuple(meta, md5, out_md5)
-            } else if (meta.sha) {
+            }
+            if (sha) {
                 checksum_tuple << tuple(meta, sha, out_sha)
             }
+
             return checksum_tuple
         }
 
