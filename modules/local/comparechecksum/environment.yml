@@ -6,4 +6,4 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - "YOUR-TOOL-HERE"
+  - conda-forge::r-base=4.2.1

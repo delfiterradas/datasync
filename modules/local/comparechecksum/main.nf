@@ -4,8 +4,8 @@ process COMPARECHECKSUM {
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/f7/f7934a95be2b2e704032cadba8f19685f32d1cebc8febad71e20b43c4f896a7f/data':
-        'community.wave.seqera.io/library/bioconductor-anndatar_bioconductor-rhdf5_r-base_r-leidenbase_pruned:4e3c0f41d63a217a' }"
+        'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/48/483e9d9b3b07e5658792d579e230ad40ed18daf7b9ebfb4323c08570f92fd1d5/data':
+        'community.wave.seqera.io/library/r-base:4.2.1--b0b5476e2e7a0872' }"
 
     input:
     tuple val(meta), path(input_checksum), path(generated_checksum)
