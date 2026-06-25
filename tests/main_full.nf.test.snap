@@ -1,5 +1,5 @@
 {
-    "-profile test": {
+    "-profile test_full": {
         "content": [
             {
                 "MD5SUM": {
@@ -14,8 +14,7 @@
             },
             [
                 "md5sum",
-                "md5sum/human_grch38_sequence.md5",
-                "md5sum/test_fastq.md5",
+                "md5sum/demultiplex.md5",
                 "multiqc",
                 "multiqc/multiqc_data",
                 "multiqc/multiqc_data/llms-full.txt",
@@ -29,14 +28,13 @@
                 "pipeline_info",
                 "pipeline_info/nf_core_datasync_software_mqc_versions.yml",
                 "shasum",
-                "shasum/human_grch38_sequence.sha256",
-                "shasum/test_fastq.sha256"
+                "shasum/demultiplex.sha256"
             ],
             [
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
             ]
         ],
-        "timestamp": "2026-06-23T19:18:17.852339994",
+        "timestamp": "2026-06-23T19:32:18.469702006",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
