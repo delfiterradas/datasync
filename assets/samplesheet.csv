@@ -1,3 +1,2 @@
 sample,input,checksum_md5
-human_grch38_sequence,s3://ngi-igenomes/igenomes/Homo_sapiens/NCBI/GRCh38/Sequence/BWAIndex/,assets/BWAIndex.tsv
-test_fastq,https://github.com/nf-core/test-datasets/raw/71ac9e72555f901d2864ccb27d534933411e3ed4/data/genomics/sarscov2/illumina/fastq/test2_1.fastq.gz,assets/fastq.tsv
+sample,path/to/file,path/to/file
