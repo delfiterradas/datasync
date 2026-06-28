@@ -1,46 +1,55 @@
 process RCLONE {
+
     tag "${meta.id}"
     label 'process_low'
 
     conda "${moduleDir}/environment.yml"
     container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
-        ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/6d/6d2dd2b3b0c1b1c6c8f7d5e3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4/data'
-        : 'rclone/rclone:latest'}"
+        ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/c9/c947c1a7171daf074310295417d0f0afe879275e1543fa5fc2a9711e7c2c72ab/data'
+        : 'community.wave.seqera.io/library/rclone:1.65.0--ff88b2e0040147be'}"
 
     input:
-    tuple val(meta), path(source_path)
+    tuple val(meta), val(source_path)
     val destination_path
+    path rclone_config
 
     output:
-    tuple val(meta), env(COPY_STATUS), emit: copy_status
-    tuple val("${task.process}"), val('rclone'), env(RCLONE_VERSION), topic: versions, emit: versions
+    tuple val(meta), path("rclone-copy.log"), emit: log
+    tuple val("${task.process}"), val('rclone'), eval("rclone version | head -n1 | sed 's/rclone v//'"), topic: versions, emit: versions
 
     when:
     task.ext.when == null || task.ext.when
 
     script:
-    def args = task.ext.args ?: '--verbose'
+    def args = task.ext.args ?: ''
+    def configArg = rclone_config ? "--config '${rclone_config}'" : ''
+
     """
-    # Get rclone version
-    RCLONE_VERSION=\$(rclone version | head -n1 | sed 's/rclone v//')
+    to_rclone_path() {
+        case "\$1" in
+            s3://*) echo "s3:\${1#s3://}" ;;
+            *) echo "\$1" ;;
+        esac
+    }
 
-    # Prepare destination with same structure as source
-    DEST="${destination_path}/\$(basename ${source_path})"
+    SRC=\$(to_rclone_path "${source_path}")
+    DEST_BASE=\$(to_rclone_path "${destination_path}")
 
-    # Run rclone copy command
-    rclone copy ${args} "${source_path}" "\${DEST}"
+    SRC_CLEAN="\${SRC%/}"
+    DEST="\${DEST_BASE%/}/\$(basename "\${SRC_CLEAN}")"
 
-    # Set status
-    if [ \$? -eq 0 ]; then
-        COPY_STATUS="success"
-    else
-        COPY_STATUS="failed"
-    fi
+    rclone ${configArg} copy ${args} \\
+        --log-file rclone-copy.log \\
+        --log-level INFO \\
+        --stats 30s \\
+        --stats-one-line \\
+        --stats-log-level INFO \\
+        --s3-env-auth \\
+        "\${SRC}" "\${DEST}"
     """
 
     stub:
     """
-    RCLONE_VERSION="1.65.0"
-    COPY_STATUS="success"
+    touch rclone-copy.log
     """
 }
