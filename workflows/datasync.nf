@@ -27,6 +27,7 @@ workflow DATASYNC {
     multiqc_methods_description
     outdir
     rclone_output_path
+    rclone_config
 
     main:
 
@@ -35,7 +36,8 @@ workflow DATASYNC {
 
     ch_samplesheet = ch_samplesheet.multiMap {
         meta, input_path, md5, sha ->
-            input: [ meta, input_path ]
+            input:    [ meta, input_path ]              // staged input for MD5SUM / SHASUM
+            rclone:   [ meta, input_path.toString() ]   // raw URI for rclone
             checksum: [ meta, md5, sha ]
     }
 
@@ -60,8 +62,9 @@ workflow DATASYNC {
     // MODULE: Rclone data copying
     //
     RCLONE(
-        ch_samplesheet.input,
-        rclone_output_path
+        ch_samplesheet.rclone,
+        rclone_output_path,
+        rclone_config ? file(rclone_config, checkIfExists: true) : null
     )
 
     //
