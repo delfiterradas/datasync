@@ -12,6 +12,7 @@ process COMPARECHECKSUM {
 
     output:
     tuple val(meta), path("*.csv"), emit: report
+    tuple val(meta), path("*.csv"), emit: summary_report
     path "versions.yml"           , emit: versions_comparechecksum, topic: versions
 
     when:
