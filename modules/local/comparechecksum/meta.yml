@@ -1,53 +1,68 @@
 name: "comparechecksum"
-## TODO nf-core: Add a description of the module and list keywords
-description: write your description here
+description: |
+  Compare expected checksums against generated checksums and produce
+  a per-file validation report and a summary count of MATCH/MISMATCH/MISSING/UNEXPECTED statuses.
 keywords:
-  - sort
-  - example
-  - genomics
+  - checksum
+  - validation
+  - integrity
+  - md5
+  - sha256
 tools:
-  - "comparechecksum":
-      ## TODO nf-core: Add a description and other details for the software below
-      description: ""
-      homepage: ""
-      documentation: ""
-      tool_dev_url: ""
-      doi: ""
-      licence:
+  - "r-base":
+      description: "R statistical computing language used to run the comparison logic"
+      homepage: "https://www.r-project.org/"
+      documentation: "https://cran.r-project.org/manuals.html"
+      licence: ["GPL-2.0-or-later"]
 
-## TODO nf-core: Add a description of all of the variables used as input
 input:
-  # Only when we have meta
-  - meta:
-      type: map
-      description: |
-        Groovy Map containing sample information
-        e.g. `[ id:'sample1', single_end:false ]`
+  - - meta:
+        type: map
+        description: |
+          Groovy Map containing sample information
+          e.g. `[ id:'sample1' ]`
+    - input_checksum:
+        type: file
+        description: |
+          File containing expected checksums (two-column, space-separated:
+          checksum and filename).
+        pattern: "*.{md5,sha256,tsv,txt}"
+    - generated_checksum:
+        type: file
+        description: |
+          File containing observed/generated checksums in the same format
+          as input_checksum.
+        pattern: "*.{md5,sha256,tsv,txt}"
 
-  ## TODO nf-core: Delete / customise this example input
-  - bam:
-      type: file
-      description: Sorted BAM/CRAM/SAM file
-      pattern: "*.{bam,cram,sam}"
-
-## TODO nf-core: Add a description of all of the variables used as output
 output:
-  #Only when we have meta
-  - meta:
-      type: map
-      description: |
-        Groovy Map containing sample information
-        e.g. `[ id:'sample1', single_end:false ]`
-
-  - versions:
-      type: file
-      description: File containing software versions
-      pattern: "versions.yml"
-  ## TODO nf-core: Delete / customise this example output
-  - bam:
-      type: file
-      description: Sorted BAM/CRAM/SAM file
-      pattern: "*.{bam,cram,sam}"
+  - report:
+      - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1' ]`
+      - "*.csv":
+          type: file
+          description: |
+            Per-file validation report (checksum_validation.csv) and summary
+            report (checksum_summary.csv).
+          pattern: "*.csv"
+  - summary_report:
+      - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1' ]`
+      - "*.csv":
+          type: file
+          description: |
+            Per-file validation report and summary report (same glob as report channel).
+          pattern: "*.csv"
+  - versions_comparechecksum:
+      - "versions.yml":
+          type: file
+          description: File containing software versions
+          pattern: "versions.yml"
 
 authors:
   - "@delfiterradas"

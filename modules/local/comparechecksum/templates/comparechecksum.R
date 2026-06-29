@@ -66,8 +66,7 @@ write.csv(
 
 versions <- c(
     "\"${task.process}\":",
-    paste0("    r-base: ", getRversion()),
-    paste0("    comparechecksum: ", getRversion())
+    paste0("    r-base: ", getRversion())
 )
 
 writeLines(
