@@ -3,8 +3,7 @@
         "content": [
             {
                 "COMPARECHECKSUM": {
-                    "r-base": "4.2.1",
-                    "comparechecksum": "4.2.1"
+                    "r-base": "4.2.1"
                 },
                 "MD5SUM": {
                     "md5sum": 9.5
@@ -55,7 +54,7 @@
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
             ]
         ],
-        "timestamp": "2026-06-29T20:12:22.962884142",
+        "timestamp": "2026-06-29T21:12:58.023076335",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.1"
