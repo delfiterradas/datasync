@@ -38,12 +38,12 @@
                 "shasum/demultiplex.sha256"
             ],
             [
-                "demultiplex.checksum_summary.csv:md5,5ab7359b25dcb4e6c6f5a7eb1687a2dc",
-                "demultiplex.checksum_validation.csv:md5,205760aabd99d02b7b61c250677f0b32",
+                "demultiplex.checksum_summary.csv:md5,13fc2d64b33a06bf80694b06998ba7c1",
+                "demultiplex.checksum_validation.csv:md5,e5d57d106f96b536608e1ff06552df09",
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
             ]
         ],
-        "timestamp": "2026-06-29T18:09:37.827179822",
+        "timestamp": "2026-06-29T20:22:24.028086784",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.1"

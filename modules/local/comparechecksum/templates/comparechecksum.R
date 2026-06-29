@@ -45,7 +45,7 @@ report\$status <- ifelse(
 
 # Write detailed report
 write.csv(
-    report,
+    report[order(report\$file), ],
     paste0(prefix, ".checksum_validation.csv"),
     row.names = FALSE
 )
@@ -55,7 +55,7 @@ summary_df <- as.data.frame(table(report\$status))
 colnames(summary_df) <- c("status", "count")
 
 write.csv(
-    summary_df,
+    summary_df[order(summary_df\$status), ],
     paste0(prefix, ".checksum_summary.csv"),
     row.names = FALSE
 )
