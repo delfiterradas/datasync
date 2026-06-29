@@ -18,15 +18,15 @@
             },
             [
                 "comparechecksum",
+                "comparechecksum/Illumina_annotation.checksum_summary.csv",
+                "comparechecksum/Illumina_annotation.checksum_validation.csv",
                 "comparechecksum/benchmark_bed.checksum_summary.csv",
                 "comparechecksum/benchmark_bed.checksum_validation.csv",
-                "comparechecksum/human_grch38_sequence.checksum_summary.csv",
-                "comparechecksum/human_grch38_sequence.checksum_validation.csv",
                 "comparechecksum/test_fastq.checksum_summary.csv",
                 "comparechecksum/test_fastq.checksum_validation.csv",
                 "md5sum",
+                "md5sum/Illumina_annotation.md5",
                 "md5sum/benchmark_bed.md5",
-                "md5sum/human_grch38_sequence.md5",
                 "md5sum/test_fastq.md5",
                 "multiqc",
                 "multiqc/multiqc_data",
@@ -41,21 +41,21 @@
                 "pipeline_info",
                 "pipeline_info/nf_core_datasync_software_mqc_versions.yml",
                 "shasum",
+                "shasum/Illumina_annotation.sha256",
                 "shasum/benchmark_bed.sha256",
-                "shasum/human_grch38_sequence.sha256",
                 "shasum/test_fastq.sha256"
             ],
             [
+                "Illumina_annotation.checksum_summary.csv:md5,da71db43566c677ddc32186e53d4f30e",
+                "Illumina_annotation.checksum_validation.csv:md5,9032cc5084168ca56d501269fc1021e8",
                 "benchmark_bed.checksum_summary.csv:md5,79bca6fd02a7888f38a493591289fbb5",
                 "benchmark_bed.checksum_validation.csv:md5,d1e7087446c6138dba9929099787c5c9",
-                "human_grch38_sequence.checksum_summary.csv:md5,0a9cabfdbcf1ef9525e8a8582fdaedc7",
-                "human_grch38_sequence.checksum_validation.csv:md5,8ceee48b8cdae45ac8ea555fe122304f",
                 "test_fastq.checksum_summary.csv:md5,79bca6fd02a7888f38a493591289fbb5",
                 "test_fastq.checksum_validation.csv:md5,9f72112e05dc478eee7d3d56a6364cd0",
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
             ]
         ],
-        "timestamp": "2026-06-29T17:14:19.165257039",
+        "timestamp": "2026-06-29T20:12:22.962884142",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.1"
