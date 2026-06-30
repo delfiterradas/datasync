@@ -44,9 +44,8 @@ output:
       - "*.csv":
           type: file
           description: |
-            Per-file validation report (checksum_validation.csv) and summary
-            report (checksum_summary.csv).
-          pattern: "*.csv"
+            Per-file validation report.
+          pattern: "*checksum_validation.csv"
   - summary_report:
       - meta:
           type: map
@@ -56,8 +55,8 @@ output:
       - "*.csv":
           type: file
           description: |
-            Per-file validation report and summary report (same glob as report channel).
-          pattern: "*.csv"
+            Per-file summary report.
+          pattern: "*checksum_summary.csv"
   - versions_comparechecksum:
       - "versions.yml":
           type: file
