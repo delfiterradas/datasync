@@ -53,6 +53,7 @@ write.csv(
 # Write summary report
 summary_df <- as.data.frame(table(report\$status))
 colnames(summary_df) <- c("status", "count")
+summary_df <- cbind(sample = prefix, summary_df)
 
 write.csv(
     summary_df[order(summary_df\$status), ],

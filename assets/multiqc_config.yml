@@ -13,3 +13,21 @@ report_section_order:
 export_plots: true
 
 disable_version_detection: true
+
+custom_data:
+  checksum_summary:
+    section_name: "Checksum Summary"
+    description: "Summary of checksum validation"
+    plot_type: "table"
+    file_format: "csv"
+  checksum_report:
+    section_name: "Checksum Report"
+    description: "Checksum validation report"
+    plot_type: "table"
+    file_format: "csv"
+
+sp:
+  checksum_summary:
+    fn: "*.checksum_summary.csv"
+  checksum_report:
+    fn: "*.checksum_validation.csv"
