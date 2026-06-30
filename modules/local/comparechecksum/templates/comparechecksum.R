@@ -54,9 +54,24 @@ write.csv(
 summary_df <- as.data.frame(table(report\$status))
 colnames(summary_df) <- c("status", "count")
 summary_df <- cbind(sample = prefix, summary_df)
+status_counts <- table(
+    factor(
+        report\$status,
+        levels = c("MATCH", "MISMATCH", "MISSING", "UNEXPECTED")
+    )
+)
+
+summary_df <- data.frame(
+    sample = prefix,
+    MATCH = unname(status_counts["MATCH"]),
+    MISMATCH = unname(status_counts["MISMATCH"]),
+    MISSING = unname(status_counts["MISSING"]),
+    UNEXPECTED = unname(status_counts["UNEXPECTED"]),
+    check.names = FALSE
+)
 
 write.csv(
-    summary_df[order(summary_df\$status), ],
+    summary_df,
     paste0(prefix, ".checksum_summary.csv"),
     row.names = FALSE
 )

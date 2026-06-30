@@ -15,19 +15,49 @@ export_plots: true
 disable_version_detection: true
 
 custom_data:
-  checksum_summary:
-    section_name: "Checksum Summary"
-    description: "Summary of checksum validation"
+  md5_checksum_summary:
+    section_name: "MD5 Checksum Summary"
+    description: "Summary of MD5 checksum validation"
     plot_type: "table"
     file_format: "csv"
-  checksum_report:
-    section_name: "Checksum Report"
-    description: "Checksum validation report"
+
+  sha_checksum_summary:
+    section_name: "SHA Checksum Summary"
+    description: "Summary of SHA checksum validation"
+    plot_type: "table"
+    file_format: "csv"
+
+  md5_checksum_report:
+    section_name: "MD5 Checksum Report"
+    description: "Detailed MD5 checksum validation report"
+    plot_type: "table"
+    file_format: "csv"
+
+    headers:
+      file:
+        title: File
+      checksum_expected:
+        title: Expected checksum
+      checksum_observed:
+        title: Observed checksum
+      status:
+        title: Status
+
+  sha_checksum_report:
+    section_name: "SHA Checksum Report"
+    description: "Detailed SHA checksum validation report"
     plot_type: "table"
     file_format: "csv"
 
 sp:
-  checksum_summary:
-    fn: "*.checksum_summary.csv"
-  checksum_report:
-    fn: "*.checksum_validation.csv"
+  md5_checksum_summary:
+    fn: "*_md5.checksum_summary.csv"
+
+  sha_checksum_summary:
+    fn: "*_sha.checksum_summary.csv"
+
+  md5_checksum_report:
+    fn: "*_md5.checksum_validation.csv"
+
+  sha_checksum_report:
+    fn: "*_sha.checksum_validation.csv"
