@@ -40,6 +40,20 @@
                     "type": "string",
                     "description": "MultiQC report title. Printed as page header, used for filename if not otherwise specified.",
                     "fa_icon": "fas fa-file-signature"
+                },
+                "rclone_output_path": {
+                    "type": "string",
+                    "description": "Output path for Rclone data copying. Can be local path or remote storage path (s3://, gs://, etc.).",
+                    "help_text": "Specify the destination path where data from the samplesheet will be copied to using Rclone. Sample IDs will be appended to this path. Supports local paths and cloud storage paths.",
+                    "fa_icon": "fas fa-cloud-upload-alt"
+                },
+                "rclone_config": {
+                    "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "description": "Path to the rclone config file used for cloud storage authentication.",
+                    "help_text": "Provide an rclone config file to support cloud providers such as AWS S3 or Azure Blob Storage. This file is loaded by rclone when copying data.",
+                    "fa_icon": "fas fa-file"
                 }
             }
         },

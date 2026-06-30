@@ -6,6 +6,7 @@
 include { COMPARECHECKSUM        } from '../modules/local/comparechecksum/main'
 include { MD5SUM                 } from '../modules/nf-core/md5sum/main'
 include { MULTIQC                } from '../modules/nf-core/multiqc/main'
+include { RCLONE                 } from '../modules/nf-core/rclone/main'
 include { SHASUM                 } from '../modules/nf-core/shasum/main'
 include { paramsSummaryMap       } from 'plugin/nf-schema'
 include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
@@ -26,6 +27,8 @@ workflow DATASYNC {
     multiqc_logo
     multiqc_methods_description
     outdir
+    rclone_output_path
+    rclone_config
 
     main:
 
@@ -34,7 +37,8 @@ workflow DATASYNC {
 
     ch_samplesheet = ch_samplesheet.multiMap {
         meta, input_path, md5, sha ->
-            input: [ meta, input_path ]
+            input:    [ meta, input_path ]              // staged input for MD5SUM / SHASUM
+            rclone:   [ meta, input_path.toString() ]   // raw URI for rclone
             checksum: [ meta, md5, sha ]
     }
 
@@ -66,6 +70,15 @@ workflow DATASYNC {
         }
 
     COMPARECHECKSUM(ch_checksum)
+
+    //
+    // MODULE: Rclone data copying
+    //
+    RCLONE(
+        ch_samplesheet.rclone,
+        rclone_output_path,
+        rclone_config ? file(rclone_config, checkIfExists: true) : null
+    )
 
     //
     // Collate and save software versions
