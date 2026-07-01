@@ -20,13 +20,11 @@ custom_data:
     description: "Summary of MD5 checksum validation"
     plot_type: "table"
     file_format: "csv"
-
   sha_checksum_summary:
     section_name: "SHA Checksum Summary"
     description: "Summary of SHA checksum validation"
     plot_type: "table"
     file_format: "csv"
-
   md5_checksum_report:
     section_name: "MD5 Checksum Report"
     description: "Detailed MD5 checksum validation report"
@@ -34,7 +32,6 @@ custom_data:
     file_format: "csv"
     pconfig:
       no_violin: true
-
     headers:
       File:
         title: File
@@ -44,7 +41,6 @@ custom_data:
         title: Observed checksum
       status:
         title: Status
-
   sha_checksum_report:
     section_name: "SHA Checksum Report"
     description: "Detailed SHA checksum validation report"
@@ -52,7 +48,6 @@ custom_data:
     file_format: "csv"
     pconfig:
       no_violin: true
-
     headers:
       File:
         title: File
@@ -63,16 +58,12 @@ custom_data:
       status:
         title: Status
 
-
 sp:
   md5_checksum_summary:
     fn: "*_md5.checksum_summary.csv"
-
   sha_checksum_summary:
     fn: "*_sha.checksum_summary.csv"
-
   md5_checksum_report:
     fn: "*_md5.checksum_validation.csv"
-
   sha_checksum_report:
     fn: "*_sha.checksum_validation.csv"
