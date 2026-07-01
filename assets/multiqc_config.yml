@@ -32,9 +32,11 @@ custom_data:
     description: "Detailed MD5 checksum validation report"
     plot_type: "table"
     file_format: "csv"
+    pconfig:
+      no_violin: true
 
     headers:
-      file:
+      File:
         title: File
       checksum_expected:
         title: Expected checksum
@@ -48,6 +50,19 @@ custom_data:
     description: "Detailed SHA checksum validation report"
     plot_type: "table"
     file_format: "csv"
+    pconfig:
+      no_violin: true
+
+    headers:
+      File:
+        title: File
+      checksum_expected:
+        title: Expected checksum
+      checksum_observed:
+        title: Observed checksum
+      status:
+        title: Status
+
 
 sp:
   md5_checksum_summary:

@@ -11,7 +11,7 @@ read_checksum_file <- function(path) {
         path,
         stringsAsFactors = FALSE,
         fill = TRUE,
-        col.names = c("checksum", "file")
+        col.names = c("checksum", "File")
     )
 
     x
@@ -24,28 +24,28 @@ expected <- read_checksum_file(input_checksum)
 report <- merge(
     expected,
     generated,
-    by = "file",
+    by = "File",
     all = TRUE,
     suffixes = c("_expected", "_observed")
 )
 
 report\$status <- ifelse(
     is.na(report\$checksum_expected),
-    "UNEXPECTED",
+    "Unexpected",
     ifelse(
         is.na(report\$checksum_observed),
-        "MISSING",
+        "Missing",
         ifelse(
             report\$checksum_expected == report\$checksum_observed,
-            "MATCH",
-            "MISMATCH"
+            "Match",
+            "Mismatch"
         )
     )
 )
 
 # Write detailed report
 write.csv(
-    report[order(report\$file), ],
+    report[order(report\$File), ],
     paste0(prefix, ".checksum_validation.csv"),
     row.names = FALSE
 )
@@ -53,20 +53,20 @@ write.csv(
 # Write summary report
 summary_df <- as.data.frame(table(report\$status))
 colnames(summary_df) <- c("status", "count")
-summary_df <- cbind(sample = prefix, summary_df)
+summary_df <- cbind(Sample = prefix, summary_df)
 status_counts <- table(
     factor(
         report\$status,
-        levels = c("MATCH", "MISMATCH", "MISSING", "UNEXPECTED")
+        levels = c("Match", "Mismatch", "Missing", "Unexpected")
     )
 )
 
 summary_df <- data.frame(
-    sample = prefix,
-    MATCH = unname(status_counts["MATCH"]),
-    MISMATCH = unname(status_counts["MISMATCH"]),
-    MISSING = unname(status_counts["MISSING"]),
-    UNEXPECTED = unname(status_counts["UNEXPECTED"]),
+    Sample = prefix,
+    Match = unname(status_counts["Match"]),
+    Mismatch = unname(status_counts["Mismatch"]),
+    Missing = unname(status_counts["Missing"]),
+    Unexpected = unname(status_counts["Unexpected"]),
     check.names = FALSE
 )
 
