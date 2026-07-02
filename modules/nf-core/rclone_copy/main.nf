@@ -1,4 +1,4 @@
-process RCLONE {
+process RCLONE_COPY {
 
     tag "${meta.id}"
     label 'process_low'
@@ -9,8 +9,7 @@ process RCLONE {
         : 'community.wave.seqera.io/library/rclone:1.65.0--ff88b2e0040147be'}"
 
     input:
-    tuple val(meta), val(source_path)
-    val destination_path
+    tuple val(meta), val(source_path), val(destination_path)
     path rclone_config
 
     output:
@@ -22,30 +21,16 @@ process RCLONE {
 
     script:
     def args = task.ext.args ?: ''
-    def configArg = rclone_config ? "--config '${rclone_config}'" : ''
+    def configArg = rclone_config ? "--config '${rclone_config}'" : error("RCLONE_COPY requires an rclone config file")
+    def transfers = task.ext.transfers ?: task.cpus
+    def checkers = task.ext.checkers ?: task.cpus
 
     """
-    to_rclone_path() {
-        case "\$1" in
-            s3://*) echo "s3:\${1#s3://}" ;;
-            *) echo "\$1" ;;
-        esac
-    }
-
-    SRC=\$(to_rclone_path "${source_path}")
-    DEST_BASE=\$(to_rclone_path "${destination_path}")
-
-    SRC_CLEAN="\${SRC%/}"
-    DEST="\${DEST_BASE%/}/\$(basename "\${SRC_CLEAN}")"
-
     rclone ${configArg} copy ${args} \\
-        --log-file rclone-copy.log \\
-        --log-level INFO \\
-        --stats 30s \\
-        --stats-one-line \\
-        --stats-log-level INFO \\
-        --s3-env-auth \\
-        "\${SRC}" "\${DEST}"
+        --transfers ${transfers} \\
+        --checkers ${checkers} \\
+        "${source_path}" \\
+        "${destination_path}"
     """
 
     stub:

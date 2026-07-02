@@ -3,15 +3,15 @@
     IMPORT MODULES / SUBWORKFLOWS / FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-include { COMPARECHECKSUM        } from '../modules/local/comparechecksum/main'
-include { MD5SUM                 } from '../modules/nf-core/md5sum/main'
-include { MULTIQC                } from '../modules/nf-core/multiqc/main'
-include { RCLONE                 } from '../modules/nf-core/rclone/main'
-include { SHASUM                 } from '../modules/nf-core/shasum/main'
-include { paramsSummaryMap       } from 'plugin/nf-schema'
-include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_datasync_pipeline'
+include { COMPARECHECKSUM             } from '../modules/local/comparechecksum/main'
+include { MD5SUM                      } from '../modules/nf-core/md5sum/main'
+include { MULTIQC                     } from '../modules/nf-core/multiqc/main'
+include { RCLONE_COPY                 } from '../modules/nf-core/rclone_copy/main'
+include { SHASUM                      } from '../modules/nf-core/shasum/main'
+include { paramsSummaryMap            } from 'plugin/nf-schema'
+include { paramsSummaryMultiqc        } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { softwareVersionsToYAML      } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { methodsDescriptionText      } from '../subworkflows/local/utils_nfcore_datasync_pipeline'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -37,8 +37,21 @@ workflow DATASYNC {
 
     ch_samplesheet = ch_samplesheet.multiMap {
         meta, input_path, md5, sha ->
-            input:    [ meta, input_path ]              // staged input for MD5SUM / SHASUM
-            rclone:   [ meta, input_path.toString() ]   // raw URI for rclone
+
+            def source_string = input_path.toString()
+
+            def rclone_source = source_string
+                .replaceFirst('^s3://', 's3:')
+
+            def source_name = rclone_source
+                .replaceAll('/+$', '')
+                .tokenize('/')
+                .last()
+
+            def rclone_destination = "${rclone_output_path.toString().replaceAll('/+$', '')}/${source_name}"
+
+            input:    [ meta, input_path ]
+            rclone:   [ meta, rclone_source, rclone_destination ]
             checksum: [ meta, md5, sha ]
     }
 
