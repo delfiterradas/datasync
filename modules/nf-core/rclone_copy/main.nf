@@ -21,12 +21,13 @@ process RCLONE_COPY {
 
     script:
     def args = task.ext.args ?: ''
-    def configArg = rclone_config ? "--config '${rclone_config}'" : error("RCLONE_COPY requires an rclone config file")
+    def configArg = rclone_config ? "--config '${rclone_config}'" : ''
     def transfers = task.ext.transfers ?: task.cpus
     def checkers = task.ext.checkers ?: task.cpus
 
     """
     rclone ${configArg} copy ${args} \\
+        --log-file rclone-copy.log \\
         --transfers ${transfers} \\
         --checkers ${checkers} \\
         "${source_path}" \\
