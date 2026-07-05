@@ -56,7 +56,6 @@ workflow NFCORE_DATASYNC {
         params.multiqc_logo,
         params.multiqc_methods_description,
         params.outdir,
-        params.rclone_output_path,
         params.rclone_config
     )
     emit:
