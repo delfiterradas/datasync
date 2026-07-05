@@ -27,7 +27,6 @@ workflow DATASYNC {
     multiqc_logo
     multiqc_methods_description
     outdir
-    rclone_output_path
     rclone_config
 
     main:
@@ -36,22 +35,32 @@ workflow DATASYNC {
     ch_multiqc_files = channel.empty()
 
     ch_samplesheet = ch_samplesheet.multiMap {
-        meta, input_path, md5, sha ->
+        meta, input_path, output_path, md5, sha ->
 
             def source_string = input_path.toString()
 
-            def rclone_source = source_string
-                .replaceFirst('^s3://', 's3:')
+            def rclone_source
+            def rclone_http_url = ''
 
-            def source_name = rclone_source
+            if (source_string ==~ /^https?:\/\/.*/) {
+                // HTTP: split into --http-url base and :http:path
+                def matcher = (source_string =~ /^(https?:\/\/[^\/]+)(\/.*)$/)
+                rclone_http_url = "--http-url '${matcher[0][1]}'"
+                rclone_source = ":http:${matcher[0][2].replaceFirst('^/', '')}"
+            } else {
+                // Cloud remotes (s3://, gs://, az://): strip :// to :
+                rclone_source = source_string.replaceFirst('^([a-zA-Z][a-zA-Z0-9+.-]*)://', '$1:')
+            }
+
+            def source_name = source_string
                 .replaceAll('/+$', '')
                 .tokenize('/')
                 .last()
 
-            def rclone_destination = "${rclone_output_path.toString().replaceAll('/+$', '')}/${source_name}"
+            def rclone_destination = "${output_path.toString().replaceAll('/+$', '')}/${source_name}"
 
             input:    [ meta, input_path ]
-            rclone:   [ meta, rclone_source, rclone_destination ]
+            rclone:   [ meta + [http_url: rclone_http_url], rclone_source, rclone_destination ]
             checksum: [ meta, md5, sha ]
     }
 
@@ -87,10 +96,9 @@ workflow DATASYNC {
     //
     // MODULE: Rclone data copying
     //
-    RCLONE(
+    RCLONE_COPY(
         ch_samplesheet.rclone,
-        rclone_output_path,
-        rclone_config ? file(rclone_config, checkIfExists: true) : null
+        rclone_config ? file(rclone_config, checkIfExists: true) : []
     )
 
     //
