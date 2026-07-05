@@ -8,6 +8,9 @@
                 "MD5SUM": {
                     "md5sum": 9.5
                 },
+                "RCLONE_COPY": {
+                    "rclone": "1.65.0-DEV"
+                },
                 "SHASUM": {
                     "sha256sum": 9.5
                 },
@@ -39,25 +42,28 @@
                 "multiqc/multiqc_report.html",
                 "pipeline_info",
                 "pipeline_info/nf_core_datasync_software_mqc_versions.yml",
+                "rclone",
+                "rclone/rclone-copy.log",
                 "shasum",
                 "shasum/Illumina_annotation.sha256",
                 "shasum/benchmark_bed.sha256",
                 "shasum/test_fastq.sha256"
             ],
             [
-                "Illumina_annotation.checksum_summary.csv:md5,da71db43566c677ddc32186e53d4f30e",
-                "Illumina_annotation.checksum_validation.csv:md5,9032cc5084168ca56d501269fc1021e8",
-                "benchmark_bed.checksum_summary.csv:md5,79bca6fd02a7888f38a493591289fbb5",
-                "benchmark_bed.checksum_validation.csv:md5,d1e7087446c6138dba9929099787c5c9",
-                "test_fastq.checksum_summary.csv:md5,79bca6fd02a7888f38a493591289fbb5",
-                "test_fastq.checksum_validation.csv:md5,9f72112e05dc478eee7d3d56a6364cd0",
-                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
+                "Illumina_annotation.checksum_summary.csv:md5,7bd3942b0dcc63b26ef412696cf9daf3",
+                "Illumina_annotation.checksum_validation.csv:md5,17dc3989f455f3eea21f0229735ea8a2",
+                "benchmark_bed.checksum_summary.csv:md5,68e7706826f0d6cd71884db5a50b5eed",
+                "benchmark_bed.checksum_validation.csv:md5,e4124b2aa278c7e0f6c9fee49f2d791f",
+                "test_fastq.checksum_summary.csv:md5,68e7706826f0d6cd71884db5a50b5eed",
+                "test_fastq.checksum_validation.csv:md5,cbb5e7132b8177707dee1b0d79022538",
+                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
+                "rclone-copy.log:md5,500fd4169d86d2ccfb70bd5b339d04e7"
             ]
         ],
-        "timestamp": "2026-06-29T21:12:58.023076335",
+        "timestamp": "2026-07-06T00:39:04.952249206",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.1"
+            "nextflow": "25.04.6"
         }
     }
 }
