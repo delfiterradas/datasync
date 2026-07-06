@@ -6,7 +6,7 @@
 include { COMPARECHECKSUM             } from '../modules/local/comparechecksum/main'
 include { MD5SUM                      } from '../modules/nf-core/md5sum/main'
 include { MULTIQC                     } from '../modules/nf-core/multiqc/main'
-include { RCLONE_COPY                 } from '../modules/nf-core/rclone_copy/main'
+include { RCLONE_COPY                 } from '../modules/local/rclone_copy/main'
 include { SHASUM                      } from '../modules/nf-core/shasum/main'
 include { paramsSummaryMap            } from 'plugin/nf-schema'
 include { paramsSummaryMultiqc        } from '../subworkflows/nf-core/utils_nfcore_pipeline'
