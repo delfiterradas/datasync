@@ -39,18 +39,9 @@
                 "multiqc/multiqc_data/multiqc_data.json",
                 "multiqc/multiqc_data/multiqc_md5_checksum_report.txt",
                 "multiqc/multiqc_data/multiqc_md5_checksum_summary.txt",
+                "multiqc/multiqc_data/multiqc_samplesheet.txt",
                 "multiqc/multiqc_data/multiqc_software_versions.txt",
                 "multiqc/multiqc_data/multiqc_sources.txt",
-                "multiqc/multiqc_plots",
-                "multiqc/multiqc_plots/pdf",
-                "multiqc/multiqc_plots/pdf/md5_checksum_report.pdf",
-                "multiqc/multiqc_plots/pdf/md5_checksum_summary.pdf",
-                "multiqc/multiqc_plots/png",
-                "multiqc/multiqc_plots/png/md5_checksum_report.png",
-                "multiqc/multiqc_plots/png/md5_checksum_summary.png",
-                "multiqc/multiqc_plots/svg",
-                "multiqc/multiqc_plots/svg/md5_checksum_report.svg",
-                "multiqc/multiqc_plots/svg/md5_checksum_summary.svg",
                 "multiqc/multiqc_report.html",
                 "pipeline_info",
                 "pipeline_info/nf_core_datasync_software_mqc_versions.yml",
@@ -70,13 +61,14 @@
                 "test_fastq_md5.checksum_validation.csv:md5,4c94e3b3362f854c42941fc67b226ac2",
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
                 "multiqc_md5_checksum_report.txt:md5,39147d72a414c399614f139354e36a86",
-                "multiqc_md5_checksum_summary.txt:md5,d8c3b87b26251d4d6cb1aca315f0f531"
+                "multiqc_md5_checksum_summary.txt:md5,d8c3b87b26251d4d6cb1aca315f0f531",
+                "multiqc_samplesheet.txt:md5,3cc1e0340101fe132e7ce466187f3c4b"
             ]
         ],
-        "timestamp": "2026-07-06T19:01:01.083839406",
+        "timestamp": "2026-07-07T15:28:47.101399362",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.04.6"
+            "nextflow": "26.04.1"
         }
     }
 }

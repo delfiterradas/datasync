@@ -10,7 +10,7 @@ report_section_order:
   "nf-core-datasync-summary":
     order: -1002
 
-export_plots: true
+export_plots: false
 
 disable_version_detection: true
 
@@ -24,12 +24,12 @@ custom_data:
         title: Sample ID
       input:
         title: Path to copy
+      output_path:
+        title: Destination path
       checksum_md5:
         title: MD5 checksum file
       checksum_sha:
         title: Sha256 checksum file
-      output_path:
-        title: Destination path
 
   md5_checksum_summary:
     section_name: "MD5 Checksum Summary"
