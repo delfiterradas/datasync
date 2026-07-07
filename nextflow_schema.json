@@ -40,6 +40,20 @@
                     "type": "string",
                     "description": "MultiQC report title. Printed as page header, used for filename if not otherwise specified.",
                     "fa_icon": "fas fa-file-signature"
+                },
+                "rclone_config": {
+                    "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "description": "Path to the rclone config file used for cloud storage authentication.",
+                    "help_text": "Provide an rclone config file to support cloud providers such as AWS S3 or Azure Blob Storage. This file is loaded by rclone when copying data.",
+                    "fa_icon": "fas fa-file"
+                },
+                "rclone_dry_run": {
+                    "type": "boolean",
+                    "description": "Perform a dry run of the rclone copy command.",
+                    "fa_icon": "fas fa-eye",
+                    "help_text": "If set, the pipeline will not actually copy any files to the destination. Instead, it will print out what would have been copied. This is useful for testing and debugging."
                 }
             }
         },
