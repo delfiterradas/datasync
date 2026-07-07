@@ -181,9 +181,9 @@ def toolCitationText() {
     // Uncomment function in methodsDescriptionText to render in MultiQC report
     def citation_text = [
             "Tools used in the workflow included:",
-            "Files were transferred to the specified destination using Rclone (Nick Craig-Wood, https://rclone.org), which supports data movement across local and cloud storage backends.",
+            "Files were transferred to the specified destination using Rclone (Craig-Wood, 2023), which supports data movement across local and cloud storage backends.",
             "File integrity was validated by computing cryptographic checksums using md5sum and shasum.",
-            "Expected and observed checksum files were compared using the pipeline's local comparechecksum module, implemented in R.",
+            "Expected and observed checksum files were compared using the pipeline's local comparechecksum module, implemented in R (R Core Team, 2017).",
             "Pipeline results were summarised with MultiQC (Ewels et al. 2016)",
             "."
         ].join(' ').trim()
@@ -196,6 +196,8 @@ def toolBibliographyText() {
     // Can use ternary operators to dynamically construct based conditions, e.g. params["run_xyz"] ? "<li>Author (2023) Pub name, Journal, DOI</li>" : "",
     // Uncomment function in methodsDescriptionText to render in MultiQC report
     def reference_text = [
+            "<li>Craig-Wood, N. (2023). Rclone: Rsync for cloud storage (Vers. 1.65.0). Computer software. https://rclone.org</li>",
+            "<li>R Core Team (2017). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. https://www.R-project.org/</li>",
             "<li>Ewels, P., Magnusson, M., Lundin, S., & Käller, M. (2016). MultiQC: summarize analysis results for multiple tools and samples in a single report. Bioinformatics, 32(19), 3047–3048. doi: /10.1093/bioinformatics/btw354</li>"
         ].join(' ').trim()
 
