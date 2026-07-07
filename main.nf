@@ -56,6 +56,7 @@ workflow NFCORE_DATASYNC {
         params.multiqc_logo,
         params.multiqc_methods_description,
         params.outdir,
+        params.rclone_config
     )
     emit:
     multiqc_report = DATASYNC.out.multiqc_report // channel: /path/to/multiqc_report.html

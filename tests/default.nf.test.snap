@@ -8,6 +8,9 @@
                 "MD5SUM": {
                     "md5sum": 9.5
                 },
+                "RCLONE_COPY": {
+                    "rclone": "1.65.0-DEV"
+                },
                 "SHASUM": {
                     "sha256sum": 9.5
                 },
@@ -39,6 +42,8 @@
                 "multiqc/multiqc_report.html",
                 "pipeline_info",
                 "pipeline_info/nf_core_datasync_software_mqc_versions.yml",
+                "rclone",
+                "rclone/rclone-copy.log",
                 "shasum",
                 "shasum/Illumina_annotation.sha256",
                 "shasum/benchmark_bed.sha256",
@@ -54,10 +59,10 @@
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
             ]
         ],
-        "timestamp": "2026-06-29T21:12:58.023076335",
+        "timestamp": "2026-07-06T19:01:01.083839406",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.1"
+            "nextflow": "25.04.6"
         }
     }
 }
