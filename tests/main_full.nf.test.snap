@@ -20,8 +20,10 @@
             },
             [
                 "comparechecksum",
-                "comparechecksum/demultiplex.checksum_summary.csv",
-                "comparechecksum/demultiplex.checksum_validation.csv",
+                "comparechecksum/demultiplex_md5.checksum_summary.csv",
+                "comparechecksum/demultiplex_md5.checksum_validation.csv",
+                "comparechecksum/demultiplex_sha.checksum_summary.csv",
+                "comparechecksum/demultiplex_sha.checksum_validation.csv",
                 "md5sum",
                 "md5sum/demultiplex.md5",
                 "multiqc",
@@ -31,6 +33,11 @@
                 "multiqc/multiqc_data/multiqc.parquet",
                 "multiqc/multiqc_data/multiqc_citations.txt",
                 "multiqc/multiqc_data/multiqc_data.json",
+                "multiqc/multiqc_data/multiqc_md5_checksum_report.txt",
+                "multiqc/multiqc_data/multiqc_md5_checksum_summary.txt",
+                "multiqc/multiqc_data/multiqc_samplesheet.txt",
+                "multiqc/multiqc_data/multiqc_sha_checksum_report.txt",
+                "multiqc/multiqc_data/multiqc_sha_checksum_summary.txt",
                 "multiqc/multiqc_data/multiqc_software_versions.txt",
                 "multiqc/multiqc_data/multiqc_sources.txt",
                 "multiqc/multiqc_report.html",
@@ -42,15 +49,22 @@
                 "shasum/demultiplex.sha256"
             ],
             [
-                "demultiplex.checksum_summary.csv:md5,5ab7359b25dcb4e6c6f5a7eb1687a2dc",
-                "demultiplex.checksum_validation.csv:md5,205760aabd99d02b7b61c250677f0b32",
-                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
+                "demultiplex_md5.checksum_summary.csv:md5,23b0f0d7d74706e07f249ed30bbb34a6",
+                "demultiplex_md5.checksum_validation.csv:md5,743eef23f7d1ddc87bcd3b901b65cae7",
+                "demultiplex_sha.checksum_summary.csv:md5,24f4d1d614fd57980b7484231f4855b9",
+                "demultiplex_sha.checksum_validation.csv:md5,96f322a237447d90d68131fb85ce76be",
+                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
+                "multiqc_md5_checksum_report.txt:md5,8d84f5711d802cd908cf5780f1fd029e",
+                "multiqc_md5_checksum_summary.txt:md5,14a9c197093f8cd187833a11e13a3c58",
+                "multiqc_samplesheet.txt:md5,95d11730dbbf9fee3ca00f2792330c63",
+                "multiqc_sha_checksum_report.txt:md5,52c4bffaf0a94c59d4c2111fc62c074d",
+                "multiqc_sha_checksum_summary.txt:md5,78a00f0c20054c0f1853ceac0fcc0172"
             ]
         ],
-        "timestamp": "2026-07-06T19:05:22.28116912",
+        "timestamp": "2026-07-07T15:30:52.986332849",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.04.6"
+            "nextflow": "26.04.1"
         }
     }
 }

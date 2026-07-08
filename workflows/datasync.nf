@@ -82,16 +82,18 @@ workflow DATASYNC {
             def checksum_tuple = []
             // If checksum is empty it will read the md5/shasum from meta
             if (md5) {
-                checksum_tuple << tuple(meta, md5, out_md5)
+                checksum_tuple << tuple(meta + [check_format: "md5"], md5, out_md5)
             }
             if (sha) {
-                checksum_tuple << tuple(meta, sha, out_sha)
+                checksum_tuple << tuple(meta + [check_format: "sha"], sha, out_sha)
             }
 
             return checksum_tuple
         }
 
     COMPARECHECKSUM(ch_checksum)
+    ch_multiqc_files = ch_multiqc_files.mix(COMPARECHECKSUM.out.report.map { meta, report -> report })
+    ch_multiqc_files = ch_multiqc_files.mix(COMPARECHECKSUM.out.summary_report.map { meta, summary -> summary })
 
     //
     // MODULE: Rclone data copying
@@ -133,6 +135,7 @@ workflow DATASYNC {
     //
     // MODULE: MultiQC
     //
+    ch_multiqc_files = ch_multiqc_files.mix(Channel.fromPath(params.input).collectFile(name: 'samplesheet.csv'))
     ch_multiqc_files = ch_multiqc_files.mix(ch_collated_versions)
     def ch_summary_params = paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")
     def ch_workflow_summary = channel.value(paramsSummaryMultiqc(ch_summary_params))
