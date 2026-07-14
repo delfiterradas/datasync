@@ -31,6 +31,30 @@ custom_data:
       checksum_sha:
         title: Sha256 checksum file
 
+  rclone_checksum_md5:
+    section_name: "RClone MD5 Checksum Report"
+    description: "MD5 input checksum validation"
+    plot_type: "table"
+    file_format: "tsv"
+    pconfig:
+      no_violin: true
+
+  rclone_checksum_sha:
+    section_name: "RClone SHA Checksum Report"
+    description: "SHA input checksum validation"
+    plot_type: "table"
+    file_format: "tsv"
+    pconfig:
+      no_violin: true
+
+  rclone_check:
+    section_name: "Final RClone Check Report"
+    description: "Validation of copied files"
+    plot_type: "table"
+    file_format: "tsv"
+    pconfig:
+      no_violin: true
+
   md5_checksum_summary:
     section_name: "MD5 Checksum Summary"
     description: "Summary of MD5 checksum validation"
@@ -106,6 +130,12 @@ custom_data:
 sp:
   samplesheet:
     fn: "samplesheet.csv"
+  rclone_checksum_md5:
+    fn: "*_md5_rclone_checksum_mqc.tsv"
+  rclone_checksum_sha:
+    fn: "*_sha_rclone_checksum_mqc.tsv"
+  rclone_check:
+    fn: "*_rclone_check_mqc.tsv"
 
   md5_checksum_summary:
     fn: "*_md5.checksum_summary.csv"

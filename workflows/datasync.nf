@@ -3,11 +3,10 @@
     IMPORT MODULES / SUBWORKFLOWS / FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-include { COMPARECHECKSUM             } from '../modules/local/comparechecksum/main'
-include { MD5SUM                      } from '../modules/nf-core/md5sum/main'
 include { MULTIQC                     } from '../modules/nf-core/multiqc/main'
 include { RCLONE_COPY                 } from '../modules/local/rclone_copy/main'
-include { SHASUM                      } from '../modules/nf-core/shasum/main'
+include { RCLONE_CHECK                } from '../modules/local/rclone/check/main'
+include { RCLONE_CHECKSUM             } from '../modules/local/rclone/checksum/main'
 include { paramsSummaryMap            } from 'plugin/nf-schema'
 include { paramsSummaryMultiqc        } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { softwareVersionsToYAML      } from '../subworkflows/nf-core/utils_nfcore_pipeline'
@@ -61,39 +60,53 @@ workflow DATASYNC {
 
             input:    [ meta, input_path ]
             rclone:   [ meta + [http_url: rclone_http_url], rclone_source, rclone_destination ]
-            checksum: [ meta, md5, sha ]
+            checksum: [ meta + [http_url: rclone_http_url], md5, sha, rclone_source ]
     }
 
-    MD5SUM(
-        ch_samplesheet.input,
-        false
-    )
-
-    SHASUM(
-        ch_samplesheet.input,
-        false
-    )
-
-    // Group input md5sum/shasum with their respective generated checksum
-    ch_checksum = ch_samplesheet.checksum
-        .join(MD5SUM.out.checksum)
-        .join(SHASUM.out.checksum)
-        .flatMap { meta, md5, sha, out_md5, out_sha ->
+    ch_input_checksum = ch_samplesheet.checksum
+        .flatMap { meta, md5, sha, input ->
             def checksum_tuple = []
-            // If checksum is empty it will read the md5/shasum from meta
             if (md5) {
-                checksum_tuple << tuple(meta + [check_format: "md5"], md5, out_md5)
+                checksum_tuple << tuple(meta + [check_format: "md5"], md5, 'MD5', input)
             }
             if (sha) {
-                checksum_tuple << tuple(meta + [check_format: "sha"], sha, out_sha)
+                checksum_tuple << tuple(meta + [check_format: "sha"], sha, "SHA256", input)
             }
 
             return checksum_tuple
         }
 
-    COMPARECHECKSUM(ch_checksum)
-    ch_multiqc_files = ch_multiqc_files.mix(COMPARECHECKSUM.out.report.map { meta, report -> report })
-    ch_multiqc_files = ch_multiqc_files.mix(COMPARECHECKSUM.out.summary_report.map { meta, summary -> summary })
+    RCLONE_CHECKSUM(
+        ch_input_checksum,
+        rclone_config ? file(rclone_config, checkIfExists: true) : []
+    )
+
+    ch_multiqc_files = ch_multiqc_files.mix(RCLONE_CHECKSUM.out.combined
+        .flatMap { meta, check_file ->
+            check_file.readLines()
+                .findAll { it.trim() }
+                .collect { line ->
+                    def fields = line.split(/ /, 2)
+                    def status_map = [
+                    '=': 'Match',
+                    '-': 'Missing in source',
+                    '+': 'Missing in destination',
+                    '*': 'Mismatch',
+                    '!': 'Error'
+                ]
+
+                def status = status_map.get(fields[0], fields[0])
+
+                [ meta, "${fields[1]}\t${meta.id}\t${status}\n" ]
+                }
+        }
+        .collectFile(
+            seed: "File\tSample\tStatus\n",
+            sort: false
+        ) { meta, checksum ->
+            return [ "${meta.id}_${meta.check_format}_rclone_checksum_mqc.tsv", checksum ]
+        }
+    )
 
     //
     // MODULE: Rclone data copying
@@ -101,6 +114,38 @@ workflow DATASYNC {
     RCLONE_COPY(
         ch_samplesheet.rclone,
         rclone_config ? file(rclone_config, checkIfExists: true) : []
+    )
+
+    RCLONE_CHECK(
+        ch_samplesheet.rclone,
+        rclone_config ? file(rclone_config, checkIfExists: true) : []
+    )
+
+    ch_multiqc_files = ch_multiqc_files.mix(RCLONE_CHECK.out.combined
+        .flatMap { meta, check_file ->
+            check_file.readLines()
+                .findAll { it.trim() }
+                .collect { line ->
+                    def fields = line.split(/ /, 2)
+                    def status_map = [
+                    '=': 'Match',
+                    '-': 'Missing in source',
+                    '+': 'Missing in destination',
+                    '*': 'Mismatch',
+                    '!': 'Error'
+                ]
+
+                def status = status_map.get(fields[0], fields[0])
+
+                [ meta, "${fields[1]}\t${meta.id}\t${status}\n" ]
+                }
+        }
+        .collectFile(
+            seed: "File\tSample\tStatus\n",
+            sort: false
+        ) { meta, check ->
+            return [ "${meta.id}_rclone_check_mqc.tsv", check ]
+        }
     )
 
     //
