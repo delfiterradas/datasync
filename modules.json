@@ -15,6 +15,11 @@
                         "git_sha": "98403d15b0e50edae1f3fec5eae5e24982f1fade",
                         "installed_by": ["modules"]
                     },
+                    "rclone/copy": {
+                        "branch": "master",
+                        "git_sha": "6bb93c2adec5f390eb1976a59b7fe4a4b0cbb2a5",
+                        "installed_by": ["modules"]
+                    },
                     "shasum": {
                         "branch": "master",
                         "git_sha": "429d56ab5b5879549f71bf9905104f39d0c3bff4",

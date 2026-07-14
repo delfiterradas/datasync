@@ -6,7 +6,7 @@
 include { COMPARECHECKSUM             } from '../modules/local/comparechecksum/main'
 include { MD5SUM                      } from '../modules/nf-core/md5sum/main'
 include { MULTIQC                     } from '../modules/nf-core/multiqc/main'
-include { RCLONE_COPY                 } from '../modules/local/rclone_copy/main'
+include { RCLONE_COPY                 } from '../modules/nf-core/rclone/copy/main'
 include { SHASUM                      } from '../modules/nf-core/shasum/main'
 include { paramsSummaryMap            } from 'plugin/nf-schema'
 include { paramsSummaryMultiqc        } from '../subworkflows/nf-core/utils_nfcore_pipeline'
@@ -39,28 +39,18 @@ workflow DATASYNC {
 
             def source_string = input_path.toString()
 
-            def rclone_source
-            def rclone_http_url = ''
-
-            if (source_string ==~ /^https?:\/\/.*/) {
-                // HTTP: split into --http-url base and :http:path
-                def matcher = (source_string =~ /^(https?:\/\/[^\/]+)(\/.*)$/)
-                rclone_http_url = "--http-url '${matcher[0][1]}'"
-                rclone_source = ":http:${matcher[0][2].replaceFirst('^/', '')}"
-            } else {
-                // Cloud remotes (s3://, gs://, az://): strip :// to :
-                rclone_source = source_string.replaceFirst('^([a-zA-Z][a-zA-Z0-9+.-]*)://', '$1:')
-            }
-
             def source_name = source_string
                 .replaceAll('/+$', '')
                 .tokenize('/')
                 .last()
 
-            def rclone_destination = "${output_path.toString().replaceAll('/+$', '')}/${source_name}"
+            def is_file = source_name.contains('.')
+            def rclone_destination = is_file
+                ? output_path.toString().replaceAll('/+$', '')
+                : "${output_path.toString().replaceAll('/+$', '')}/${source_name}"
 
             input:    [ meta, input_path ]
-            rclone:   [ meta + [http_url: rclone_http_url], rclone_source, rclone_destination ]
+            rclone:   [ meta, source_string, rclone_destination ]
             checksum: [ meta, md5, sha ]
     }
 
