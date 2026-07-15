@@ -31,87 +31,36 @@ custom_data:
       checksum_sha:
         title: Sha256 checksum file
 
-  md5_checksum_summary:
-    section_name: "MD5 Checksum Summary"
-    description: "Summary of MD5 checksum validation"
+  rclone_checksum_md5:
+    section_name: "RClone MD5 Checksum Report"
+    description: "MD5 input checksum validation"
     plot_type: "table"
-    file_format: "csv"
-    headers:
-      Match:
-        description: "Number of files whose output checksum matches the expected checksum."
-      Mismatch:
-        description: "Number of files whose output checksum differs from the expected checksum."
-      Missing:
-        description: "Number of expected input files that are missing from the output."
-      Unexpected:
-        description: "Number of output files that were not present in the input checksum list."
-
-  sha_checksum_summary:
-    section_name: "SHA Checksum Summary"
-    description: "Summary of SHA checksum validation"
-    plot_type: "table"
-    file_format: "csv"
-    headers:
-      Match:
-        description: "Number of files whose output checksum matches the expected checksum."
-      Mismatch:
-        description: "Number of files whose output checksum differs from the expected checksum."
-      Missing:
-        description: "Number of expected input files that are missing from the output."
-      Unexpected:
-        description: "Number of output files that were not present in the input checksum list."
-
-  md5_checksum_report:
-    section_name: "MD5 Checksum Report"
-    description: "Detailed MD5 checksum validation report"
-    plot_type: "table"
-    file_format: "csv"
+    file_format: "tsv"
     pconfig:
       no_violin: true
-    headers:
-      File:
-        title: File
-        description: "Path to the file being validated."
-      checksum_expected:
-        title: Expected checksum
-        description: "Checksum recorded for the input file before processing."
-      checksum_observed:
-        title: Observed checksum
-        description: "Checksum calculated for the corresponding output file after processing."
-      status:
-        title: Status
-        description: "Comparison result between the expected and observed checksums."
 
-  sha_checksum_report:
-    section_name: "SHA Checksum Report"
-    description: "Detailed SHA checksum validation report"
+  rclone_checksum_sha:
+    section_name: "RClone SHA Checksum Report"
+    description: "SHA input checksum validation"
     plot_type: "table"
-    file_format: "csv"
+    file_format: "tsv"
     pconfig:
       no_violin: true
-    headers:
-      File:
-        title: File
-        description: "Path to the file being validated."
-      checksum_expected:
-        title: Expected checksum
-        description: "Checksum recorded for the input file before processing."
-      checksum_observed:
-        title: Observed checksum
-        description: "Checksum calculated for the corresponding output file after processing."
-      status:
-        title: Status
-        description: "Comparison result between the expected and observed checksums."
+
+  rclone_check:
+    section_name: "Final RClone Check Report"
+    description: "Validation of copied files"
+    plot_type: "table"
+    file_format: "tsv"
+    pconfig:
+      no_violin: true
 
 sp:
   samplesheet:
     fn: "samplesheet.csv"
-
-  md5_checksum_summary:
-    fn: "*_md5.checksum_summary.csv"
-  sha_checksum_summary:
-    fn: "*_sha.checksum_summary.csv"
-  md5_checksum_report:
-    fn: "*_md5.checksum_validation.csv"
-  sha_checksum_report:
-    fn: "*_sha.checksum_validation.csv"
+  rclone_checksum_md5:
+    fn: "*_md5_rclone_checksum_mqc.tsv"
+  rclone_checksum_sha:
+    fn: "*_sha_rclone_checksum_mqc.tsv"
+  rclone_check:
+    fn: "*_rclone_check_mqc.tsv"
