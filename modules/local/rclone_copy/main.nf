@@ -1,5 +1,4 @@
 process RCLONE_COPY {
-
     tag "${meta.id}"
     label 'process_low'
 
@@ -14,7 +13,7 @@ process RCLONE_COPY {
 
     output:
     tuple val(meta), path("rclone-copy.log"), emit: log
-    tuple val("${task.process}"), val('rclone'), eval("rclone version | head -n1 | sed 's/rclone v//'"), topic: versions, emit: versions
+    tuple val("${task.process}"), val('rclone'), eval("rclone --version | sed -n '1s/^rclone v//p'"), topic: versions, emit: versions_rclone
 
     when:
     task.ext.when == null || task.ext.when
@@ -22,15 +21,30 @@ process RCLONE_COPY {
     script:
     def args = task.ext.args ?: ''
     def configArg = rclone_config ? "--config '${rclone_config}'" : ''
-    def transfers = task.ext.transfers ?: task.cpus
-    def checkers = task.ext.checkers ?: task.cpus
+    def transfers = Math.max(1, task.cpus.intdiv(2))
+    def checkers = task.cpus
+
+    // Handle HTTP URLs: split into --http-url base and :http:relative_path
+    def source_string = source_path.toString()
+    def rclone_source
+    def http_url_arg = ''
+
+    if (source_string ==~ /^https?:\/\/.*/) {
+        def matcher = (source_string =~ /^(https?:\/\/[^\/]+)(\/.*)$/)
+        http_url_arg = "--http-url '${matcher[0][1]}'"
+        rclone_source = ":http:${matcher[0][2].replaceFirst('^/', '')}"
+    } else {
+        rclone_source = source_string.replaceFirst('^([a-zA-Z][a-zA-Z0-9+.-]*)://', '$1:')
+    }
 
     """
-    rclone ${configArg} copy ${args} \\
+    rclone ${configArg} copy \\
+        ${http_url_arg} \\
+        ${args} \\
         --log-file rclone-copy.log \\
         --transfers ${transfers} \\
         --checkers ${checkers} \\
-        "${source_path}" \\
+        "${rclone_source}" \\
         "${destination_path}"
     """
 
