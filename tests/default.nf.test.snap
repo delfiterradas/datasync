@@ -2,34 +2,20 @@
     "-profile test": {
         "content": [
             {
-                "COMPARECHECKSUM": {
-                    "r-base": "4.2.1"
+                "RCLONE_CHECK": {
+                    "rclone": "1.74.3-DEV"
                 },
-                "MD5SUM": {
-                    "md5sum": 9.5
+                "RCLONE_CHECKSUM": {
+                    "rclone": "1.74.3-DEV"
                 },
                 "RCLONE_COPY": {
                     "rclone": "1.65.0-DEV"
-                },
-                "SHASUM": {
-                    "sha256sum": 9.5
                 },
                 "Workflow": {
                     "nf-core/datasync": "v1.0dev"
                 }
             },
             [
-                "comparechecksum",
-                "comparechecksum/Illumina_annotation_md5.checksum_summary.csv",
-                "comparechecksum/Illumina_annotation_md5.checksum_validation.csv",
-                "comparechecksum/benchmark_bed_md5.checksum_summary.csv",
-                "comparechecksum/benchmark_bed_md5.checksum_validation.csv",
-                "comparechecksum/test_fastq_md5.checksum_summary.csv",
-                "comparechecksum/test_fastq_md5.checksum_validation.csv",
-                "md5sum",
-                "md5sum/Illumina_annotation.md5",
-                "md5sum/benchmark_bed.md5",
-                "md5sum/test_fastq.md5",
                 "multiqc",
                 "multiqc/multiqc_data",
                 "multiqc/multiqc_data/llms-full.txt",
@@ -37,8 +23,8 @@
                 "multiqc/multiqc_data/multiqc.parquet",
                 "multiqc/multiqc_data/multiqc_citations.txt",
                 "multiqc/multiqc_data/multiqc_data.json",
-                "multiqc/multiqc_data/multiqc_md5_checksum_report.txt",
-                "multiqc/multiqc_data/multiqc_md5_checksum_summary.txt",
+                "multiqc/multiqc_data/multiqc_rclone_check.txt",
+                "multiqc/multiqc_data/multiqc_rclone_checksum_md5.txt",
                 "multiqc/multiqc_data/multiqc_samplesheet.txt",
                 "multiqc/multiqc_data/multiqc_software_versions.txt",
                 "multiqc/multiqc_data/multiqc_sources.txt",
@@ -46,26 +32,34 @@
                 "pipeline_info",
                 "pipeline_info/nf_core_datasync_software_mqc_versions.yml",
                 "rclone",
+                "rclone/Illumina_annotation.combined.txt",
+                "rclone/Illumina_annotation.differ.txt",
+                "rclone/Illumina_annotation.error.txt",
+                "rclone/Illumina_annotation.match.txt",
+                "rclone/Illumina_annotation.missing_on_dst.txt",
+                "rclone/Illumina_annotation.missing_on_src.txt",
+                "rclone/benchmark_bed.combined.txt",
+                "rclone/benchmark_bed.differ.txt",
+                "rclone/benchmark_bed.error.txt",
+                "rclone/benchmark_bed.match.txt",
+                "rclone/benchmark_bed.missing_on_dst.txt",
+                "rclone/benchmark_bed.missing_on_src.txt",
                 "rclone/rclone-copy.log",
-                "shasum",
-                "shasum/Illumina_annotation.sha256",
-                "shasum/benchmark_bed.sha256",
-                "shasum/test_fastq.sha256"
+                "rclone/test_fastq.combined.txt",
+                "rclone/test_fastq.differ.txt",
+                "rclone/test_fastq.error.txt",
+                "rclone/test_fastq.match.txt",
+                "rclone/test_fastq.missing_on_dst.txt",
+                "rclone/test_fastq.missing_on_src.txt"
             ],
             [
-                "Illumina_annotation_md5.checksum_summary.csv:md5,eaff8b778f802026d8013d004a9aa00f",
-                "Illumina_annotation_md5.checksum_validation.csv:md5,ce382d06839523dd9c390e3b34881be0",
-                "benchmark_bed_md5.checksum_summary.csv:md5,266bcbba1edbc6720508aa392387c566",
-                "benchmark_bed_md5.checksum_validation.csv:md5,b528bcd09ff8e6bf3c51e72d3e4ebe8f",
-                "test_fastq_md5.checksum_summary.csv:md5,6904f7c475eb219bee74f013a1870caf",
-                "test_fastq_md5.checksum_validation.csv:md5,4c94e3b3362f854c42941fc67b226ac2",
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
-                "multiqc_md5_checksum_report.txt:md5,39147d72a414c399614f139354e36a86",
-                "multiqc_md5_checksum_summary.txt:md5,d8c3b87b26251d4d6cb1aca315f0f531",
-                "multiqc_samplesheet.txt:md5,3cc1e0340101fe132e7ce466187f3c4b"
+                "multiqc_rclone_check.txt:md5,b6ea8bb50b08e6a31b02de80f15cba83",
+                "multiqc_rclone_checksum_md5.txt:md5,b6ea8bb50b08e6a31b02de80f15cba83",
+                "multiqc_samplesheet.txt:md5,608c07d7a768f3d66b44f8daddcec95e"
             ]
         ],
-        "timestamp": "2026-07-07T15:28:47.101399362",
+        "timestamp": "2026-07-15T03:46:47.848763259",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.1"
