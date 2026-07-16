@@ -173,6 +173,28 @@ def validateInputParameters() {
 }
 
 //
+// Parse Rclone check and checksum combined.txt file
+//
+def parseRcloneCheck(meta, check_file) {
+    def status_map = [
+        '=': 'Match',
+        '-': 'Missing in source',
+        '+': 'Missing in destination',
+        '*': 'Mismatch',
+        '!': 'Error'
+    ]
+
+    return check_file.readLines()
+        .findAll { it.trim() }
+        .collect { line ->
+            def fields = line.split(/ /, 2)
+            def status = status_map.get(fields[0], fields[0])
+
+            [ meta, "${fields[1]}\t${meta.id}\t${status}\n" ]
+        }
+}
+
+//
 // Generate methods description for MultiQC
 //
 def toolCitationText() {

@@ -11,6 +11,7 @@ include { paramsSummaryMap            } from 'plugin/nf-schema'
 include { paramsSummaryMultiqc        } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { softwareVersionsToYAML      } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText      } from '../subworkflows/local/utils_nfcore_datasync_pipeline'
+include { parseRcloneCheck            } from '../subworkflows/local/utils_nfcore_datasync_pipeline'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -70,22 +71,7 @@ workflow DATASYNC {
 
     ch_multiqc_files = ch_multiqc_files.mix(RCLONE_CHECKSUM.out.combined
         .flatMap { meta, check_file ->
-            check_file.readLines()
-                .findAll { it.trim() }
-                .collect { line ->
-                    def fields = line.split(/ /, 2)
-                    def status_map = [
-                    '=': 'Match',
-                    '-': 'Missing in source',
-                    '+': 'Missing in destination',
-                    '*': 'Mismatch',
-                    '!': 'Error'
-                ]
-
-                def status = status_map.get(fields[0], fields[0])
-
-                [ meta, "${fields[1]}\t${meta.id}\t${status}\n" ]
-                }
+            parseRcloneCheck(meta, check_file)
         }
         .collectFile(
             seed: "File\tSample\tStatus\n",
@@ -117,22 +103,7 @@ workflow DATASYNC {
 
     ch_multiqc_files = ch_multiqc_files.mix(RCLONE_CHECK.out.combined
         .flatMap { meta, check_file ->
-            check_file.readLines()
-                .findAll { it.trim() }
-                .collect { line ->
-                    def fields = line.split(/ /, 2)
-                    def status_map = [
-                    '=': 'Match',
-                    '-': 'Missing in source',
-                    '+': 'Missing in destination',
-                    '*': 'Mismatch',
-                    '!': 'Error'
-                ]
-
-                def status = status_map.get(fields[0], fields[0])
-
-                [ meta, "${fields[1]}\t${meta.id}\t${status}\n" ]
-                }
+            parseRcloneCheck(meta, check_file)
         }
         .collectFile(
             seed: "File\tSample\tStatus\n",
