@@ -37,7 +37,7 @@ workflow DATASYNC {
         meta, input_path, output_path, md5, sha ->
 
             def source = file(input_path)
-           
+
             def rclone_destination = source.isFile()
                 ? output_path.toString().replaceAll('/+$', '')
                 : "${output_path.toString().replaceAll('/+$', '')}/${source.name}"
