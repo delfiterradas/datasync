@@ -37,20 +37,16 @@ workflow DATASYNC {
     ch_samplesheet = ch_samplesheet.multiMap {
         meta, input_path, output_path, md5, sha ->
 
-            def source_string = input_path.toString()
+            def source = file(input_path)
 
-            def source_name = source_string
-                .replaceAll('/+$', '')
-                .tokenize('/')
-                .last()
-
-            def is_file = source_name.contains('.')
-            def rclone_destination = is_file
+            def source_uri = source.toUriString()
+            
+            def rclone_destination = source.isFile()
                 ? output_path.toString().replaceAll('/+$', '')
-                : "${output_path.toString().replaceAll('/+$', '')}/${source_name}"
+                : "${output_path.toString().replaceAll('/+$', '')}/${source.name}"
 
             input:    [ meta, input_path ]
-            rclone:   [ meta, source_string, rclone_destination ]
+            rclone:   [ meta, source_uri, rclone_destination ]
             checksum: [ meta, md5, sha ]
     }
 
