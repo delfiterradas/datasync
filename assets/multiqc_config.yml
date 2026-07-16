@@ -32,24 +32,24 @@ custom_data:
         title: Sha256 checksum file
 
   rclone_checksum_md5:
-    section_name: "RClone MD5 Checksum Report"
-    description: "MD5 input checksum validation"
+    section_name: "MD5sum Input Validation"
+    description: "Comparison of the expected MD5 checksums provided in the samplesheet with the observed MD5 checksums of the file(s) found at the specified source path."
     plot_type: "table"
     file_format: "tsv"
     pconfig:
       no_violin: true
 
   rclone_checksum_sha:
-    section_name: "RClone SHA Checksum Report"
-    description: "SHA input checksum validation"
+    section_name: "SHAsum Input Validation"
+    description: "Comparison of the expected SHA-256 checksums provided in the samplesheet with the observed SHA-256 checksums of the file(s) found at the specified source path."
     plot_type: "table"
     file_format: "tsv"
     pconfig:
       no_violin: true
 
   rclone_check:
-    section_name: "Final RClone Check Report"
-    description: "Validation of copied files"
+    section_name: "Source–Destination Checksum Validation"
+    description: "Comparison of the checksums of corresponding file(s) in the source input path and the output destination to confirm data integrity following file transfer."
     plot_type: "table"
     file_format: "tsv"
     pconfig:
