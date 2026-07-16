@@ -44,7 +44,7 @@
                 "pipeline_info",
                 "pipeline_info/nf_core_datasync_software_mqc_versions.yml",
                 "rclone",
-                "rclone/rclone-copy.log",
+                "rclone/demultiplex-rclone-copy.log",
                 "shasum",
                 "shasum/demultiplex.sha256"
             ],
@@ -56,15 +56,15 @@
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
                 "multiqc_md5_checksum_report.txt:md5,8d84f5711d802cd908cf5780f1fd029e",
                 "multiqc_md5_checksum_summary.txt:md5,14a9c197093f8cd187833a11e13a3c58",
-                "multiqc_samplesheet.txt:md5,95d11730dbbf9fee3ca00f2792330c63",
+                "multiqc_samplesheet.txt:md5,00788a52d1a014c12ac4ed554b0b44ca",
                 "multiqc_sha_checksum_report.txt:md5,52c4bffaf0a94c59d4c2111fc62c074d",
                 "multiqc_sha_checksum_summary.txt:md5,78a00f0c20054c0f1853ceac0fcc0172"
             ]
         ],
-        "timestamp": "2026-07-07T15:30:52.986332849",
+        "timestamp": "2026-07-16T14:42:21.246036308",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.1"
+            "nextflow": "25.10.4"
         }
     }
 }
