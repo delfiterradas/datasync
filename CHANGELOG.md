@@ -11,7 +11,7 @@ Initial release of nf-core/datasync, created with the [nf-core](https://nf-co.re
 
 - [[#31](https://github.com/nf-core/datasync/pull/31)] - Compute checksum for each input file ([@delfiterradas](https://github.com/delfiterradas), review by [@atrigila](https://github.com/atrigila)).
 - [[#35](https://github.com/nf-core/datasync/pull/35)] - Compare generated checksum to given checksum in input and update test profiles ([@delfiterradas](https://github.com/delfiterradas), review by [@atrigila](https://github.com/atrigila)).
-- [[#29](https://github.com/nf-core/datasync/pull/38)] - Implement Rclone module ([@antoniasaracco](https://github.com/antoniasaracco), review by [@delfiterradas](https://github.com/delfiterradas)).
+- [[#46](https://github.com/nf-core/datasync/pull/46)] - Import Rclone module from nf-core([@antoniasaracco](https://github.com/antoniasaracco), review by [@delfiterradas](https://github.com/delfiterradas)).
 - [[#41](https://github.com/nf-core/datasync/pull/41)] - Generate MultiQC Report with comparechecksum tables and input samplesheet ([@delfiterradas](https://github.com/delfiterradas), review by [@atrigila](https://github.com/atrigila)).
 
 ### `Fixed`
