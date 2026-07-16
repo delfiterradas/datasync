@@ -48,7 +48,7 @@ custom_data:
       no_violin: true
 
   rclone_check:
-    section_name: "Source–Destination Checksum Validation"
+    section_name: "Source-Destination Checksum Validation"
     description: "Comparison of the checksums of corresponding file(s) in the source input path and the output destination to confirm data integrity following file transfer."
     plot_type: "table"
     file_format: "tsv"
