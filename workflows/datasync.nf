@@ -4,9 +4,9 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 include { MULTIQC                     } from '../modules/nf-core/multiqc/main'
-include { RCLONE_COPY                 } from '../modules/local/rclone_copy/main'
-include { RCLONE_CHECK                } from '../modules/local/rclone/check/main'
-include { RCLONE_CHECKSUM             } from '../modules/local/rclone/checksum/main'
+include { RCLONE_COPY                 } from '../modules/nf-core/rclone/copy/main'
+include { RCLONE_CHECK                } from '../modules/nf-core/rclone/check/main'
+include { RCLONE_CHECKSUM             } from '../modules/nf-core/rclone/checksum/main'
 include { paramsSummaryMap            } from 'plugin/nf-schema'
 include { paramsSummaryMultiqc        } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { softwareVersionsToYAML      } from '../subworkflows/nf-core/utils_nfcore_pipeline'
@@ -36,19 +36,12 @@ workflow DATASYNC {
     ch_samplesheet = ch_samplesheet.multiMap {
         meta, input_path, output_path, md5, sha ->
 
-            def source_string = input_path.toString()
-
-            def source_name = source_string
-                .replaceAll('/+$', '')
-                .tokenize('/')
-                .last()
-
-            def is_file = source_name.contains('.')
-            def rclone_destination = is_file
+            def source = file(input_path)
+           
+            def rclone_destination = source.isFile()
                 ? output_path.toString().replaceAll('/+$', '')
-                : "${output_path.toString().replaceAll('/+$', '')}/${source_name}"
-
-            def rclone_check = "${output_path.toString().replaceAll('/+$', '')}/${source_name}"
+                : "${output_path.toString().replaceAll('/+$', '')}/${source.name}"
+            def rclone_check = "${output_path.toString().replaceAll('/+$', '')}/${source.name}"
 
             input:    [ meta, input_path ]
             rclone:   [ meta, input_path, rclone_destination ]
