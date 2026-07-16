@@ -33,23 +33,23 @@
                 "pipeline_info",
                 "pipeline_info/nf_core_datasync_software_mqc_versions.yml",
                 "rclone",
+                "rclone/demultiplex-rclone-copy.log",
                 "rclone/demultiplex.combined.txt",
                 "rclone/demultiplex.differ.txt",
                 "rclone/demultiplex.error.txt",
                 "rclone/demultiplex.match.txt",
                 "rclone/demultiplex.missing_on_dst.txt",
-                "rclone/demultiplex.missing_on_src.txt",
-                "rclone/rclone-copy.log"
+                "rclone/demultiplex.missing_on_src.txt"
             ],
             [
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
                 "multiqc_rclone_check.txt:md5,034d1d633f567288c33f2c5e2b917962",
                 "multiqc_rclone_checksum_md5.txt:md5,dda2aa574568eb99f579fca2a1b19207",
                 "multiqc_rclone_checksum_sha.txt:md5,034d1d633f567288c33f2c5e2b917962",
-                "multiqc_samplesheet.txt:md5,29fbce9d1ffcdb97cb2ae32606e7145d"
+                "multiqc_samplesheet.txt:md5,00788a52d1a014c12ac4ed554b0b44ca"
             ]
         ],
-        "timestamp": "2026-07-15T03:49:57.234615558",
+        "timestamp": "2026-07-16T18:18:10.503592311",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.1"

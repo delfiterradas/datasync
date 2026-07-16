@@ -38,20 +38,21 @@ workflow DATASYNC {
 
             def source = file(input_path)
 
+            def source_uri = source.toUriString()
+
             def rclone_destination = source.isFile()
                 ? output_path.toString().replaceAll('/+$', '')
                 : "${output_path.toString().replaceAll('/+$', '')}/${source.name}"
             def rclone_check = "${output_path.toString().replaceAll('/+$', '')}/${source.name}"
 
-            input:    [ meta, input_path ]
-            rclone:   [ meta, input_path, rclone_destination ]
-            checksum: [ meta, md5, sha, file(input_path) ]
-            check :   [ meta, file(input_path), file(rclone_check) ]
+            rclone:   [ meta, source_uri, rclone_destination ]
+            checksum: [ meta, md5, sha, source ]
+            check :   [ meta, source, file(rclone_check) ]
     }
 
     // Group input md5sum/shasum with their respective generated checksum
     ch_checksum = ch_samplesheet.checksum
-         .flatMap { meta, md5, sha, input ->
+        .flatMap { meta, md5, sha, input ->
             def checksum_tuple = []
             if (md5) {
                 checksum_tuple << tuple(meta + [check_format: "md5"], md5, 'MD5', input)

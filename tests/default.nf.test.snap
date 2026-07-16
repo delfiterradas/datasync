@@ -32,19 +32,21 @@
                 "pipeline_info",
                 "pipeline_info/nf_core_datasync_software_mqc_versions.yml",
                 "rclone",
+                "rclone/Illumina_annotation-rclone-copy.log",
                 "rclone/Illumina_annotation.combined.txt",
                 "rclone/Illumina_annotation.differ.txt",
                 "rclone/Illumina_annotation.error.txt",
                 "rclone/Illumina_annotation.match.txt",
                 "rclone/Illumina_annotation.missing_on_dst.txt",
                 "rclone/Illumina_annotation.missing_on_src.txt",
+                "rclone/benchmark_bed-rclone-copy.log",
                 "rclone/benchmark_bed.combined.txt",
                 "rclone/benchmark_bed.differ.txt",
                 "rclone/benchmark_bed.error.txt",
                 "rclone/benchmark_bed.match.txt",
                 "rclone/benchmark_bed.missing_on_dst.txt",
                 "rclone/benchmark_bed.missing_on_src.txt",
-                "rclone/rclone-copy.log",
+                "rclone/test_fastq-rclone-copy.log",
                 "rclone/test_fastq.combined.txt",
                 "rclone/test_fastq.differ.txt",
                 "rclone/test_fastq.error.txt",
@@ -59,7 +61,7 @@
                 "multiqc_samplesheet.txt:md5,608c07d7a768f3d66b44f8daddcec95e"
             ]
         ],
-        "timestamp": "2026-07-15T03:46:47.848763259",
+        "timestamp": "2026-07-16T18:16:30.402815144",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.1"
