@@ -40,7 +40,7 @@ workflow DATASYNC {
             def source = file(input_path)
 
             def source_uri = source.toUriString()
-            
+
             def rclone_destination = source.isFile()
                 ? output_path.toString().replaceAll('/+$', '')
                 : "${output_path.toString().replaceAll('/+$', '')}/${source.name}"
