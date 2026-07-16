@@ -17,7 +17,7 @@
                     },
                     "rclone/copy": {
                         "branch": "master",
-                        "git_sha": "6bb93c2adec5f390eb1976a59b7fe4a4b0cbb2a5",
+                        "git_sha": "969013a2a91dc8152ca537bbd4dd4feaa15c13a7",
                         "installed_by": ["modules"]
                     },
                     "shasum": {
