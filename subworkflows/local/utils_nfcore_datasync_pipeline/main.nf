@@ -198,7 +198,7 @@ def parseRcloneCheck(meta, check_file) {
             def status = status_map.get(fields[0], fields[0])
             def priority = priority_map.get(fields[0], 0)
 
-            [ meta, "${fields[1]}\t${meta.id}\t${status}\t${fields[1]}\t${priority}\n" ]
+            [ meta, "${meta.id}:${fields[1]}\t${status}\t${fields[1]}\t${meta.id}\t${priority}\n" ]
         }
 }
 

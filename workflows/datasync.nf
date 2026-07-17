@@ -74,7 +74,7 @@ workflow DATASYNC {
             parseRcloneCheck(meta, check_file)
         }
         .collectFile(
-            seed: "Row\tSample\tStatus\tFile\tPriority\n",
+            seed: "Row\tStatus\tFile\tSample\tPriority\n",
             sort: false
         ) { meta, checksum ->
             return [ "${meta.id}_${meta.check_format}_rclone_checksum_mqc.tsv", checksum ]
@@ -106,7 +106,7 @@ workflow DATASYNC {
             parseRcloneCheck(meta, check_file)
         }
         .collectFile(
-            seed: "Row\tSample\tStatus\tFile\tPriority\n",
+            seed: "Row\tStatus\tFile\tSample\tPriority\n",
             sort: false
         ) { meta, check ->
             return [ "${meta.id}_rclone_check_mqc.tsv", check ]
