@@ -43,16 +43,16 @@
             ],
             [
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
-                "multiqc_rclone_check.txt:md5,034d1d633f567288c33f2c5e2b917962",
-                "multiqc_rclone_checksum_md5.txt:md5,dda2aa574568eb99f579fca2a1b19207",
-                "multiqc_rclone_checksum_sha.txt:md5,034d1d633f567288c33f2c5e2b917962",
+                "multiqc_rclone_check.txt:md5,6ee1b24af2769c0620cb6a3c52d7e3ce",
+                "multiqc_rclone_checksum_md5.txt:md5,0367be35c8af1775ccedaac24abdbfa9",
+                "multiqc_rclone_checksum_sha.txt:md5,6ee1b24af2769c0620cb6a3c52d7e3ce",
                 "multiqc_samplesheet.txt:md5,00788a52d1a014c12ac4ed554b0b44ca"
             ]
         ],
-        "timestamp": "2026-07-16T18:18:10.503592311",
+        "timestamp": "2026-07-17T16:51:02.615492867",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.1"
+            "nextflow": "26.04.6"
         }
     }
 }

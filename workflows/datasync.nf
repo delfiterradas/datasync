@@ -74,7 +74,7 @@ workflow DATASYNC {
             parseRcloneCheck(meta, check_file)
         }
         .collectFile(
-            seed: "File\tSample\tStatus\n",
+            seed: "Row\tSample\tStatus\tFile\tPriority\n",
             sort: false
         ) { meta, checksum ->
             return [ "${meta.id}_${meta.check_format}_rclone_checksum_mqc.tsv", checksum ]
@@ -106,7 +106,7 @@ workflow DATASYNC {
             parseRcloneCheck(meta, check_file)
         }
         .collectFile(
-            seed: "File\tSample\tStatus\n",
+            seed: "Row\tSample\tStatus\tFile\tPriority\n",
             sort: false
         ) { meta, check ->
             return [ "${meta.id}_rclone_check_mqc.tsv", check ]
@@ -155,6 +155,7 @@ workflow DATASYNC {
         : file("${projectDir}/assets/methods_description_template.yml", checkIfExists: true)
     def ch_methods_description = channel.value(methodsDescriptionText(ch_multiqc_custom_methods_description))
     ch_multiqc_files = ch_multiqc_files.mix(ch_methods_description.collectFile(name: 'methods_description_mqc.yaml', sort: true))
+    ch_multiqc_files = ch_multiqc_files.mix(channel.value(file("${projectDir}/assets/multiqc_custom.css", checkIfExists: true)))
     MULTIQC(
         ch_multiqc_files.flatten().collect().map { files ->
             [
