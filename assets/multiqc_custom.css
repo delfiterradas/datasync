@@ -1,0 +1,33 @@
+/* Keep the internal row identifier available to MultiQC without displaying it. */
+#rclone_checksum_md5-section-plot_table .rowheader,
+#rclone_checksum_sha-section-plot_table .rowheader,
+#rclone_check-section-plot_table .rowheader {
+  display: none;
+}
+
+/* Fit rclone result tables to the report width and wrap long file paths. */
+#rclone_checksum_md5-section-plot_table,
+#rclone_checksum_sha-section-plot_table,
+#rclone_check-section-plot_table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+#rclone_checksum_md5-section-plot_table .Status,
+#rclone_checksum_sha-section-plot_table .Status,
+#rclone_check-section-plot_table .Status {
+  width: 14rem;
+}
+
+#rclone_checksum_md5-section-plot_table .File .val,
+#rclone_checksum_sha-section-plot_table .File .val,
+#rclone_check-section-plot_table .File .val {
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+#rclone_checksum_md5-section-plot_table_container .mqc-table-responsive,
+#rclone_checksum_sha-section-plot_table_container .mqc-table-responsive,
+#rclone_check-section-plot_table_container .mqc-table-responsive {
+  overflow-x: hidden;
+}

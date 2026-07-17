@@ -36,24 +36,129 @@ custom_data:
     description: "Comparison of the expected MD5 checksums provided in the samplesheet with the observed MD5 checksums of the file(s) found at the specified source path."
     plot_type: "table"
     file_format: "tsv"
+    headers:
+      Status:
+        title: Result
+        description: "= Match; - Missing in source; + Missing in destination; * Mismatch; ! Error"
+        cond_formatting_rules:
+          match:
+            - s_eq: "="
+            - s_eq: "Match"
+          missing_source:
+            - s_eq: "-"
+            - s_eq: "Missing in source"
+          missing_destination:
+            - s_eq: "+"
+            - s_eq: "Missing in destination"
+          mismatch:
+            - s_eq: "*"
+            - s_eq: "Mismatch"
+          error:
+            - s_eq: "!"
+            - s_eq: "Error"
+        cond_formatting_colours:
+          - match: "#5cb85c"
+          - missing_source: "#f0ad4e"
+          - missing_destination: "#5bc0de"
+          - mismatch: "#d9534f"
+          - error: "#8b0000"
+      File:
+        title: File
+        description: "File checked by rclone"
+      Priority:
+        title: Priority
+        hidden: true
     pconfig:
       no_violin: true
+      defaultsort:
+        - column: Priority
+          direction: asc
 
   rclone_checksum_sha:
     section_name: "SHAsum Input Validation"
     description: "Comparison of the expected SHA-256 checksums provided in the samplesheet with the observed SHA-256 checksums of the file(s) found at the specified source path."
     plot_type: "table"
     file_format: "tsv"
+    headers:
+      Status:
+        title: Result
+        description: "= Match; - Missing in source; + Missing in destination; * Mismatch; ! Error"
+        cond_formatting_rules:
+          match:
+            - s_eq: "="
+            - s_eq: "Match"
+          missing_source:
+            - s_eq: "-"
+            - s_eq: "Missing in source"
+          missing_destination:
+            - s_eq: "+"
+            - s_eq: "Missing in destination"
+          mismatch:
+            - s_eq: "*"
+            - s_eq: "Mismatch"
+          error:
+            - s_eq: "!"
+            - s_eq: "Error"
+        cond_formatting_colours:
+          - match: "#5cb85c"
+          - missing_source: "#f0ad4e"
+          - missing_destination: "#5bc0de"
+          - mismatch: "#d9534f"
+          - error: "#8b0000"
+      File:
+        title: File
+        description: "File checked by rclone"
+      Priority:
+        title: Priority
+        hidden: true
     pconfig:
       no_violin: true
+      defaultsort:
+        - column: Priority
+          direction: asc
 
   rclone_check:
     section_name: "Source-Destination Checksum Validation"
     description: "Comparison of the checksums of corresponding file(s) in the source input path and the output destination to confirm data integrity following file transfer."
     plot_type: "table"
     file_format: "tsv"
+    headers:
+      Status:
+        title: Result
+        description: "= Match; - Missing in source; + Missing in destination; * Mismatch; ! Error"
+        cond_formatting_rules:
+          match:
+            - s_eq: "="
+            - s_eq: "Match"
+          missing_source:
+            - s_eq: "-"
+            - s_eq: "Missing in source"
+          missing_destination:
+            - s_eq: "+"
+            - s_eq: "Missing in destination"
+          mismatch:
+            - s_eq: "*"
+            - s_eq: "Mismatch"
+          error:
+            - s_eq: "!"
+            - s_eq: "Error"
+        cond_formatting_colours:
+          - match: "#5cb85c"
+          - missing_source: "#f0ad4e"
+          - missing_destination: "#5bc0de"
+          - mismatch: "#d9534f"
+          - error: "#8b0000"
+      File:
+        title: File
+        description: "File checked by rclone"
+      Priority:
+        title: Priority
+        hidden: true
     pconfig:
       no_violin: true
+      defaultsort:
+        - column: Priority
+          direction: asc
 
 sp:
   samplesheet:
