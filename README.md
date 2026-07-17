@@ -21,52 +21,68 @@
 
 ## Introduction
 
-[WIP] WORK IN PROGRESS AND NOT YET STABLE - DO NOT USE FOR PRODUCTIVE SETTINGS YET
+> [!WARNING]
+> nf-core/datasync is under active development and is not yet recommended for production data transfers. Validate its behaviour with representative data before relying on it.
 
-**nf-core/datasync** is a system operation pipeline that provides several workflows for handling system operation / automation tasks that are commonly helpful for various tasks in large data processing / analysis facilities. This includes:
+**nf-core/datasync** is a Nextflow pipeline for copying files and directories between storage locations and documenting their integrity. For every row in an input samplesheet, the pipeline:
 
-- Data Synchronization & Checksum generation
-  - Configurable: Can provide YAML file which files to include or exclude from sync
-  - Checksum backend: Can configure which backend to use for checksum generation (e.g. sha256sum, md5, ...)
-  - Configurable whether to include (sub-) folders in the sync or not (search for checkpoint files, e.g. has to have DEMUX_DONE that signals a demultiplexing run was finished & successfully copied)
-- Data Integrity validation
-  - Provided with a directory to check, can validate that file(s) found are matching checksums from Synchronization subworkflow
-- Data Archival & Deletion
-  - Can check source and target location for existence of file(s) and decide based on user configurable rules whether files can be considered archived
-    - Timestamp older than X days
-    - Checksums match Integrity validation report
-    - Create empty files to make it obvious that archival was performed
-    - Optionally: Delete files or create list of files to be deleted for manual deletion process
+1. validates the source against a supplied MD5 and/or SHA-256 checksum manifest;
+2. copies the source to the requested destination with [rclone](https://rclone.org/);
+3. compares the copied data with the source using `rclone check`; and
+4. produces detailed rclone status files and a consolidated MultiQC report.
 
-The pipeline can be configured by users to execute any of the aforementioned subworkflows and then produces a report using MultiQC custom content that also serves as a report of _what_ was done by the pipeline for documentation purposes.
+Sources may be local paths or HTTP(S) URLs. Destinations can be local paths or rclone-supported remote storage (for example S3 or Azure Blob Storage); authenticated remotes can be defined with `--rclone_config`.
 
-## Usage
+```mermaid
+graph LR
+    A[Samplesheet] --> B[Validate supplied checksums]
+    A --> C[Copy with rclone]
+    C --> D[Compare source and destination]
+    B --> E[MultiQC integrity report]
+    D --> E
+```
+
+## Quick start
 
 > [!NOTE]
-> If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/get_started/environment_setup/overview) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/get_started/run-your-first-pipeline) with `-profile test` before running the workflow on actual data.
+> If you are new to Nextflow and nf-core, see the [nf-core environment setup guide](https://nf-co.re/docs/get_started/environment_setup/overview). Nextflow 25.10.4 or later is required.
 
-Now, you can run the pipeline using:
+Create a samplesheet containing one transfer per row:
+
+```csv
+sample,input,output_path,checksum_md5,checksum_sha
+run_001,/data/run_001,s3://archive/runs,/data/manifests/run_001_md5.tsv,
+reference,https://example.org/reference.fa,/data/references,,/data/manifests/reference_sha256.tsv
+```
+
+Then launch the pipeline with a container profile:
 
 ```bash
 nextflow run nf-core/datasync \
-   -profile <docker/singularity/.../institute> \
-   --input samplesheet.csv \
-   --outdir <OUTDIR>
-   --sync
-   --sync_backend 'sha256'
-   --sync_done true #Creates SYNC_DONE file when done in each folder
+    -r <VERSION> \
+    -profile docker \
+    --input samplesheet.csv \
+    --outdir results \
+    --rclone_config /path/to/rclone.conf
 ```
 
-> [!WARNING]
-> Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_; see [docs](https://nf-co.re/docs/running/run-pipelines#using-parameter-files).
+`--rclone_config` is optional when all paths are accessible without an rclone remote configuration. To preview copy operations without transferring data, add `--rclone_dry_run`; note that subsequent comparison reports will then describe the unchanged destination.
 
-For more details and further functionality, please refer to the [usage documentation](https://nf-co.re/datasync/usage) and the [parameter documentation](https://nf-co.re/datasync/parameters).
+> [!WARNING]
+> Provide pipeline parameters on the command line or with Nextflow's `-params-file` option. Do not put pipeline parameters in a configuration supplied with `-c`; custom configuration files are intended for executor and resource settings.
+
+See the [usage documentation](docs/usage.md) for samplesheet rules, destination semantics, remote configuration, and reproducible execution. The complete generated parameter reference is available on the [nf-core pipeline page](https://nf-co.re/datasync/parameters).
 
 ## Pipeline output
 
-To see the results of an example test run with a full size dataset refer to the [results](https://nf-co.re/datasync/results) tab on the nf-core website pipeline page.
-For more details about the output files and reports, please refer to the
-[output documentation](https://nf-co.re/datasync/output).
+Results are written below `--outdir`:
+
+- `rclone/` contains a copy log and integrity status files for each samplesheet row;
+- `multiqc/multiqc_report.html` provides the consolidated transfer and checksum summary;
+- `multiqc/multiqc_data/` contains machine-readable report data; and
+- `pipeline_info/` contains software versions and Nextflow execution reports.
+
+The transferred data itself is written directly to each row's `output_path`, not below `--outdir` unless that is the destination you selected. See the [output documentation](docs/output.md) for file names and status-code interpretation.
 
 ## Credits
 
