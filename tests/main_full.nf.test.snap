@@ -2,30 +2,20 @@
     "-profile test_full": {
         "content": [
             {
-                "COMPARECHECKSUM": {
-                    "r-base": "4.2.1"
+                "RCLONE_CHECK": {
+                    "rclone": "1.74.3-DEV"
                 },
-                "MD5SUM": {
-                    "md5sum": 9.5
+                "RCLONE_CHECKSUM": {
+                    "rclone": "1.74.3-DEV"
                 },
                 "RCLONE_COPY": {
                     "rclone": "1.65.0-DEV"
-                },
-                "SHASUM": {
-                    "sha256sum": 9.5
                 },
                 "Workflow": {
                     "nf-core/datasync": "v1.0dev"
                 }
             },
             [
-                "comparechecksum",
-                "comparechecksum/demultiplex_md5.checksum_summary.csv",
-                "comparechecksum/demultiplex_md5.checksum_validation.csv",
-                "comparechecksum/demultiplex_sha.checksum_summary.csv",
-                "comparechecksum/demultiplex_sha.checksum_validation.csv",
-                "md5sum",
-                "md5sum/demultiplex.md5",
                 "multiqc",
                 "multiqc/multiqc_data",
                 "multiqc/multiqc_data/llms-full.txt",
@@ -33,11 +23,10 @@
                 "multiqc/multiqc_data/multiqc.parquet",
                 "multiqc/multiqc_data/multiqc_citations.txt",
                 "multiqc/multiqc_data/multiqc_data.json",
-                "multiqc/multiqc_data/multiqc_md5_checksum_report.txt",
-                "multiqc/multiqc_data/multiqc_md5_checksum_summary.txt",
+                "multiqc/multiqc_data/multiqc_rclone_check.txt",
+                "multiqc/multiqc_data/multiqc_rclone_checksum_md5.txt",
+                "multiqc/multiqc_data/multiqc_rclone_checksum_sha.txt",
                 "multiqc/multiqc_data/multiqc_samplesheet.txt",
-                "multiqc/multiqc_data/multiqc_sha_checksum_report.txt",
-                "multiqc/multiqc_data/multiqc_sha_checksum_summary.txt",
                 "multiqc/multiqc_data/multiqc_software_versions.txt",
                 "multiqc/multiqc_data/multiqc_sources.txt",
                 "multiqc/multiqc_report.html",
@@ -45,26 +34,25 @@
                 "pipeline_info/nf_core_datasync_software_mqc_versions.yml",
                 "rclone",
                 "rclone/demultiplex-rclone-copy.log",
-                "shasum",
-                "shasum/demultiplex.sha256"
+                "rclone/demultiplex.combined.txt",
+                "rclone/demultiplex.differ.txt",
+                "rclone/demultiplex.error.txt",
+                "rclone/demultiplex.match.txt",
+                "rclone/demultiplex.missing_on_dst.txt",
+                "rclone/demultiplex.missing_on_src.txt"
             ],
             [
-                "demultiplex_md5.checksum_summary.csv:md5,23b0f0d7d74706e07f249ed30bbb34a6",
-                "demultiplex_md5.checksum_validation.csv:md5,743eef23f7d1ddc87bcd3b901b65cae7",
-                "demultiplex_sha.checksum_summary.csv:md5,24f4d1d614fd57980b7484231f4855b9",
-                "demultiplex_sha.checksum_validation.csv:md5,96f322a237447d90d68131fb85ce76be",
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
-                "multiqc_md5_checksum_report.txt:md5,8d84f5711d802cd908cf5780f1fd029e",
-                "multiqc_md5_checksum_summary.txt:md5,14a9c197093f8cd187833a11e13a3c58",
-                "multiqc_samplesheet.txt:md5,00788a52d1a014c12ac4ed554b0b44ca",
-                "multiqc_sha_checksum_report.txt:md5,52c4bffaf0a94c59d4c2111fc62c074d",
-                "multiqc_sha_checksum_summary.txt:md5,78a00f0c20054c0f1853ceac0fcc0172"
+                "multiqc_rclone_check.txt:md5,034d1d633f567288c33f2c5e2b917962",
+                "multiqc_rclone_checksum_md5.txt:md5,dda2aa574568eb99f579fca2a1b19207",
+                "multiqc_rclone_checksum_sha.txt:md5,034d1d633f567288c33f2c5e2b917962",
+                "multiqc_samplesheet.txt:md5,00788a52d1a014c12ac4ed554b0b44ca"
             ]
         ],
-        "timestamp": "2026-07-16T14:42:21.246036308",
+        "timestamp": "2026-07-16T18:18:10.503592311",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.1"
         }
     }
 }
