@@ -8,7 +8,7 @@
 
 Install Nextflow 25.10.4 or later and use a supported software profile. Docker or Singularity/Apptainer is recommended for reproducibility. Ensure that the account running Nextflow can read each source and checksum manifest and can write to every destination.
 
-For cloud or other authenticated rclone remotes, create an [rclone configuration](https://rclone.org/docs/) and pass it with `--rclone_config`. Avoid committing configuration files because they may contain credentials. Native environment credentials and public endpoints can be used without this option when supported by the storage backend.
+For cloud or other authenticated rclone remotes, create an [rclone configuration](https://rclone.org/docs/) and pass it with `--rclone_config`. The configuration applies to remote **sources and destinations**. For example, the pipeline can copy from S3 to a local directory, from Azure Blob Storage to S3, or between two separately configured S3-compatible providers.
 
 ## Samplesheet input
 
@@ -20,13 +20,13 @@ Supply a comma-separated samplesheet with `--input`:
 
 Each row describes an independent transfer. The header names are fixed; columns may be in any order.
 
-| Column         | Required            | Description                                                                                                                                                                         |
-| -------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sample`       | Yes                 | Unique identifier used in task labels and output report names. It must not contain whitespace. Use a unique value for each row to prevent published report files from colliding.    |
-| `input`        | Yes                 | Source file or directory. Local paths and HTTP(S) URLs are supported by the copy step; other locations must be addressable in the execution environment. Whitespace is not allowed. |
-| `output_path`  | Yes                 | Destination directory understood by rclone, such as `/archive/runs`, `s3://bucket/prefix`, or a configured `remote:path`. Whitespace is not allowed.                                |
-| `checksum_md5` | One checksum column | MD5 sum file (`.csv` or `.tsv`) used to validate `input` before copying. Leave empty when using SHA-256 only.                                                                       |
-| `checksum_sha` | One checksum column | SHA-256 sum file (`.csv` or `.tsv`) used to validate `input` before copying. Leave empty when using MD5 only.                                                                       |
+| Column         | Required            | Description                                                                                                                                                                                                                             |
+| -------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sample`       | Yes                 | Unique identifier used in task labels and output report names. It must not contain whitespace. Use a unique value for each row to prevent published report files from colliding.                                                        |
+| `input`        | Yes                 | Source file or directory. This can be a local path, HTTP(S) URL, object-storage URL such as `s3://bucket/prefix`, or configured remote such as `source_s3:bucket/prefix` or `source_azure:container/prefix`. Whitespace is not allowed. |
+| `output_path`  | Yes                 | Destination directory understood by rclone, such as `/archive/runs`, `s3://bucket/prefix`, or a configured `remote:path`. Whitespace is not allowed.                                                                                    |
+| `checksum_md5` | One checksum column | MD5 sum file (`.csv` or `.tsv`) used to validate `input` before copying. Leave empty when using SHA-256 only.                                                                                                                           |
+| `checksum_sha` | One checksum column | SHA-256 sum file (`.csv` or `.tsv`) used to validate `input` before copying. Leave empty when using MD5 only.                                                                                                                           |
 
 At least one checksum manifest is required on every row. If both are supplied, both validations run. Checksum files must use the format accepted by [`rclone checksum`](https://rclone.org/commands/rclone_checksum/): one hash and one path per line, with paths relative to the source root. Despite the permitted `.csv`/`.tsv` filename suffix, the contents are checksum-manifest text rather than a table with a header.
 
@@ -41,7 +41,79 @@ run_002,/data/run_002,archive:runs,/data/checksums/run_002_md5.tsv,/data/checksu
 
 An [example samplesheet](../assets/samplesheet.csv) is included in the repository.
 
-### Destination layout
+## Configuring rclone remotes
+
+The file supplied with `--rclone_config` uses rclone's INI-style format. Each `[name]` section defines a remote, and samplesheet paths refer to it as `name:path`. The remote name is an arbitrary local label; it does not need to match the provider or bucket name. One file may contain several sections, so a cloud-to-cloud transfer can define both providers in the same file:
+
+```text
+source_s3:incoming/run_001
+archive_azure:research-archive/run_001
+```
+
+Create the file interactively where possible:
+
+```bash
+rclone config --config /secure/rclone.conf
+rclone listremotes --config /secure/rclone.conf
+```
+
+Then provide that exact file to the pipeline:
+
+```bash
+nextflow run nf-core/datasync \
+    -profile docker \
+    --input samplesheet.csv \
+    --outdir results \
+    --rclone_config /secure/rclone.conf
+```
+
+### S3 and S3-compatible storage
+
+An S3 remote specifies the provider, region, and credentials. S3-compatible services commonly also require their service endpoint. For example:
+
+```ini title="rclone.conf"
+[source_s3]
+type = s3
+provider = AWS
+access_key_id = YOUR_ACCESS_KEY_ID
+secret_access_key = YOUR_SECRET_ACCESS_KEY
+region = eu-central-1
+
+[institutional_s3]
+type = s3
+provider = Other
+access_key_id = YOUR_ACCESS_KEY_ID
+secret_access_key = YOUR_SECRET_ACCESS_KEY
+endpoint = https://objects.example.org
+region = us-east-1
+```
+
+The corresponding input values could be `source_s3:incoming/run_001` and `institutional_s3:project/run_002`. Provider-specific settings vary: consult the [rclone S3 documentation](https://rclone.org/s3/) and your storage provider's endpoint, region, addressing-style, and credential documentation rather than copying example values unchanged.
+
+The pipeline also accepts an `s3://bucket/path` source or destination. In that form, ensure credentials and provider settings are available to both Nextflow and rclone in the execution environment. A named remote such as `source_s3:bucket/path` makes the selected configuration section explicit and is preferable when a config file contains multiple S3 providers.
+
+### Azure Blob Storage
+
+An Azure remote can use a storage account and key, a SAS URL, managed identity, or another authentication method supported by rclone. A storage-account-key example is:
+
+```ini title="rclone.conf"
+[archive_azure]
+type = azureblob
+account = YOUR_STORAGE_ACCOUNT
+key = YOUR_STORAGE_ACCOUNT_KEY
+```
+
+A destination can then use `archive_azure:container/path`. See the [rclone Azure Blob Storage documentation](https://rclone.org/azureblob/) to select the authentication method appropriate for the execution environment. Prefer short-lived credentials, managed identity, or narrowly scoped SAS tokens over long-lived account keys where possible.
+
+### Credential handling and validation
+
+- Do not commit `rclone.conf`, add it to container images, or include its contents in support requests. It often contains plaintext credentials or reusable tokens.
+- Restrict access, for example with `chmod 600 /secure/rclone.conf`, and inject the file through your workflow platform's secret-management facility where available.
+- Use distinct, least-privilege credentials for each provider. A source generally needs list/read access, while a destination needs list/read/write access for copying and post-copy validation.
+- Test each configured remote before launching the pipeline, for example with `rclone lsd source_s3:bucket --config /secure/rclone.conf`. Use a harmless test prefix before operating on production data.
+- Rotate any example or real credential that is accidentally exposed. The placeholder values above are not usable credentials.
+
+## Destination layout
 
 The pipeline preserves the source basename:
 

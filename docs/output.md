@@ -98,3 +98,5 @@ Open `multiqc_report.html` after every run and investigate any non-matching, mis
 </details>
 
 These files provide operational provenance and help diagnose performance or failures. Archive them with the MultiQC and rclone reports. The Nextflow `work/` directory and `.nextflow.log` remain in the launch directory rather than `--outdir`; keep them until transfer verification is complete if detailed troubleshooting or `-resume` may be needed.
+
+The supplied rclone configuration is an input credential file and is not intentionally copied to `--outdir`. Nevertheless, execution logs may contain remote names and object paths. Review logs before sharing them, and manage `rclone.conf` separately as a secret.
