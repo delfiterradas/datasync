@@ -2,213 +2,204 @@
 
 ## :warning: Please read this documentation on the nf-core website: [https://nf-co.re/datasync/usage](https://nf-co.re/datasync/usage)
 
-> _Documentation of pipeline parameters is generated automatically from the pipeline schema and can no longer be found in markdown files._
+> Pipeline parameter documentation is generated automatically from [`nextflow_schema.json`](../nextflow_schema.json). This page explains how to prepare a transfer and operate the pipeline.
 
-## Introduction
+## Prerequisites
 
-<!-- TODO nf-core: Add documentation about anything specific to running your pipeline. For general topics, please point to (and add to) the main nf-core website. -->
+Install Nextflow 25.10.4 or later and use a supported software profile. Docker or Singularity/Apptainer is recommended for reproducibility. Ensure that the account running Nextflow can read each source and checksum manifest and can write to every destination.
+
+For cloud or other authenticated rclone remotes, create an [rclone configuration](https://rclone.org/docs/) and pass it with `--rclone_config`. The configuration applies to remote **sources and destinations**. The pipeline has currently been tested for transfers between S3 buckets. Other rclone-supported layouts, such as Azure Blob Storage to S3 or transfers between S3-compatible providers, should be configured and validated against the upstream rclone documentation for each provider before use.
 
 ## Samplesheet input
 
-You will need to create a samplesheet with information about the samples you would like to analyse before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row as shown in the examples below.
+Supply a comma-separated samplesheet with `--input`:
 
 ```bash
---input '[path to samplesheet file]'
+--input /path/to/samplesheet.csv
 ```
 
-### Multiple runs of the same sample
+Each row describes an independent transfer. The header names are fixed; columns may be in any order.
 
-The `sample` identifiers have to be the same when you have re-sequenced the same sample more than once e.g. to increase sequencing depth. The pipeline will concatenate the raw reads before performing any downstream analysis. Below is an example for the same sample sequenced across 3 lanes:
+| Column         | Required            | Description                                                                                                                                                                                                                             |
+| -------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sample`       | Yes                 | Unique identifier used in task labels and output report names. It must not contain whitespace. Use a unique value for each row to prevent published report files from colliding.                                                        |
+| `input`        | Yes                 | Source file or directory. This can be a local path, HTTP(S) URL, object-storage URL such as `s3://bucket/prefix`, or configured remote such as `source_s3:bucket/prefix` or `source_azure:container/prefix`. Whitespace is not allowed. |
+| `output_path`  | Yes                 | Destination directory understood by rclone, such as `/archive/runs`, `s3://bucket/prefix`, or a configured `remote:path`. Whitespace is not allowed.                                                                                    |
+| `checksum_md5` | One checksum column | MD5 sum file (`.csv` or `.tsv`) used to validate `input` before copying. Leave empty when using SHA-256 only.                                                                                                                           |
+| `checksum_sha` | One checksum column | SHA-256 sum file (`.csv` or `.tsv`) used to validate `input` before copying. Leave empty when using MD5 only.                                                                                                                           |
+
+At least one checksum manifest is required on every row. If both are supplied, both validations run. Checksum files must use the format accepted by [`rclone checksum`](https://rclone.org/commands/rclone_checksum/): one hash and one path per line, with paths relative to the source root. Despite the permitted `.csv`/`.tsv` filename suffix, the contents are checksum-manifest text rather than a table with a header.
+
+Example:
 
 ```csv title="samplesheet.csv"
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
-CONTROL_REP1,AEG588A1_S1_L003_R1_001.fastq.gz,AEG588A1_S1_L003_R2_001.fastq.gz
-CONTROL_REP1,AEG588A1_S1_L004_R1_001.fastq.gz,AEG588A1_S1_L004_R2_001.fastq.gz
+sample,input,output_path,checksum_md5,checksum_sha
+run_001,/data/run_001,s3://archive/runs,/data/checksums/run_001_md5.tsv,
+reference,https://example.org/reference.fa,/data/references,,/data/checksums/reference_sha256.tsv
+run_002,/data/run_002,archive:runs,/data/checksums/run_002_md5.tsv,/data/checksums/run_002_sha256.tsv
 ```
 
-### Full samplesheet
+An [example samplesheet](../assets/samplesheet.csv) is included in the repository.
 
-The pipeline will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The samplesheet can have as many columns as you desire, however, there is a strict requirement for the first 3 columns to match those defined in the table below.
+## Configuring rclone remotes
 
-A final samplesheet file consisting of both single- and paired-end data may look something like the one below. This is for 6 samples, where `TREATMENT_REP3` has been sequenced twice.
+The file supplied with `--rclone_config` uses rclone's INI-style format. Each `[name]` section defines a remote, and samplesheet paths refer to it as `name:path`. The remote name is an arbitrary local label; it does not need to match the provider or bucket name. The pipeline's documented and tested configuration pattern is S3-to-S3 transfer. One file may contain several sections, so other cloud-to-cloud transfers can define both providers in the same file, but provider-specific options should be taken from the relevant rclone documentation rather than inferred from the S3 example:
 
-```csv title="samplesheet.csv"
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
-CONTROL_REP2,AEG588A2_S2_L002_R1_001.fastq.gz,AEG588A2_S2_L002_R2_001.fastq.gz
-CONTROL_REP3,AEG588A3_S3_L002_R1_001.fastq.gz,AEG588A3_S3_L002_R2_001.fastq.gz
-TREATMENT_REP1,AEG588A4_S4_L003_R1_001.fastq.gz,
-TREATMENT_REP2,AEG588A5_S5_L003_R1_001.fastq.gz,
-TREATMENT_REP3,AEG588A6_S6_L003_R1_001.fastq.gz,
-TREATMENT_REP3,AEG588A6_S6_L004_R1_001.fastq.gz,
+```text
+source_s3:incoming/run_001
+archive_azure:research-archive/run_001
 ```
 
-| Column    | Description                                                                                                                                                                            |
-| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sample`  | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
-| `fastq_1` | Full path to FastQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
-| `fastq_2` | Full path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
+Create the file interactively where possible:
 
-An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
+```bash
+rclone config --config /secure/rclone.conf
+rclone listremotes --config /secure/rclone.conf
+```
+
+Then provide that exact file to the pipeline:
+
+```bash
+nextflow run nf-core/datasync \
+    -profile docker \
+    --input samplesheet.csv \
+    --outdir results \
+    --rclone_config /secure/rclone.conf
+```
+
+### S3 and S3-compatible storage
+
+The main use case tested for nf-core/datasync is transferring files between S3 buckets. An S3 remote specifies the provider, region, and credentials. S3-compatible services commonly also require their service endpoint. For example:
+
+```ini title="rclone.conf"
+[source_s3]
+type = s3
+provider = AWS
+access_key_id = YOUR_ACCESS_KEY_ID
+secret_access_key = YOUR_SECRET_ACCESS_KEY
+region = eu-central-1
+
+[institutional_s3]
+type = s3
+provider = Other
+access_key_id = YOUR_ACCESS_KEY_ID
+secret_access_key = YOUR_SECRET_ACCESS_KEY
+endpoint = https://objects.example.org
+region = us-east-1
+```
+
+The corresponding input values could be `source_s3:incoming/run_001` and `institutional_s3:project/run_002`. Provider-specific settings vary: consult the [rclone S3 documentation](https://rclone.org/s3/) and your storage provider's endpoint, region, addressing-style, and credential documentation rather than copying example values unchanged.
+
+The pipeline also accepts an `s3://bucket/path` source or destination. In that form, ensure credentials and provider settings are available to both Nextflow and rclone in the execution environment. A named remote such as `source_s3:bucket/path` makes the selected configuration section explicit and is preferable when a config file contains multiple S3 providers.
+
+### Azure Blob Storage
+
+An Azure remote can use a storage account and key, a SAS URL, managed identity, or another authentication method supported by rclone. A storage-account-key example is:
+
+```ini title="rclone.conf"
+[archive_azure]
+type = azureblob
+account = YOUR_STORAGE_ACCOUNT
+key = YOUR_STORAGE_ACCOUNT_KEY
+```
+
+A destination can then use `archive_azure:container/path`. Azure and other non-S3 providers are examples of rclone-supported use cases, but they are not the primary tested configuration for this pipeline. See the [rclone Azure Blob Storage documentation](https://rclone.org/azureblob/) to select the authentication method appropriate for the execution environment, and validate the configuration with rclone before launching nf-core/datasync. Prefer short-lived credentials, managed identity, or narrowly scoped SAS tokens over long-lived account keys where possible.
+
+### Credential handling and validation
+
+- Do not commit `rclone.conf`, add it to container images, or include its contents in support requests. It often contains plaintext credentials or reusable tokens.
+- Restrict access, for example with `chmod 600 /secure/rclone.conf`, and inject the file through your workflow platform's secret-management facility where available.
+- Use distinct, least-privilege credentials for each provider. A source generally needs list/read access, while a destination needs list/read/write access for copying and post-copy validation.
+- Test each configured remote before launching the pipeline, for example with `rclone lsd source_s3:bucket --config /secure/rclone.conf`. Use a harmless test prefix before operating on production data.
+- Rotate any example or real credential that is accidentally exposed. The placeholder values above are not usable credentials.
+
+## Destination layout
+
+The pipeline preserves the source basename:
+
+- for a file source, rclone copies the file into `output_path`, and validation expects `output_path/<source filename>`;
+- for a directory source, the pipeline appends the source directory name, so `/data/run_001` with `output_path=/archive/runs` is copied and checked at `/archive/runs/run_001`.
+
+A trailing slash on `output_path` is removed before these paths are constructed. Ensure that a destination does not already contain unrelated files: post-copy validation uses `rclone check --one-way`, which checks that source content exists and matches at the destination while tolerating destination-only files.
 
 ## Running the pipeline
 
-The typical command for running the pipeline is as follows:
+A typical local-to-cloud run is:
 
 ```bash
-nextflow run nf-core/datasync --input ./samplesheet.csv --outdir ./results --genome GRCh37 -profile docker
+nextflow run nf-core/datasync \
+    -r <VERSION> \
+    -profile docker \
+    --input /data/samplesheet.csv \
+    --outdir /data/datasync-results \
+    --rclone_config /secure/rclone.conf
 ```
 
-This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
+`--outdir` stores logs, integrity reports, MultiQC, and execution metadata. It does **not** override the transfer destinations in the samplesheet.
 
-Note that the pipeline will create the following files in your working directory:
+To inspect the proposed copy without writing destination data:
 
 ```bash
-work                # Directory containing the nextflow working files
-<OUTDIR>            # Finished results in specified location (defined with --outdir)
-.nextflow_log       # Log file from Nextflow
-# Other nextflow hidden files, eg. history of pipeline runs and old logs.
+nextflow run nf-core/datasync \
+    -r <VERSION> \
+    -profile docker \
+    --input /data/samplesheet.csv \
+    --outdir /data/datasync-dry-run \
+    --rclone_config /secure/rclone.conf \
+    --rclone_dry_run
 ```
 
-If you wish to repeatedly use the same parameters for multiple runs, rather than specifying each flag in the command, you can specify these in a params file.
+The checksum and post-copy check stages still run during a dry run. Consequently, post-copy results reflect whatever was already present at the destination rather than a simulated final state.
 
-Pipeline settings can be provided in a `yaml` or `json` file via `-params-file <file>`.
+### Parameter files
 
-> [!WARNING]
-> Do not use `-c <file>` to specify parameters as this will result in errors. Custom config files specified with `-c` must only be used for [tuning process resource specifications](https://nf-co.re/docs/running/run-pipelines#configuring-pipelines), other infrastructural tweaks (such as output directories), or module arguments (args).
-
-The above pipeline run specified with a params file in yaml format:
-
-```bash
-nextflow run nf-core/datasync -profile docker -params-file params.yaml
-```
-
-with:
+Frequently reused settings can be stored in YAML or JSON and loaded with `-params-file`:
 
 ```yaml title="params.yaml"
-input: './samplesheet.csv'
-outdir: './results/'
-genome: 'GRCh37'
-<...>
+input: /data/samplesheet.csv
+outdir: /data/datasync-results
+rclone_config: /secure/rclone.conf
+multiqc_title: July archive transfer
 ```
 
-You can also generate such `YAML`/`JSON` files via [nf-core/launch](https://nf-co.re/launch).
+```bash
+nextflow run nf-core/datasync -r <VERSION> -profile docker -params-file params.yaml
+```
 
-### Updating the pipeline
+Do not use `-c` for pipeline parameters. Use it only for Nextflow executor, resources, and other infrastructure configuration.
 
-When you run the above command, Nextflow automatically pulls the pipeline code from GitHub and stores it as a cached version. When running the pipeline after this, it will always use the cached version if available - even if the pipeline has been updated since. To make sure that you're running the latest version of the pipeline, make sure that you regularly update the cached version of the pipeline:
+## Understanding completion and integrity
+
+For each row, the pipeline first validates supplied checksum manifests, performs the copy, and then compares source and destination. Rclone comparison commands write status reports even when differences are found, allowing all results to be collected in MultiQC. Therefore, a successful Nextflow run means the workflow completed; it does **not by itself** prove every object matched. Review `multiqc/multiqc_report.html` and the reports under `rclone/`, especially lines marked `-`, `+`, `*`, or `!` (see [output documentation](output.md)).
+
+## Resuming and reproducibility
+
+Pin a released pipeline version with `-r` and record the samplesheet, parameter file, rclone configuration provenance (without exposing secrets), and generated `pipeline_info/` directory. To restart an interrupted run with unchanged inputs and parameters, add `-resume`:
+
+```bash
+nextflow run nf-core/datasync -r <VERSION> -profile docker -params-file params.yaml -resume
+```
+
+Nextflow may reuse completed tasks from its work directory. Before retrying a partial transfer, confirm the destination contents are acceptable; rclone copy skips identical files but may update changed ones.
+
+Update the locally cached pipeline when intentionally moving to a newer release:
 
 ```bash
 nextflow pull nf-core/datasync
 ```
 
-### Reproducibility
+## Resource configuration
 
-It is a good idea to specify the pipeline version when running the pipeline on your data. This ensures that a specific version of the pipeline code and software are used when you run your pipeline. If you keep using the same tag, you'll be running the same version of the pipeline, even if there have been changes to the code since.
+The rclone processes use the `process_low` label. Configure executors and override CPU, memory, or time in a Nextflow config, for example:
 
-First, go to the [nf-core/datasync releases page](https://github.com/nf-core/datasync/releases) and find the latest pipeline version - numeric only (eg. `1.3.1`). Then specify this when running the pipeline with `-r` (one hyphen) - eg. `-r 1.3.1`. Of course, you can switch to another version by changing the number after the `-r` flag.
-
-This version number will be logged in reports when you run the pipeline, so that you'll know what you used when you look back in the future. For example, at the bottom of the MultiQC reports.
-
-To further assist in reproducibility, you can use share and reuse [parameter files](#running-the-pipeline) to repeat pipeline runs with the same settings without having to write out a command with every single parameter.
-
-> [!TIP]
-> If you wish to share such profile (such as upload as supplementary material for academic publications), make sure to NOT include cluster specific paths to files, nor institutional specific profiles.
-
-## Core Nextflow arguments
-
-> [!NOTE]
-> These options are part of Nextflow and use a _single_ hyphen (pipeline parameters use a double-hyphen)
-
-### `-profile`
-
-Use this parameter to choose a configuration profile. Profiles can give configuration presets for different compute environments.
-
-Several generic profiles are bundled with the pipeline which instruct the pipeline to use software packaged using different methods (Docker, Singularity, Podman, Shifter, Charliecloud, Apptainer, Conda) - see below.
-
-> [!IMPORTANT]
-> We highly recommend the use of Docker or Singularity containers for full pipeline reproducibility, however when this is not possible, Conda is also supported.
-
-The pipeline also dynamically loads configurations from [https://github.com/nf-core/configs](https://github.com/nf-core/configs) when it runs, making multiple config profiles for various institutional clusters available at run time. For more information and to check if your system is supported, please see the [nf-core/configs documentation](https://github.com/nf-core/configs#documentation).
-
-Note that multiple profiles can be loaded, for example: `-profile test,docker` - the order of arguments is important!
-They are loaded in sequence, so later profiles can overwrite earlier profiles.
-
-If `-profile` is not specified, the pipeline will run locally and expect all software to be installed and available on the `PATH`. This is _not_ recommended, since it can lead to different results on different machines dependent on the computer environment.
-
-- `test`
-  - A profile with a complete configuration for automated testing
-  - Includes links to test data so needs no other parameters
-- `docker`
-  - A generic configuration profile to be used with [Docker](https://docker.com/)
-- `singularity`
-  - A generic configuration profile to be used with [Singularity](https://sylabs.io/docs/)
-- `podman`
-  - A generic configuration profile to be used with [Podman](https://podman.io/)
-- `shifter`
-  - A generic configuration profile to be used with [Shifter](https://nersc.gitlab.io/development/shifter/how-to-use/)
-- `charliecloud`
-  - A generic configuration profile to be used with [Charliecloud](https://charliecloud.io/)
-- `apptainer`
-  - A generic configuration profile to be used with [Apptainer](https://apptainer.org/)
-- `wave`
-  - A generic configuration profile to enable [Wave](https://seqera.io/wave/) containers. Use together with one of the above (requires Nextflow ` 24.03.0-edge` or later).
-- `conda`
-  - A generic configuration profile to be used with [Conda](https://conda.io/docs/). Please only use Conda as a last resort i.e. when it's not possible to run the pipeline with Docker, Singularity, Podman, Shifter, Charliecloud, or Apptainer.
-
-### `-resume`
-
-Specify this when restarting a pipeline. Nextflow will use cached results from any pipeline steps where the inputs are the same, continuing from where it got to previously. For input to be considered the same, not only the names must be identical but the files' contents as well. For more info about this parameter, see [this blog post](https://www.nextflow.io/blog/2019/demystifying-nextflow-resume.html).
-
-You can also supply a run name to resume a specific run: `-resume [run-name]`. Use the `nextflow log` command to show previous run names.
-
-### `-c`
-
-Specify the path to a specific config file (this is a core Nextflow command). See the [nf-core website documentation](https://nf-co.re/usage/configuration) for more information.
-
-## Custom configuration
-
-### Resource requests
-
-Whilst the default requirements set within the pipeline will hopefully work for most people and with most input data, you may find that you want to customise the compute resources that the pipeline requests. Each step in the pipeline has a default set of requirements for number of CPUs, memory and time. For most of the pipeline steps, if the job exits with any of the error codes specified [here](https://github.com/nf-core/rnaseq/blob/4c27ef5610c87db00c3c5a3eed10b1d161abf575/conf/base.config#L18) it will automatically be resubmitted with higher resources request (2 x original, then 3 x original). If it still fails after the third attempt then the pipeline execution is stopped.
-
-To change the resource requests, please see the [max resources](https://nf-co.re/docs/running/configuration/nextflow-for-your-system#set-max-resources) and [customise process resources](https://nf-co.re/docs/running/configuration/nextflow-for-your-system#customize-process-resources) section of the nf-core website.
-
-### Custom Containers
-
-In some cases, you may wish to change the container or conda environment used by a pipeline steps for a particular tool. By default, nf-core pipelines use containers and software from the [biocontainers](https://biocontainers.pro/) or [bioconda](https://bioconda.github.io/) projects. However, in some cases the pipeline specified version maybe out of date.
-
-To use a different container from the default container or conda environment specified in a pipeline, please see the [updating tool versions](https://nf-co.re/docs/running/configuration/nextflow-for-your-system#update-tool-versions) section of the nf-core website.
-
-### Custom Tool Arguments
-
-A pipeline might not always support every possible argument or option of a particular tool used in pipeline. Fortunately, nf-core pipelines provide some freedom to users to insert additional parameters that the pipeline does not include by default.
-
-To learn how to provide additional arguments to a particular tool of the pipeline, please see the [customising tool arguments](https://nf-co.re/docs/running/configuration/nextflow-for-your-system#modifying-tool-arguments) section of the nf-core website.
-
-### nf-core/configs
-
-In most cases, you will only need to create a custom config as a one-off but if you and others within your organisation are likely to be running nf-core pipelines regularly and need to use the same settings regularly it may be a good idea to request that your custom config file is uploaded to the `nf-core/configs` git repository. Before you do this please can you test that the config file works with your pipeline of choice using the `-c` parameter. You can then create a pull request to the `nf-core/configs` repository with the addition of your config file, associated documentation file (see examples in [`nf-core/configs/docs`](https://github.com/nf-core/configs/tree/master/docs)), and amending [`nfcore_custom.config`](https://github.com/nf-core/configs/blob/master/nfcore_custom.config) to include your custom profile.
-
-See the main [Nextflow documentation](https://www.nextflow.io/docs/latest/config.html) for more information about creating your own configuration files.
-
-If you have any questions or issues please send us a message on [Slack](https://nf-co.re/join/slack) on the [`#configs` channel](https://nfcore.slack.com/channels/configs).
-
-## Running in the background
-
-Nextflow handles job submissions and supervises the running jobs. The Nextflow process must run until the pipeline is finished.
-
-The Nextflow `-bg` flag launches Nextflow in the background, detached from your terminal so that the workflow does not stop if you log out of your session. The logs are saved to a file.
-
-Alternatively, you can use `screen` / `tmux` or similar tool to create a detached session which you can log back into at a later time.
-Some HPC setups also allow you to run nextflow within a cluster job submitted your job scheduler (from where it submits more jobs).
-
-## Nextflow memory requirements
-
-In some cases, the Nextflow Java virtual machines can start to request a large amount of memory.
-We recommend adding the following line to your environment to limit this (typically in `~/.bashrc` or `~./bash_profile`):
-
-```bash
-NXF_OPTS='-Xms1g -Xmx4g'
+```groovy title="resources.config"
+process {
+    withLabel: process_low {
+        cpus = 8
+        memory = '16 GB'
+        time = '12h'
+    }
+}
 ```
+
+Run with `-c resources.config`. Rclone derives its checker count from allocated CPUs, and the copy step uses roughly half that count (minimum one) for parallel transfers.
