@@ -31,7 +31,7 @@
 3. compares the copied data with the source using `rclone check`; and
 4. produces detailed rclone status files and a consolidated MultiQC report.
 
-Sources and destinations may be local paths, HTTP(S) URLs, or rclone-supported remote storage such as Amazon S3, S3-compatible object storage, or Azure Blob Storage. Pass an rclone configuration with `--rclone_config` whenever a source or destination needs a configured remote, endpoint, or credentials. A single configuration file can contain separate named remotes for multiple providers.
+Sources and destinations may be local paths, HTTP(S) URLs, or rclone-supported remote storage such as Amazon S3, S3-compatible object storage, or Azure Blob Storage. The current tested use case for this pipeline is transfer between S3 buckets. Pass an rclone configuration with `--rclone_config` whenever a source or destination needs a configured remote, endpoint, or credentials. A single configuration file can contain separate named remotes for multiple providers; for non-S3 layouts, design and validate the provider-specific configuration using the upstream [rclone documentation](https://rclone.org/docs/).
 
 ```mermaid
 graph LR
@@ -66,7 +66,7 @@ nextflow run nf-core/datasync \
     --rclone_config /path/to/rclone.conf
 ```
 
-`--rclone_config` is optional only when every source and destination is accessible without a configured rclone remote. See the [rclone configuration section](docs/usage.md#configuring-rclone-remotes) for S3 and Azure examples. To preview copy operations without transferring data, add `--rclone_dry_run`; note that subsequent comparison reports will then describe the unchanged destination.
+`--rclone_config` is optional only when every source and destination is accessible without a configured rclone remote. See the [rclone configuration section](docs/usage.md#configuring-rclone-remotes) for the tested S3-to-S3 use case and guidance on adapting rclone configuration files for other providers. To preview copy operations without transferring data, add `--rclone_dry_run`; note that subsequent comparison reports will then describe the unchanged destination.
 
 > [!WARNING]
 > Provide pipeline parameters on the command line or with Nextflow's `-params-file` option. Do not put pipeline parameters in a configuration supplied with `-c`; custom configuration files are intended for executor and resource settings.

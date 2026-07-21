@@ -8,7 +8,7 @@
 
 Install Nextflow 25.10.4 or later and use a supported software profile. Docker or Singularity/Apptainer is recommended for reproducibility. Ensure that the account running Nextflow can read each source and checksum manifest and can write to every destination.
 
-For cloud or other authenticated rclone remotes, create an [rclone configuration](https://rclone.org/docs/) and pass it with `--rclone_config`. The configuration applies to remote **sources and destinations**. For example, the pipeline can copy from S3 to a local directory, from Azure Blob Storage to S3, or between two separately configured S3-compatible providers.
+For cloud or other authenticated rclone remotes, create an [rclone configuration](https://rclone.org/docs/) and pass it with `--rclone_config`. The configuration applies to remote **sources and destinations**. The pipeline has currently been tested for transfers between S3 buckets. Other rclone-supported layouts, such as Azure Blob Storage to S3 or transfers between S3-compatible providers, should be configured and validated against the upstream rclone documentation for each provider before use.
 
 ## Samplesheet input
 
@@ -43,7 +43,7 @@ An [example samplesheet](../assets/samplesheet.csv) is included in the repositor
 
 ## Configuring rclone remotes
 
-The file supplied with `--rclone_config` uses rclone's INI-style format. Each `[name]` section defines a remote, and samplesheet paths refer to it as `name:path`. The remote name is an arbitrary local label; it does not need to match the provider or bucket name. One file may contain several sections, so a cloud-to-cloud transfer can define both providers in the same file:
+The file supplied with `--rclone_config` uses rclone's INI-style format. Each `[name]` section defines a remote, and samplesheet paths refer to it as `name:path`. The remote name is an arbitrary local label; it does not need to match the provider or bucket name. The pipeline's documented and tested configuration pattern is S3-to-S3 transfer. One file may contain several sections, so other cloud-to-cloud transfers can define both providers in the same file, but provider-specific options should be taken from the relevant rclone documentation rather than inferred from the S3 example:
 
 ```text
 source_s3:incoming/run_001
@@ -69,7 +69,7 @@ nextflow run nf-core/datasync \
 
 ### S3 and S3-compatible storage
 
-An S3 remote specifies the provider, region, and credentials. S3-compatible services commonly also require their service endpoint. For example:
+The main use case tested for nf-core/datasync is transferring files between S3 buckets. An S3 remote specifies the provider, region, and credentials. S3-compatible services commonly also require their service endpoint. For example:
 
 ```ini title="rclone.conf"
 [source_s3]
@@ -103,7 +103,7 @@ account = YOUR_STORAGE_ACCOUNT
 key = YOUR_STORAGE_ACCOUNT_KEY
 ```
 
-A destination can then use `archive_azure:container/path`. See the [rclone Azure Blob Storage documentation](https://rclone.org/azureblob/) to select the authentication method appropriate for the execution environment. Prefer short-lived credentials, managed identity, or narrowly scoped SAS tokens over long-lived account keys where possible.
+A destination can then use `archive_azure:container/path`. Azure and other non-S3 providers are examples of rclone-supported use cases, but they are not the primary tested configuration for this pipeline. See the [rclone Azure Blob Storage documentation](https://rclone.org/azureblob/) to select the authentication method appropriate for the execution environment, and validate the configuration with rclone before launching nf-core/datasync. Prefer short-lived credentials, managed identity, or narrowly scoped SAS tokens over long-lived account keys where possible.
 
 ### Credential handling and validation
 
