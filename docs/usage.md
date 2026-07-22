@@ -34,7 +34,7 @@ Example:
 
 ```csv title="samplesheet.csv"
 sample,input,output_path,checksum_md5,checksum_sha
-run_001,/data/run_001,s3://archive/runs,/data/checksums/run_001_md5.tsv,
+run_001,/data/run_001,s3://archive/runs,/data/checksums/run_001_md5.tsv
 reference,https://example.org/reference.fa,/data/references,,/data/checksums/reference_sha256.tsv
 run_002,/data/run_002,archive:runs,/data/checksums/run_002_md5.tsv,/data/checksums/run_002_sha256.tsv
 ```
@@ -69,49 +69,20 @@ nextflow run nf-core/datasync \
 
 ### S3 and S3-compatible storage
 
-The main use case tested for nf-core/datasync is transferring files between S3 buckets. An S3 remote specifies the provider, region, and credentials. S3-compatible services commonly also require their service endpoint. For example:
+The main use case tested for nf-core/datasync is transferring files between S3 buckets. An S3 remote specifies the provider, region, and credentials. For example:
 
 ```ini title="rclone.conf"
-[source_s3]
+[s3]
 type = s3
 provider = AWS
 access_key_id = YOUR_ACCESS_KEY_ID
 secret_access_key = YOUR_SECRET_ACCESS_KEY
 region = eu-central-1
-
-[institutional_s3]
-type = s3
-provider = Other
-access_key_id = YOUR_ACCESS_KEY_ID
-secret_access_key = YOUR_SECRET_ACCESS_KEY
-endpoint = https://objects.example.org
-region = us-east-1
 ```
 
 The corresponding input values could be `source_s3:incoming/run_001` and `institutional_s3:project/run_002`. Provider-specific settings vary: consult the [rclone S3 documentation](https://rclone.org/s3/) and your storage provider's endpoint, region, addressing-style, and credential documentation rather than copying example values unchanged.
 
 The pipeline also accepts an `s3://bucket/path` source or destination. In that form, ensure credentials and provider settings are available to both Nextflow and rclone in the execution environment. A named remote such as `source_s3:bucket/path` makes the selected configuration section explicit and is preferable when a config file contains multiple S3 providers.
-
-### Azure Blob Storage
-
-An Azure remote can use a storage account and key, a SAS URL, managed identity, or another authentication method supported by rclone. A storage-account-key example is:
-
-```ini title="rclone.conf"
-[archive_azure]
-type = azureblob
-account = YOUR_STORAGE_ACCOUNT
-key = YOUR_STORAGE_ACCOUNT_KEY
-```
-
-A destination can then use `archive_azure:container/path`. Azure and other non-S3 providers are examples of rclone-supported use cases, but they are not the primary tested configuration for this pipeline. See the [rclone Azure Blob Storage documentation](https://rclone.org/azureblob/) to select the authentication method appropriate for the execution environment, and validate the configuration with rclone before launching nf-core/datasync. Prefer short-lived credentials, managed identity, or narrowly scoped SAS tokens over long-lived account keys where possible.
-
-### Credential handling and validation
-
-- Do not commit `rclone.conf`, add it to container images, or include its contents in support requests. It often contains plaintext credentials or reusable tokens.
-- Restrict access, for example with `chmod 600 /secure/rclone.conf`, and inject the file through your workflow platform's secret-management facility where available.
-- Use distinct, least-privilege credentials for each provider. A source generally needs list/read access, while a destination needs list/read/write access for copying and post-copy validation.
-- Test each configured remote before launching the pipeline, for example with `rclone lsd source_s3:bucket --config /secure/rclone.conf`. Use a harmless test prefix before operating on production data.
-- Rotate any example or real credential that is accidentally exposed. The placeholder values above are not usable credentials.
 
 ## Destination layout
 
