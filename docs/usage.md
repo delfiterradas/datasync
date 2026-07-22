@@ -173,4 +173,4 @@ process {
 }
 ```
 
-Run with `-c resources.config`. Rclone derives its checker count from allocated CPUs, and the copy step uses roughly half that count (minimum one) for parallel transfers.
+Run with `-c resources.config`. `rclone` derives its checker count from allocated CPUs, and the copy step uses roughly half that count (minimum one) for parallel transfers.
