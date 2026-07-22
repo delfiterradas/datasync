@@ -33,7 +33,7 @@
 
 Sources and destinations may be local paths, HTTP(S) URLs, or rclone-supported remote storage such as Amazon S3, S3-compatible object storage, or Azure Blob Storage. The current tested use case for this pipeline is transfer between S3 buckets. Pass an rclone configuration with `--rclone_config` whenever a source or destination needs a configured remote, endpoint, or credentials. A single configuration file can contain separate named remotes for multiple providers; for non-S3 layouts, design and validate the provider-specific configuration using the upstream [rclone documentation](https://rclone.org/docs/).
 
-<img width="1036" height="370" alt="metromap_style_pipeline_workflow_components drawio (1)" src="https://github.com/user-attachments/assets/e8b669c8-462e-4e2c-ac87-c47640ea59d0" />
+<img width="1036" height="370" alt="metromap_style_pipeline_workflow_components drawio (1)" src="https://github.com/user-attachments/assets/84188c95-e6eb-42b7-b82f-db1d9e0560e5" />
 
 ## Quick start
 
