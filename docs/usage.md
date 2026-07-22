@@ -161,7 +161,7 @@ nextflow pull nf-core/datasync
 
 ## Resource configuration
 
-The rclone processes use the `process_low` label. Configure executors and override CPU, memory, or time in a Nextflow config, for example:
+The `rclone` processes use the `process_low` label. Configure executors and override CPU, memory, or time in a Nextflow config, for example:
 
 ```groovy title="resources.config"
 process {
