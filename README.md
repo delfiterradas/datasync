@@ -48,7 +48,7 @@ run_001,/data/run_001,s3://archive/runs,/data/manifests/run_001_md5.tsv
 reference,https://example.org/reference.fa,/data/references,,/data/manifests/reference_sha256.tsv
 ```
 
-Then launch the pipeline with a container profile:
+Then launch the pipeline using:
 
 ```bash
 nextflow run nf-core/datasync \
