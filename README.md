@@ -27,7 +27,7 @@
 **nf-core/datasync** is a Nextflow pipeline for copying files and directories between storage locations and documenting their integrity. For every row in an input samplesheet, the pipeline:
 
 1. validates the source against a supplied MD5 and/or SHA-256 checksum manifest;
-2. copies the source to the requested destination with [rclone](https://rclone.org/);
+2. copies the source to the requested destination with [`rclone copy`](https://rclone.org/);
 3. compares the copied data with the source using `rclone check`; and
 4. produces detailed rclone status files and a consolidated MultiQC report.
 
