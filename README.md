@@ -65,14 +65,7 @@ See the [usage documentation](docs/usage.md) for samplesheet rules, destination 
 
 ## Pipeline output
 
-Results are written below `--outdir`:
-
-- `rclone/` contains a copy log and integrity status files for each samplesheet row;
-- `multiqc/multiqc_report.html` provides the consolidated transfer and checksum summary;
-- `multiqc/multiqc_data/` contains machine-readable report data; and
-- `pipeline_info/` contains software versions and Nextflow execution reports.
-
-The transferred data itself is written directly to each row's `output_path`, not below `--outdir` unless that is the destination you selected. See the [output documentation](docs/output.md) for file names and status-code interpretation.
+Results are written below `--outdir`. See the [output documentation](docs/output.md) for file names and status-code interpretation.
 
 ## Credits
 
