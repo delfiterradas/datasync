@@ -12,13 +12,24 @@ This document describes the reports produced by nf-core/datasync. Paths below ar
 ```text
 <OUTDIR>/
 ├── rclone/
-│   ├── <sample>-rclone-copy.log
-│   ├── <sample>.combined.txt
-│   ├── <sample>.match.txt
-│   ├── <sample>.differ.txt
-│   ├── <sample>.missing_on_dst.txt
-│   ├── <sample>.missing_on_src.txt
-│   └── <sample>.error.txt
+│   ├── copy/
+│   │   └── <sample>-rclone-copy.log
+│   ├── checksum/
+│   │   └── <sample>/
+│   │       ├── <sample>.combined.txt
+│   │       ├── <sample>.match.txt
+│   │       ├── <sample>.differ.txt
+│   │       ├── <sample>.missing_on_dst.txt
+│   │       ├── <sample>.missing_on_src.txt
+│   │       └── <sample>.error.txt
+│   └── check/
+│       └── <sample>/
+│           ├── <sample>.combined.txt
+│           ├── <sample>.match.txt
+│           ├── <sample>.differ.txt
+│           ├── <sample>.missing_on_dst.txt
+│           ├── <sample>.missing_on_src.txt
+│           └── <sample>.error.txt
 ├── multiqc/
 │   ├── multiqc_report.html
 │   └── multiqc_data/
@@ -27,26 +38,36 @@ This document describes the reports produced by nf-core/datasync. Paths below ar
     └── execution_* / pipeline_dag_*
 ```
 
+The `rclone/` directory is split by module stage. Copy logs are published to `rclone/copy/`, pre-copy checksum validation reports are published to `rclone/checksum/<sample>/`, and post-copy source-to-destination comparison reports are published to `rclone/check/<sample>/`. The `<sample>` directory name is taken from the `sample` value in the samplesheet row.
+
 ## Rclone transfer and integrity reports
 
 <details markdown="1">
 <summary>Output files</summary>
 
-- `rclone/`
+- `rclone/copy/`
   - `<sample>-rclone-copy.log`: informational log from the copy operation.
-  - `<sample>.combined.txt`: combined comparison status, one path per line.
-  - `<sample>.match.txt`: paths whose content matched (`=`).
+- `rclone/checksum/<sample>/`
+  - `<sample>.combined.txt`: combined pre-copy checksum-validation status, one path per line.
+  - `<sample>.match.txt`: paths whose content matched the supplied checksum manifest (`=`).
+  - `<sample>.differ.txt`: paths present in the source and manifest but with different content (`*`).
+  - `<sample>.missing_on_dst.txt`: paths present in the checksum manifest but absent from the checked source (`-`).
+  - `<sample>.missing_on_src.txt`: paths present in the checked source but absent from the checksum manifest (`+`).
+  - `<sample>.error.txt`: paths that could not be read or hashed (`!`).
+- `rclone/check/<sample>/`
+  - `<sample>.combined.txt`: combined post-copy source-to-destination comparison status, one path per line.
+  - `<sample>.match.txt`: paths whose content matched between source and destination (`=`).
   - `<sample>.differ.txt`: paths present on both sides but with different content (`*`).
-  - `<sample>.missing_on_dst.txt`: paths found in the source or manifest but absent from the checked data (`-`).
-  - `<sample>.missing_on_src.txt`: paths found in the checked data but absent from the source or manifest (`+`).
+  - `<sample>.missing_on_dst.txt`: paths found in the source but absent from the destination (`-`).
+  - `<sample>.missing_on_src.txt`: paths found at the destination but absent from the source (`+`).
   - `<sample>.error.txt`: paths that could not be read or hashed (`!`).
 
 </details>
 
 Two integrity stages create reports:
 
-1. **Pre-copy checksum validation** uses each supplied MD5 and/or SHA-256 manifest to check the source.
-2. **Post-copy validation** compares the source with the destination after the copy task finishes.
+1. **Pre-copy checksum validation** uses each supplied MD5 and/or SHA-256 manifest to check the source and publishes reports under `rclone/checksum/<sample>/`.
+2. **Post-copy validation** compares the source with the destination after the copy task finishes and publishes reports under `rclone/check/<sample>/`.
 
 Both stages use the same `<sample>.*.txt` naming convention and publish to `rclone/`. When a row supplies a checksum manifest, similarly named pre-copy and post-copy files may target the same published path; use the consolidated MultiQC sections for the stage-specific summary and retain the Nextflow work directory if both raw report sets must be audited independently.
 
