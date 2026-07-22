@@ -33,14 +33,8 @@
 
 Sources and destinations may be local paths, HTTP(S) URLs, or rclone-supported remote storage such as Amazon S3, S3-compatible object storage, or Azure Blob Storage. The current tested use case for this pipeline is transfer between S3 buckets. Pass an rclone configuration with `--rclone_config` whenever a source or destination needs a configured remote, endpoint, or credentials. A single configuration file can contain separate named remotes for multiple providers; for non-S3 layouts, design and validate the provider-specific configuration using the upstream [rclone documentation](https://rclone.org/docs/).
 
-```mermaid
-graph LR
-    A[Samplesheet] --> B[Validate supplied checksums]
-    A --> C[Copy with rclone]
-    C --> D[Compare source and destination]
-    B --> E[MultiQC integrity report]
-    D --> E
-```
+<img width="1036" height="370" alt="metromap_style_pipeline_workflow_components drawio" src="https://github.com/user-attachments/assets/1976ecfd-f363-401e-b2a1-ba94f0abf317" />
+
 
 ## Quick start
 
@@ -51,7 +45,7 @@ Create a samplesheet containing one transfer per row:
 
 ```csv
 sample,input,output_path,checksum_md5,checksum_sha
-run_001,/data/run_001,s3://archive/runs,/data/manifests/run_001_md5.tsv,
+run_001,/data/run_001,s3://archive/runs,/data/manifests/run_001_md5.tsv
 reference,https://example.org/reference.fa,/data/references,,/data/manifests/reference_sha256.tsv
 ```
 
@@ -68,8 +62,6 @@ nextflow run nf-core/datasync \
 
 `--rclone_config` is optional only when every source and destination is accessible without a configured rclone remote. See the [rclone configuration section](docs/usage.md#configuring-rclone-remotes) for the tested S3-to-S3 use case and guidance on adapting rclone configuration files for other providers. To preview copy operations without transferring data, add `--rclone_dry_run`; note that subsequent comparison reports will then describe the unchanged destination.
 
-> [!WARNING]
-> Provide pipeline parameters on the command line or with Nextflow's `-params-file` option. Do not put pipeline parameters in a configuration supplied with `-c`; custom configuration files are intended for executor and resource settings.
 
 See the [usage documentation](docs/usage.md) for samplesheet rules, destination semantics, remote configuration, and reproducible execution. The complete generated parameter reference is available on the [nf-core pipeline page](https://nf-co.re/datasync/parameters).
 
