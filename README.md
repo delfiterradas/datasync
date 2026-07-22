@@ -40,7 +40,18 @@ Sources and destinations may be local paths, HTTP(S) URLs, or rclone-supported r
 > [!NOTE]
 > If you are new to Nextflow and nf-core, see the [nf-core environment setup guide](https://nf-co.re/docs/get_started/environment_setup/overview). Nextflow 25.10.4 or later is required.
 
-Create a samplesheet containing one transfer per row:
+To explore the pipeline outputs before preparing your own data, run the bundled `test` profile with a container profile:
+
+```bash
+nextflow run nf-core/datasync \
+    -r <VERSION> \
+    -profile test,docker \
+    --outdir results
+```
+
+The `test` profile supplies a small samplesheet and rclone configuration automatically. It also enables `--rclone_dry_run`, so no files are actually transferred. This makes it useful for exploring the `rclone/` output folders and `multiqc/multiqc_report.html`; remember that post-copy comparison reports describe whatever is already present at the destination because the dry run does not write transfer data.
+
+To run the pipeline on your own data, create a samplesheet containing one transfer per row:
 
 ```csv
 sample,input,output_path,checksum_md5,checksum_sha
