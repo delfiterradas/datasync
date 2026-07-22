@@ -35,7 +35,6 @@ Sources and destinations may be local paths, HTTP(S) URLs, or rclone-supported r
 
 <img width="1036" height="370" alt="metromap_style_pipeline_workflow_components drawio (1)" src="https://github.com/user-attachments/assets/e8b669c8-462e-4e2c-ac87-c47640ea59d0" />
 
-
 ## Quick start
 
 > [!NOTE]
@@ -61,7 +60,6 @@ nextflow run nf-core/datasync \
 ```
 
 `--rclone_config` is optional only when every source and destination is accessible without a configured rclone remote. See the [rclone configuration section](docs/usage.md#configuring-rclone-remotes) for the tested S3-to-S3 use case and guidance on adapting rclone configuration files for other providers. To preview copy operations without transferring data, add `--rclone_dry_run`; note that subsequent comparison reports will then describe the unchanged destination.
-
 
 See the [usage documentation](docs/usage.md) for samplesheet rules, destination semantics, remote configuration, and reproducible execution. The complete generated parameter reference is available on the [nf-core pipeline page](https://nf-co.re/datasync/parameters).
 
