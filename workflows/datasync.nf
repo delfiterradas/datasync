@@ -33,6 +33,7 @@ workflow DATASYNC {
 
     ch_versions = channel.empty()
     ch_multiqc_files = channel.empty()
+    ch_rclone_config = rclone_config ? file(rclone_config, checkIfExists: true) : []
 
     ch_samplesheet = ch_samplesheet.multiMap {
         meta, input_path, output_path, md5, sha ->
@@ -69,7 +70,7 @@ workflow DATASYNC {
 
     RCLONE_CHECKSUM(
         ch_checksum,
-        rclone_config ? file(rclone_config, checkIfExists: true) : []
+        ch_rclone_config
     )
 
     ch_multiqc_files = ch_multiqc_files.mix(RCLONE_CHECKSUM.out.combined
@@ -89,7 +90,7 @@ workflow DATASYNC {
     //
     RCLONE_COPY(
         ch_samplesheet.rclone,
-        rclone_config ? file(rclone_config, checkIfExists: true) : []
+        ch_rclone_config
     )
 
     //
@@ -102,7 +103,7 @@ workflow DATASYNC {
 
     RCLONE_CHECK(
         ch_rclone_check,
-        rclone_config ? file(rclone_config, checkIfExists: true) : []
+        ch_rclone_config
     )
 
     ch_multiqc_files = ch_multiqc_files.mix(RCLONE_CHECK.out.combined
