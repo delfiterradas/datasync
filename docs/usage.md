@@ -25,18 +25,43 @@ Each row describes an independent transfer. The header names are fixed; columns 
 | `sample`       | Yes                 | Unique identifier used in task labels and output report names. It must not contain whitespace. Use a unique value for each row to prevent published report files from colliding.                                                        |
 | `input`        | Yes                 | Source file or directory. This can be a local path, HTTP(S) URL, object-storage URL such as `s3://bucket/prefix`, or configured remote such as `source_s3:bucket/prefix` or `source_azure:container/prefix`. Whitespace is not allowed. |
 | `output_path`  | Yes                 | Destination directory understood by rclone, such as `/archive/runs`, `s3://bucket/prefix`, or a configured `remote:path`. Whitespace is not allowed.                                                                                    |
-| `checksum_md5` | One checksum column | MD5 sum file (`.csv` or `.tsv`) used to validate `input` before copying. Leave empty when using SHA-256 only.                                                                                                                           |
-| `checksum_sha` | One checksum column | SHA-256 sum file (`.csv` or `.tsv`) used to validate `input` before copying. Leave empty when using MD5 only.                                                                                                                           |
+| `checksum_md5` | One checksum column | Path or URL to an MD5 checksum manifest used to validate `input` before copying. The manifest format is described below. Leave empty when using SHA-256 only.                                                                           |
+| `checksum_sha` | One checksum column | Path or URL to a SHA-256 checksum manifest used to validate `input` before copying. The manifest format is described below. Leave empty when using MD5 only.                                                                            |
 
-At least one checksum manifest is required on every row. If both are supplied, both validations run. Checksum files must use the format accepted by [`rclone checksum`](https://rclone.org/commands/rclone_checksum/): one hash and one path per line, with paths relative to the source root. Despite the permitted `.csv`/`.tsv` filename suffix, the contents are checksum-manifest text rather than a table with a header.
+At least one checksum manifest is required on every row. If both are supplied, both validations run. Checksum files must use the format accepted by [`rclone checksum`](https://rclone.org/commands/rclone_checksum/): one checksum record per line with the hash value followed by two spaces and then the file path. Paths must be relative to the source root from the `input` column, not absolute paths.
 
-Example:
+For a directory input, the source root is the directory named in the samplesheet. For example, if the samplesheet `input` is `/data/run_001` and one file in that directory is `/data/run_001/reads/sample_R1.fastq.gz`, the checksum manifest path must be `reads/sample_R1.fastq.gz`. Do not write `/data/run_001/reads/sample_R1.fastq.gz` in the manifest. For a single-file input, use the input file name as the manifest path.
+
+Checksum manifests may use a `.tsv` or `.csv` filename extension, but their contents are not tab-separated or comma-separated tables and must not include a header. Each record is plain text with the hash and path separated by exactly two spaces. The required fields are:
+
+| Field | Required | Description                                                                                     |
+| ----- | -------- | ----------------------------------------------------------------------------------------------- |
+| Hash  | Yes      | MD5 hash for `checksum_md5` files or SHA-256 hash for `checksum_sha` files.                     |
+| Path  | Yes      | Relative path to the file being validated, resolved from the corresponding `input` source root. |
+
+Example samplesheet:
 
 ```csv title="samplesheet.csv"
 sample,input,output_path,checksum_md5,checksum_sha
-run_001,/data/run_001,s3://archive/runs,/data/checksums/run_001_md5.tsv
+run_001,/data/run_001,s3://archive/runs,/data/checksums/run_001_md5.tsv,
 reference,https://example.org/reference.fa,/data/references,,/data/checksums/reference_sha256.tsv
 run_002,/data/run_002,archive:runs,/data/checksums/run_002_md5.tsv,/data/checksums/run_002_sha256.tsv
+```
+
+For the `run_001` directory example, `/data/checksums/run_001_md5.tsv` could contain:
+
+```text title="run_001_md5.tsv"
+d41d8cd98f00b204e9800998ecf8427e  reads/sample_R1.fastq.gz
+0cc175b9c0f1b6a831c399e269772661  reads/sample_R2.fastq.gz
+900150983cd24fb0d6963f7d28e17f72  reports/qc_summary.txt
+```
+
+For a SHA-256 manifest, the same relative paths are used with SHA-256 hashes:
+
+```text title="run_001_sha256.tsv"
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  reads/sample_R1.fastq.gz
+ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb  reads/sample_R2.fastq.gz
+ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad  reports/qc_summary.txt
 ```
 
 An [example samplesheet](../assets/samplesheet.csv) is included in the repository.
