@@ -176,21 +176,24 @@ Do not use `-c` for pipeline parameters. Use it only for Nextflow executor, reso
 
 For each row, the pipeline first validates supplied checksum manifests, performs the copy, and then compares source and destination. Rclone comparison commands write status reports even when differences are found, allowing all results to be collected in MultiQC. Therefore, a successful Nextflow run means the workflow completed; it does **not by itself** prove every object matched. Review `multiqc/multiqc_report.html` and the reports under `rclone/`, especially lines marked `-`, `+`, `*`, or `!` (see [output documentation](output.md)).
 
-## Resuming and reproducibility
+### Reproducibility
 
-Pin a released pipeline version with `-r` and record the samplesheet, parameter file, rclone configuration provenance (without exposing secrets), and generated `pipeline_info/` directory. To restart an interrupted run with unchanged inputs and parameters, add `-resume`:
+It is a good idea to specify the pipeline version when running the pipeline on your data. This ensures that a specific version of the pipeline code and software are used when you run your pipeline. If you keep using the same tag, you'll be running the same version of the pipeline, even if there have been changes to the code since.
 
-```bash
-nextflow run nf-core/datasync -r <VERSION> -profile docker -params-file params.yaml -resume
-```
+First, go to the [nf-core/datasync releases page](https://github.com/nf-core/datasync/releases) and find the latest pipeline version - numeric only (eg. `1.3.1`). Then specify this when running the pipeline with `-r` (one hyphen) - eg. `-r 1.3.1`. Of course, you can switch to another version by changing the number after the `-r` flag.
 
-Nextflow may reuse completed tasks from its work directory. Before retrying a partial transfer, confirm the destination contents are acceptable; rclone copy skips identical files but may update changed ones.
+This version number will be logged in reports when you run the pipeline, so that you'll know what you used when you look back in the future. For example, at the bottom of the MultiQC reports.
 
-Update the locally cached pipeline when intentionally moving to a newer release:
+To further assist in reproducibility, you can use share and reuse [parameter files](#running-the-pipeline) to repeat pipeline runs with the same settings without having to write out a command with every single parameter.
 
-```bash
-nextflow pull nf-core/datasync
-```
+> [!TIP]
+> If you wish to share such profile (such as upload as supplementary material for academic publications), make sure to NOT include cluster specific paths to files, nor institutional specific profiles.
+
+### `-resume`
+
+Specify this when restarting a pipeline. Nextflow will use cached results from any pipeline steps where the inputs are the same, continuing from where it got to previously. For input to be considered the same, not only the names must be identical but the files' contents as well. For more info about this parameter, see [this blog post](https://www.nextflow.io/blog/2019/demystifying-nextflow-resume.html).
+
+You can also supply a run name to resume a specific run: `-resume [run-name]`. Use the `nextflow log` command to show previous run names.
 
 ## Resource configuration
 
