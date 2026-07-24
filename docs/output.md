@@ -81,7 +81,7 @@ The combined files use `rclone`'s one-character status prefixes:
 | `*`    | Content differs          | Re-copy or investigate source/destination mutation.                                                                         |
 | `!`    | Read/hash error          | Inspect permissions, credentials, connectivity, and the copy log.                                                           |
 
-Empty category files mean that rclone reported no entries in that category. The commands are designed to preserve these reports rather than terminate the whole workflow on comparison differences. Always inspect the reports; workflow success alone is not an integrity guarantee.
+Empty category files mean that `rclone` reported no entries in that category. The commands are designed to preserve these reports rather than terminate the whole workflow on comparison differences. Always inspect the reports; workflow success alone is not an integrity guarantee.
 
 ## MultiQC
 
