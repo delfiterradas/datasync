@@ -66,7 +66,7 @@ ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad  reports/qc_sum
 
 An [example samplesheet](../assets/samplesheet.csv) is included in the repository.
 
-## Configuring rclone remotes
+## Configuring `rclone` remotes
 
 The file supplied with `--rclone_config` uses rclone's INI-style format. Each `[name]` section defines a remote, and samplesheet paths refer to it as `name:path`. The remote name is an arbitrary local label; it does not need to match the provider or bucket name. The pipeline's documented and tested configuration pattern is S3-to-S3 transfer. One file may contain several sections, so other cloud-to-cloud transfers can define both providers in the same file, but provider-specific options should be taken from the relevant rclone documentation rather than inferred from the S3 example:
 
