@@ -71,7 +71,7 @@ Two integrity stages create reports:
 
 Both stages use the same `<sample>.*.txt` naming convention and publish to `rclone/`. When a row supplies a checksum manifest, similarly named pre-copy and post-copy files may target the same published path; use the consolidated MultiQC sections for the stage-specific summary and retain the Nextflow work directory if both raw report sets must be audited independently.
 
-The combined files use rclone's one-character status prefixes:
+The combined files use `rclone`'s one-character status prefixes:
 
 | Prefix | Meaning                  | Action                                                                                                                      |
 | ------ | ------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
