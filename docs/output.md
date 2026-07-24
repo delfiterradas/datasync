@@ -107,7 +107,7 @@ The MD5 and SHA-256 input-validation sections show the results from `rclone chec
 
 ![nf-core/multiqc checksum md5](images/datasync-multiqc-checksum-md5.png)
 
-### Rclone check section
+### `rclone check` section (post-transfer checks)
 
 The source-destination validation section shows the results from `rclone check` after the copy step. Use this section to confirm that copied files at `output_path` match the corresponding source files.
 
