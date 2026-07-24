@@ -197,6 +197,65 @@ nextflow run nf-core/datasync -r <VERSION> -profile docker -params-file params.y
 
 Do not use `-c` for pipeline parameters. Use it only for Nextflow executor, resources, and other infrastructure configuration.
 
+### Common integrity outcomes
+
+The workflow is designed to collect rclone reports even when rclone detects differences. The table below summarises common edge cases and how to interpret them in the published reports and MultiQC.
+
+| Situation                                                          | Where it is detected                                             | Report status                     | Pipeline behaviour and action                                                                                                                       |
+| ------------------------------------------------------------------ | ---------------------------------------------------------------- | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| File exists and checksum/content matches                           | `rclone checksum` before copy and `rclone check` after copy      | `=` / `Match`                     | Expected result; no action needed.                                                                                                                  |
+| File is listed in the checksum manifest but absent from the source | Pre-copy `rclone checksum`                                       | `-` / missing from checked source | The report is retained for review. Fix the manifest or restore the missing source file before relying on the transfer.                              |
+| Source file exists but is absent from the checksum manifest        | Pre-copy `rclone checksum`                                       | `+` / missing from manifest       | Review whether the manifest is incomplete or whether the extra source file should be excluded from the transfer.                                    |
+| Source file hash differs from the supplied manifest                | Pre-copy `rclone checksum`                                       | `*` / mismatch                    | Investigate source mutation, stale manifests, or incorrect checksum files before accepting the copy.                                                |
+| Source file cannot be read or hashed                               | Pre-copy `rclone checksum`                                       | `!` / error                       | Inspect credentials, permissions, connectivity, and source path spelling.                                                                           |
+| Destination is missing a copied file                               | Post-copy `rclone check`                                         | `-` / missing from destination    | Treat as an incomplete transfer unless the file was intentionally excluded; re-run or inspect the rclone copy log.                                  |
+| Destination file exists but content differs from source            | Post-copy `rclone check`                                         | `*` / mismatch                    | Re-copy or investigate concurrent source/destination changes.                                                                                       |
+| Destination contains files absent from the source                  | Post-copy `rclone check`                                         | `+` / missing from source         | The post-copy check uses `--one-way`, so destination-only files are tolerated, but should still be reviewed for unexpected stale or unrelated data. |
+| Dry-run execution                                                  | Copy step uses `--dry-run`; checksum and check reports still run | Depends on existing destination   | No transfer data is written. Post-copy reports describe whatever was already present at the destination.                                            |
+
+### Including or excluding files
+
+Filter files by passing additional rclone filter flags to the relevant rclone module through a Nextflow configuration file. Rclone supports flags such as `--include`, `--exclude`, `--filter`, `--files-from`, and related rule files; see the [rclone filtering documentation](https://rclone.org/filtering/) for rule syntax and ordering.
+
+For example, to copy and check only FASTQ files while excluding temporary files, create a small infrastructure config:
+
+```groovy title="rclone_filters.config"
+process {
+    withName: 'RCLONE_COPY' {
+        ext.args = {
+            [
+                '--log-level INFO',
+                '--stats 30s',
+                '--stats-one-line',
+                '--stats-log-level INFO',
+                '--s3-chunk-size 64M',
+                '--no-check-certificate',
+                params.rclone_dry_run ? '--dry-run' : '',
+                '--include "*.fastq.gz"',
+                '--include "*.fq.gz"',
+                '--exclude "*.tmp"',
+                '--exclude "*"'
+            ].findAll { it }.join(' ')
+        }
+    }
+
+    withName: 'RCLONE_CHECK' {
+        ext.args = {
+            [
+                '--no-check-certificate',
+                '--one-way',
+                '--include "*.fastq.gz"',
+                '--include "*.fq.gz"',
+                '--exclude "*.tmp"',
+                '--exclude "*"'
+            ].join(' ')
+        }
+    }
+}
+```
+
+Run it with `-c rclone_filters.config` in addition to your normal profile and parameters. Because `ext.args` overrides module defaults, include the default rclone flags you still need when adding filters. Keep checksum manifests consistent with the same filtering rules: if a file is intentionally excluded from copy/check, remove it from the checksum manifest or generate a manifest for only the included files.
+
 ## Understanding completion and integrity
 
 For each row, the pipeline first validates supplied checksum manifests, performs the copy, and then compares source and destination. Rclone comparison commands write status reports even when differences are found, allowing all results to be collected in MultiQC. Therefore, a successful Nextflow run means the workflow completed; it does **not by itself** prove every object matched. Review `multiqc/multiqc_report.html` and the reports under `rclone/`, especially lines marked `-`, `+`, `*`, or `!` (see [output documentation](output.md)).
