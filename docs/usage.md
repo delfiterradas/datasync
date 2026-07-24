@@ -8,7 +8,7 @@
 
 Install Nextflow 25.10.4 or later and use a supported software profile. Docker or Singularity/Apptainer is recommended for reproducibility. Ensure that the account running Nextflow can read each source and checksum manifest and can write to every destination.
 
-For cloud or other authenticated rclone remotes, create an [rclone configuration](https://rclone.org/docs/) and pass it with `--rclone_config`. The configuration applies to remote **sources and destinations**. The pipeline has currently been tested for transfers between S3 buckets. Other rclone-supported layouts, such as Azure Blob Storage to S3 or transfers between S3-compatible providers, should be configured and validated against the upstream rclone documentation for each provider before use.
+For cloud or other authenticated rclone remotes, create an [rclone configuration](https://rclone.org/docs/) and pass it with `--rclone_config`. The configuration applies to remote **sources and destinations**. The pipeline has currently been tested for transfers between S3 buckets. Other rclone-supported layouts, such as Azure Blob Storage to S3 or transfers between S3-compatible providers, should be configured and validated against the upstream `rclone` documentation for each provider before use.
 
 ## Samplesheet input
 
