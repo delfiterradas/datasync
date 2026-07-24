@@ -105,7 +105,7 @@ The MultiQC report consolidates:
 
 The MD5 and SHA-256 input-validation sections show the results from [`rclone checksum`](https://rclone.org/commands/rclone_checksum/). Use these sections to confirm that each source file matched the checksum manifest supplied in `checksum_md5` and/or `checksum_sha` before copying.
 
-When a samplesheet `input` points to S3, `rclone checksum` can normally validate MD5 manifests from S3 object hashes, but S3 does not provide SHA-256 object hashes for rclone to read remotely. SHA-256 validation for S3 inputs therefore requires `rclone checksum --download`, which downloads object data and calculates the hash locally during validation. Configure the checksum process to pass `--download` when SHA-256 validation is required for S3 inputs; see the [`rclone checksum --download` documentation](https://rclone.org/commands/rclone_checksum/) and the [rclone S3 hash documentation](https://rclone.org/s3/#hashes).
+When a samplesheet `input` points to S3, `rclone checksum` can normally validate MD5 manifests from S3 object hashes, but S3 does not provide SHA-256 object hashes for rclone to read remotely. SHA-256 validation for S3 inputs therefore requires `rclone checksum --download`, which downloads object data and calculates the hash locally during validation. Configure the checksum process to pass `--download` when SHA-256 validation is required for S3 inputs; see the [`rclone checksum` --download documentation](https://rclone.org/commands/rclone_checksum/).
 
 ![nf-core/multiqc checksum md5](images/datasync-multiqc-checksum-md5.png)
 
