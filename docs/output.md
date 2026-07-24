@@ -101,7 +101,7 @@ The MultiQC report consolidates:
 - the validated samplesheet and workflow parameter summary; and
 - pipeline and tool versions.
 
-### Rclone checksum sections
+### `rclone checksum` section (source integrity checks)
 
 The MD5 and SHA-256 input-validation sections show the results from `rclone checksum`. Use these sections to confirm that each source file matched the checksum manifest supplied in `checksum_md5` and/or `checksum_sha` before copying.
 
