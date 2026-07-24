@@ -105,13 +105,13 @@ The MultiQC report consolidates:
 
 The MD5 and SHA-256 input-validation sections show the results from `rclone checksum`. Use these sections to confirm that each source file matched the checksum manifest supplied in `checksum_md5` and/or `checksum_sha` before copying.
 
-![nf-core/multiqc checksum md5](docs/images/datasync-multiqc-checksum-md5.png)
+![nf-core/multiqc checksum md5](images/datasync-multiqc-checksum-md5.png)
 
 ### Rclone check section
 
 The source-destination validation section shows the results from `rclone check` after the copy step. Use this section to confirm that copied files at `output_path` match the corresponding source files.
 
-![nf-core/multiqc checksum md5](docs/images/datasync-multiqc-post-transfer-check.png)
+![nf-core/multiqc checksum md5](images/datasync-multiqc-post-transfer-check.png)
 
 Open `multiqc_report.html` after every run and investigate any non-matching, missing, or error entries. In the rclone result sections, entries are prioritised so rows needing attention are shown before successful matches: errors, mismatches, and missing-file statuses appear ahead of matching files. Data under `multiqc_data/` can be retained for automated auditing or downstream reporting; exact filenames may vary with the MultiQC version and the checksum types present in the samplesheet.
 
