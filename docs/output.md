@@ -40,7 +40,7 @@ This document describes the reports produced by nf-core/datasync. Paths below ar
 
 The `rclone/` directory is split by module stage. Copy logs are published to `rclone/copy/`, pre-copy checksum validation reports are published to `rclone/checksum/<sample>/`, and post-copy source-to-destination comparison reports are published to `rclone/check/<sample>/`. The `<sample>` directory name is taken from the `sample` value in the samplesheet row.
 
-## Rclone transfer and integrity reports
+## `rclone` directory
 
 <details markdown="1">
 <summary>Output files</summary>
