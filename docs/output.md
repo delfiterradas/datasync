@@ -113,7 +113,7 @@ The source-destination validation section shows the results from `rclone check` 
 
 ![nf-core/multiqc checksum md5](images/datasync-multiqc-post-transfer-check.png)
 
-Open `multiqc_report.html` after every run and investigate any non-matching, missing, or error entries. In the rclone result sections, entries are prioritised so rows needing attention are shown before successful matches: errors, mismatches, and missing-file statuses appear ahead of matching files. Data under `multiqc_data/` can be retained for automated auditing or downstream reporting; exact filenames may vary with the MultiQC version and the checksum types present in the samplesheet.
+Open `multiqc_report.html` after every run and investigate any non-matching, missing, or error entries. In the `rclone` result sections, entries are prioritised so rows needing attention are shown before successful matches: errors, mismatches, and missing-file statuses appear ahead of matching files. Data under `multiqc_data/` can be retained for automated auditing or downstream reporting; exact filenames may vary with the MultiQC version and the checksum types present in the samplesheet.
 
 ## Pipeline information
 
