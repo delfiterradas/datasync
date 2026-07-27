@@ -3,15 +3,16 @@
     IMPORT MODULES / SUBWORKFLOWS / FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-include { MULTIQC                     } from '../modules/nf-core/multiqc/main'
-include { RCLONE_COPY                 } from '../modules/nf-core/rclone/copy/main'
-include { RCLONE_CHECK                } from '../modules/nf-core/rclone/check/main'
-include { RCLONE_CHECKSUM             } from '../modules/nf-core/rclone/checksum/main'
-include { paramsSummaryMap            } from 'plugin/nf-schema'
-include { paramsSummaryMultiqc        } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { softwareVersionsToYAML      } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText      } from '../subworkflows/local/utils_nfcore_datasync_pipeline'
-include { parseRcloneCheck            } from '../subworkflows/local/utils_nfcore_datasync_pipeline'
+include { MULTIQC                                  } from '../modules/nf-core/multiqc/main'
+include { RCLONE_COPY                              } from '../modules/nf-core/rclone/copy/main'
+include { RCLONE_COPY as RCLONE_COPY_MATCHING_ONLY } from '../modules/nf-core/rclone/copy/main'
+include { RCLONE_CHECK                             } from '../modules/nf-core/rclone/check/main'
+include { RCLONE_CHECKSUM                          } from '../modules/nf-core/rclone/checksum/main'
+include { paramsSummaryMap                         } from 'plugin/nf-schema'
+include { paramsSummaryMultiqc                     } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { softwareVersionsToYAML                   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { methodsDescriptionText                   } from '../subworkflows/local/utils_nfcore_datasync_pipeline'
+include { parseRcloneCheck                         } from '../subworkflows/local/utils_nfcore_datasync_pipeline'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -88,19 +89,49 @@ workflow DATASYNC {
     //
     // MODULE: Rclone data copying
     //
-    RCLONE_COPY(
-        ch_samplesheet.rclone,
-        ch_rclone_config
-    )
+    if(params.copy_matching_only) {
+        files_to_copy = RCLONE_CHECKSUM.out.match.map {
+                meta, match -> [ meta.subMap(meta.keySet() - 'check_format'), match ]
+            }
+            .groupTuple()
+            .map{ meta, files ->
+                def common = files
+                    .collect { it.readLines() }
+                    .inject { a, b -> a.intersect(b) }
+
+                def copy_files = file("${outdir}/${meta.id}_files_to_copy.txt")
+                copy_files.text = common.join('\n') + '\n'
+
+                tuple(meta, copy_files)
+            }
+
+        ch_rclone_copy = ch_samplesheet.rclone
+            .join(files_to_copy)
+
+        RCLONE_COPY_MATCHING_ONLY(
+            ch_rclone_copy,
+            ch_rclone_config,
+        )
+
+        // Wait for file copy to finish before running RCLONE_CHECK
+        ch_rclone_check = ch_samplesheet.rclone
+            .join(RCLONE_COPY_MATCHING_ONLY.out.log)
+            .map { meta, input, output, log -> [ meta, input, output ]}
+    } else {
+        RCLONE_COPY(
+            ch_samplesheet.rclone.map { meta, source, destination -> [ meta, source, destination, [] ]},
+            ch_rclone_config,
+        )
+
+        // Wait for file copy to finish before running RCLONE_CHECK
+        ch_rclone_check = ch_samplesheet.rclone
+            .join(RCLONE_COPY.out.log)
+            .map { meta, input, output, log -> [ meta, input, output ]}
+    }
 
     //
     // File transfer validation
     //
-    // Wait for file copy to finish before running RCLONE_CHECK
-    ch_rclone_check = ch_samplesheet.rclone
-        .join(RCLONE_COPY.out.log)
-        .map { meta, input, output, log -> [ meta, input, output ]}
-
     RCLONE_CHECK(
         ch_rclone_check,
         ch_rclone_config
