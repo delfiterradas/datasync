@@ -5,7 +5,6 @@
 */
 include { MULTIQC                                  } from '../modules/nf-core/multiqc/main'
 include { RCLONE_COPY                              } from '../modules/nf-core/rclone/copy/main'
-include { RCLONE_COPY as RCLONE_COPY_MATCHING_ONLY } from '../modules/nf-core/rclone/copy/main'
 include { RCLONE_CHECK                             } from '../modules/nf-core/rclone/check/main'
 include { RCLONE_CHECKSUM                          } from '../modules/nf-core/rclone/checksum/main'
 include { paramsSummaryMap                         } from 'plugin/nf-schema'
@@ -95,7 +94,6 @@ workflow DATASYNC {
             .map { meta, checksum, hash, source -> [ meta.subMap(meta.keySet() - 'check_format'), 1 ] }
             .groupTuple()
             .map { meta, ones -> tuple(meta, ones.size()) }
-            .view()
 
         files_to_copy = RCLONE_CHECKSUM.out.match.map {
                 meta, match -> [ meta.subMap(meta.keySet() - 'check_format'), match ]
@@ -108,7 +106,7 @@ workflow DATASYNC {
                     .collect { it.readLines() }
                     .inject { a, b -> a.intersect(b) }
 
-                def copy_files = file("${outdir}/${meta.id}_files_to_copy.txt")
+                def copy_files = file("${workDir}/${meta.id}_files_to_copy.txt")
                 copy_files.text = common.join('\n') + '\n'
 
                 tuple(meta, copy_files)
@@ -116,27 +114,19 @@ workflow DATASYNC {
 
         ch_rclone_copy = ch_samplesheet.rclone
             .join(files_to_copy)
-
-        RCLONE_COPY_MATCHING_ONLY(
-            ch_rclone_copy,
-            ch_rclone_config,
-        )
-
-        // Wait for file copy to finish before running RCLONE_CHECK
-        ch_rclone_check = ch_samplesheet.rclone
-            .join(RCLONE_COPY_MATCHING_ONLY.out.log)
-            .map { meta, input, output, log -> [ meta, input, output ]}
     } else {
-        RCLONE_COPY(
-            ch_samplesheet.rclone.map { meta, source, destination -> [ meta, source, destination, [] ]},
-            ch_rclone_config,
-        )
-
-        // Wait for file copy to finish before running RCLONE_CHECK
-        ch_rclone_check = ch_samplesheet.rclone
-            .join(RCLONE_COPY.out.log)
-            .map { meta, input, output, log -> [ meta, input, output ]}
+        ch_rclone_copy = ch_samplesheet.rclone.map { meta, source, destination -> [ meta, source, destination, [] ] }
     }
+
+    RCLONE_COPY(
+        ch_rclone_copy,
+        ch_rclone_config,
+    )
+
+    // Wait for file copy to finish before running RCLONE_CHECK
+    ch_rclone_check = ch_samplesheet.rclone
+        .join(RCLONE_COPY.out.log)
+        .map { meta, input, output, log -> [ meta, input, output ] }
 
     //
     // File transfer validation
