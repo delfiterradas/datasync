@@ -90,9 +90,18 @@ workflow DATASYNC {
     // MODULE: Rclone data copying
     //
     if(params.copy_matching_only) {
+        // Compute expected group size per meta.id from the input
+        ch_with_size = ch_checksum
+            .map { meta, checksum, hash, source -> [ meta.subMap(meta.keySet() - 'check_format'), 1 ] }
+            .groupTuple()
+            .map { meta, ones -> tuple(meta, ones.size()) }
+            .view()
+
         files_to_copy = RCLONE_CHECKSUM.out.match.map {
                 meta, match -> [ meta.subMap(meta.keySet() - 'check_format'), match ]
             }
+            .combine(ch_with_size, by: 0)
+            .map { meta, match, size -> tuple(groupKey(meta, size), match) }
             .groupTuple()
             .map{ meta, files ->
                 def common = files
