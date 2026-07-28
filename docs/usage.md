@@ -68,12 +68,12 @@ An [example samplesheet](../assets/samplesheet.csv) is included in the repositor
 
 ## Configuring `rclone` remotes
 
-The file supplied with `--rclone_config` uses `rclone`'s INI-style format. 
+The file supplied with `--rclone_config` uses `rclone`'s INI-style format.
 
-Each `[name]` section defines a remote, and samplesheet paths refer to it as `name:path`. The remote name is an arbitrary local label; it does not need to match the provider or bucket name. 
+Each `[name]` section defines a remote, and samplesheet paths refer to it as `name:path`. The remote name is an arbitrary local label; it does not need to match the provider or bucket name.
 
 > [!NOTE]
-> The pipeline's documented and tested configuration pattern is S3-to-S3 transfer. 
+> The pipeline's documented and tested configuration pattern is S3-to-S3 transfer.
 
 One file may contain several sections, so other cloud-to-cloud transfers can define both providers in the same file, but provider-specific options should be taken from the relevant `rclone` documentation. This is an example using S3:
 
@@ -123,7 +123,7 @@ The pipeline preserves the source basename:
 - for a file source, `rclone` copies the file into `output_path`, and validation expects `output_path/<source filename>`;
 - for a directory source, the pipeline appends the source directory name, so `/data/run_001` with `output_path=/archive/runs` is copied and checked at `/archive/runs/run_001`.
 
-A trailing slash on `output_path` is removed before these paths are constructed. Ensure that a destination does not already contain unrelated files: post-copy validation uses `rclone check --one-way`, which checks that source content exists and matches at the destination while tolerating destination-only files. You can override this behavior by providing your own config file with external arguments for `rclone check`. 
+A trailing slash on `output_path` is removed before these paths are constructed. Ensure that a destination does not already contain unrelated files: post-copy validation uses `rclone check --one-way`, which checks that source content exists and matches at the destination while tolerating destination-only files. You can override this behavior by providing your own config file with external arguments for `rclone check`.
 
 ## Running the pipeline
 
