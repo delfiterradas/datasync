@@ -31,7 +31,7 @@
 3. compares the copied data with the source using [`rclone check`](https://rclone.org/commands/rclone_check/); and
 4. produces detailed `rclone` status files and a consolidated MultiQC report.
 
-Sources and destinations may be local paths, HTTP(S) URLs, or rclone-supported remote storage such as Amazon S3, S3-compatible object storage, or Azure Blob Storage. 
+Sources and destinations may be local paths, HTTP(S) URLs, or rclone-supported remote storage such as Amazon S3, S3-compatible object storage, or Azure Blob Storage.
 
 The current tested use case for this pipeline is transfer between S3 buckets. 
 
