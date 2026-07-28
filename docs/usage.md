@@ -68,7 +68,14 @@ An [example samplesheet](../assets/samplesheet.csv) is included in the repositor
 
 ## Configuring `rclone` remotes
 
-The file supplied with `--rclone_config` uses rclone's INI-style format. Each `[name]` section defines a remote, and samplesheet paths refer to it as `name:path`. The remote name is an arbitrary local label; it does not need to match the provider or bucket name. The pipeline's documented and tested configuration pattern is S3-to-S3 transfer. One file may contain several sections, so other cloud-to-cloud transfers can define both providers in the same file, but provider-specific options should be taken from the relevant rclone documentation rather than inferred from the S3 example:
+The file supplied with `--rclone_config` uses `rclone`'s INI-style format. 
+
+Each `[name]` section defines a remote, and samplesheet paths refer to it as `name:path`. The remote name is an arbitrary local label; it does not need to match the provider or bucket name. 
+
+> [!NOTE]
+> The pipeline's documented and tested configuration pattern is S3-to-S3 transfer. 
+
+One file may contain several sections, so other cloud-to-cloud transfers can define both providers in the same file, but provider-specific options should be taken from the relevant `rclone` documentation. This is an example using S3:
 
 ```text
 source_s3:incoming/run_001
@@ -105,18 +112,18 @@ secret_access_key = YOUR_SECRET_ACCESS_KEY
 region = eu-central-1
 ```
 
-The corresponding input values could be `source_s3:incoming/run_001` and `institutional_s3:project/run_002`. Provider-specific settings vary: consult the [rclone S3 documentation](https://rclone.org/s3/) and your storage provider's endpoint, region, addressing-style, and credential documentation rather than copying example values unchanged.
+The corresponding input values could be `source_s3:incoming/run_001` and `institutional_s3:project/run_002`. Provider-specific settings vary: consult the [`rclone` S3 documentation](https://rclone.org/s3/) and your storage provider's endpoint, region, addressing-style, and credential documentation rather than copying example values unchanged.
 
-The pipeline also accepts an `s3://bucket/path` source or destination. In that form, ensure credentials and provider settings are available to both Nextflow and rclone in the execution environment. A named remote such as `source_s3:bucket/path` makes the selected configuration section explicit and is preferable when a config file contains multiple S3 providers.
+The pipeline also accepts an `s3://bucket/path` source or destination. In that form, ensure credentials and provider settings are available to both Nextflow and `rclone` in the execution environment. A named remote such as `source_s3:bucket/path` makes the selected configuration section explicit and is preferable when a config file contains multiple S3 providers.
 
 ## Destination layout
 
 The pipeline preserves the source basename:
 
-- for a file source, rclone copies the file into `output_path`, and validation expects `output_path/<source filename>`;
+- for a file source, `rclone` copies the file into `output_path`, and validation expects `output_path/<source filename>`;
 - for a directory source, the pipeline appends the source directory name, so `/data/run_001` with `output_path=/archive/runs` is copied and checked at `/archive/runs/run_001`.
 
-A trailing slash on `output_path` is removed before these paths are constructed. Ensure that a destination does not already contain unrelated files: post-copy validation uses `rclone check --one-way`, which checks that source content exists and matches at the destination while tolerating destination-only files.
+A trailing slash on `output_path` is removed before these paths are constructed. Ensure that a destination does not already contain unrelated files: post-copy validation uses `rclone check --one-way`, which checks that source content exists and matches at the destination while tolerating destination-only files. You can override this behavior by providing your own config file with external arguments for `rclone check`. 
 
 ## Running the pipeline
 
@@ -199,7 +206,7 @@ Do not use `-c` for pipeline parameters. Use it only for Nextflow executor, reso
 
 ### Common integrity outcomes
 
-The workflow is designed to collect rclone reports even when rclone detects differences. The table below summarises common edge cases and how to interpret them in the published reports and MultiQC.
+The workflow is designed to collect `rclone` reports even when `rclone` detects differences. The table below summarises common edge cases and how to interpret them in the published reports and MultiQC.
 
 | Situation                                                          | Where it is detected                                             | Report status                     | Pipeline behaviour and action                                                                                                                       |
 | ------------------------------------------------------------------ | ---------------------------------------------------------------- | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -215,7 +222,7 @@ The workflow is designed to collect rclone reports even when rclone detects diff
 
 ### Including or excluding files
 
-Filter files by passing additional rclone filter flags to the relevant rclone module through a Nextflow configuration file. Rclone supports flags such as `--include`, `--exclude`, `--filter`, `--files-from`, and related rule files; see the [rclone filtering documentation](https://rclone.org/filtering/) for rule syntax and ordering.
+Filter files by passing additional `rclone` filter flags to the relevant rclone module through a Nextflow configuration file. `rclone` supports flags such as `--include`, `--exclude`, `--filter`, `--files-from`, and related rule files; see the [`rclone` filtering documentation](https://rclone.org/filtering/) for rule syntax and ordering.
 
 For example, to copy and check only FASTQ files while excluding temporary files, create a small infrastructure config:
 
@@ -254,11 +261,11 @@ process {
 }
 ```
 
-Run it with `-c rclone_filters.config` in addition to your normal profile and parameters. Because `ext.args` overrides module defaults, include the default rclone flags you still need when adding filters. Keep checksum manifests consistent with the same filtering rules: if a file is intentionally excluded from copy/check, remove it from the checksum manifest or generate a manifest for only the included files.
+Run it with `-c rclone_filters.config` in addition to your normal profile and parameters. Because `ext.args` overrides module defaults, include the default `rclone` flags you still need when adding filters. Keep checksum manifests consistent with the same filtering rules: if a file is intentionally excluded from copy/check, remove it from the checksum manifest or generate a manifest for only the included files.
 
 ## Understanding completion and integrity
 
-For each row, the pipeline first validates supplied checksum manifests, performs the copy, and then compares source and destination. Rclone comparison commands write status reports even when differences are found, allowing all results to be collected in MultiQC. Therefore, a successful Nextflow run means the workflow completed; it does **not by itself** prove every object matched. Review `multiqc/multiqc_report.html` and the reports under `rclone/`, especially lines marked `-`, `+`, `*`, or `!` (see [output documentation](output.md)).
+For each row, the pipeline first validates supplied checksum manifests, performs the copy, and then compares source and destination. `rclone` comparison commands write status reports even when differences are found, allowing all results to be collected in MultiQC. Therefore, a successful Nextflow run means the workflow completed; it does **not by itself** prove every object matched. Review `multiqc/multiqc_report.html` and the reports under `rclone/`, especially lines marked `-`, `+`, `*`, or `!` (see [output documentation](output.md)).
 
 ### Reproducibility
 
