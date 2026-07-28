@@ -183,14 +183,22 @@ def parseRcloneCheck(meta, check_file) {
         '*': 'Mismatch',
         '!': 'Error'
     ]
+    def priority_map = [
+        '!': 0,
+        '*': 1,
+        '-': 2,
+        '+': 3,
+        '=': 4
+    ]
 
     return check_file.readLines()
         .findAll { it.trim() }
         .collect { line ->
             def fields = line.split(/ /, 2)
             def status = status_map.get(fields[0], fields[0])
+            def priority = priority_map.get(fields[0], 0)
 
-            [ meta, "${fields[1]}\t${meta.id}\t${status}\n" ]
+            [ meta, "${meta.id}:${fields[1]}\t${status}\t${fields[1]}\t${meta.id}\t${priority}\n" ]
         }
 }
 

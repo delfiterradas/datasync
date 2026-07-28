@@ -33,6 +33,7 @@ workflow DATASYNC {
 
     ch_versions = channel.empty()
     ch_multiqc_files = channel.empty()
+    ch_rclone_config = rclone_config ? file(rclone_config, checkIfExists: true) : []
 
     ch_samplesheet = ch_samplesheet.multiMap {
         meta, input_path, output_path, md5, sha ->
@@ -44,11 +45,13 @@ workflow DATASYNC {
             def rclone_destination = source.isFile()
                 ? output_path.toString().replaceAll('/+$', '')
                 : "${output_path.toString().replaceAll('/+$', '')}/${source.name}"
-            def rclone_check = "${output_path.toString().replaceAll('/+$', '')}/${source.name}"
+
+            def rclone_check = source.isFile()
+                ? input_path.replaceFirst('/[^/]+$', '')
+                : input_path.toString().replaceAll('/+$', '')
 
             rclone:   [ meta, source_uri, rclone_destination ]
-            checksum: [ meta, md5, sha, source ]
-            check :   [ meta, source, file(rclone_check) ]
+            checksum: [ meta, md5, sha, rclone_check ]
     }
 
     // Group input md5sum/shasum with their respective generated checksum
@@ -66,7 +69,8 @@ workflow DATASYNC {
         }
 
     RCLONE_CHECKSUM(
-        ch_checksum
+        ch_checksum,
+        ch_rclone_config
     )
 
     ch_multiqc_files = ch_multiqc_files.mix(RCLONE_CHECKSUM.out.combined
@@ -74,7 +78,7 @@ workflow DATASYNC {
             parseRcloneCheck(meta, check_file)
         }
         .collectFile(
-            seed: "File\tSample\tStatus\n",
+            seed: "Row\tStatus\tFile\tSample\tPriority\n",
             sort: false
         ) { meta, checksum ->
             return [ "${meta.id}_${meta.check_format}_rclone_checksum_mqc.tsv", checksum ]
@@ -86,19 +90,20 @@ workflow DATASYNC {
     //
     RCLONE_COPY(
         ch_samplesheet.rclone,
-        rclone_config ? file(rclone_config, checkIfExists: true) : []
+        ch_rclone_config
     )
 
     //
     // File transfer validation
     //
     // Wait for file copy to finish before running RCLONE_CHECK
-    ch_rclone_check = ch_samplesheet.check
+    ch_rclone_check = ch_samplesheet.rclone
         .join(RCLONE_COPY.out.log)
         .map { meta, input, output, log -> [ meta, input, output ]}
 
     RCLONE_CHECK(
-        ch_rclone_check
+        ch_rclone_check,
+        ch_rclone_config
     )
 
     ch_multiqc_files = ch_multiqc_files.mix(RCLONE_CHECK.out.combined
@@ -106,7 +111,7 @@ workflow DATASYNC {
             parseRcloneCheck(meta, check_file)
         }
         .collectFile(
-            seed: "File\tSample\tStatus\n",
+            seed: "Row\tStatus\tFile\tSample\tPriority\n",
             sort: false
         ) { meta, check ->
             return [ "${meta.id}_rclone_check_mqc.tsv", check ]
@@ -155,6 +160,7 @@ workflow DATASYNC {
         : file("${projectDir}/assets/methods_description_template.yml", checkIfExists: true)
     def ch_methods_description = channel.value(methodsDescriptionText(ch_multiqc_custom_methods_description))
     ch_multiqc_files = ch_multiqc_files.mix(ch_methods_description.collectFile(name: 'methods_description_mqc.yaml', sort: true))
+    ch_multiqc_files = ch_multiqc_files.mix(channel.value(file("${projectDir}/assets/multiqc_custom.css", checkIfExists: true)))
     MULTIQC(
         ch_multiqc_files.flatten().collect().map { files ->
             [

@@ -9,6 +9,9 @@ Initial release of nf-core/datasync, created with the [nf-core](https://nf-co.re
 
 ### `Added`
 
+- [[#57](https://github.com/nf-core/datasync/pull/57)] - Add nf-tests with edge cases([@atrigila](https://github.com/atrigila), review by [@delfiterradas](https://github.com/delfiterradas)).
+- [[#55](https://github.com/nf-core/datasync/pull/55)] - Add subdirectories with sample id to results. Improvements to MultiQC report (width of columns, sections and sub-section headers)colors to multiqc results and display first errors in tables ([@atrigila](https://github.com/atrigila), review by [@delfiterradas](https://github.com/delfiterradas)).
+- [[#54](https://github.com/nf-core/datasync/pull/54)] - Add colors to multiqc results and display first errors in tables ([@atrigila](https://github.com/atrigila), review by [@delfiterradas](https://github.com/delfiterradas)).
 - [[#31](https://github.com/nf-core/datasync/pull/31)] - Compute checksum for each input file ([@delfiterradas](https://github.com/delfiterradas), review by [@atrigila](https://github.com/atrigila)).
 - [[#35](https://github.com/nf-core/datasync/pull/35)] - Compare generated checksum to given checksum in input and update test profiles ([@delfiterradas](https://github.com/delfiterradas), review by [@atrigila](https://github.com/atrigila)).
 - [[#46](https://github.com/nf-core/datasync/pull/46)] - Import Rclone module from nf-core([@antoniasaracco](https://github.com/antoniasaracco), review by [@delfiterradas](https://github.com/delfiterradas)).
