@@ -22,7 +22,7 @@
                     },
                     "rclone/copy": {
                         "branch": "master",
-                        "git_sha": "a554e54c63c3f03f91c88a18ece7b89eca5a5212",
+                        "git_sha": "b34acd9d361bb226be8f0cf446b8b3a20ad0e3da",
                         "installed_by": ["modules"]
                     }
                 }
