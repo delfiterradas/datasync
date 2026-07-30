@@ -106,7 +106,10 @@ workflow DATASYNC {
                     .collect { it.readLines() }
                     .inject { a, b -> a.intersect(b) }
 
-                def copy_files = file("${workDir}/${meta.id}_files_to_copy.txt")
+                def copy_files = java.nio.file.Files.createTempFile(
+                    "${meta.id}_files_to_copy_",
+                    ".txt"
+                )
                 copy_files.text = common.join('\n') + '\n'
 
                 tuple(meta, copy_files)
