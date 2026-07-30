@@ -9,6 +9,7 @@ Initial release of nf-core/datasync, created with the [nf-core](https://nf-co.re
 
 ### `Added`
 
+- [[#74](https://github.com/nf-core/datasync/pull/74)] - Implement warning and `--download` parameter when working with remote directories and SHA checksums ([@delfiterradas](https://github.com/delfiterradas), review by [@atrigila](https://github.com/atrigila) and [@antoniasaracco](https://github.com/antoniasaracco)).
 - [[#67](https://github.com/nf-core/datasync/pull/67)] - Copy only files which are successfully validated ([@delfiterradas](https://github.com/delfiterradas), review by [@atrigila](https://github.com/atrigila) and [@antoniasaracco](https://github.com/antoniasaracco)).
 - [[#57](https://github.com/nf-core/datasync/pull/57)] - Add nf-tests with edge cases([@atrigila](https://github.com/atrigila), review by [@delfiterradas](https://github.com/delfiterradas)).
 - [[#55](https://github.com/nf-core/datasync/pull/55)] - Add subdirectories with sample id to results. Improvements to MultiQC report (width of columns, sections and sub-section headers)colors to multiqc results and display first errors in tables ([@atrigila](https://github.com/atrigila), review by [@delfiterradas](https://github.com/delfiterradas)).
