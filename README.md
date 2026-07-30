@@ -28,12 +28,10 @@
 
 **nf-core/datasync** is a Nextflow pipeline for copying files and directories between storage locations and documenting their integrity. For every row in an input samplesheet, the pipeline:
 
-
 1. validates the source against a supplied MD5 and/or SHA-256 checksum manifest using [`rclone checksum`](https://rclone.org/commands/rclone_checksum/);
 2. copies the source to the requested destination with [`rclone copy`](https://rclone.org/);
 3. compares the copied data with the source using [`rclone check`](https://rclone.org/commands/rclone_check/); and
 4. produces detailed `rclone` status files and a consolidated MultiQC report.
-
 
 Sources and destinations may be local paths, HTTP(S) URLs, or rclone-supported remote storage such as Amazon S3, S3-compatible object storage, or Azure Blob Storage.
 
@@ -49,7 +47,6 @@ Pass an `rclone` configuration with `--rclone_config` whenever a source or desti
 
 > If you are new to Nextflow and nf-core, see the [nf-core environment setup guide](https://nf-co.re/docs/get_started/environment_setup/overview). Nextflow 25.10.4 or later is required.
 
-
 To explore the pipeline outputs before preparing your own data, run the bundled `test` profile with a container profile:
 
 ```bash
@@ -58,9 +55,7 @@ nextflow run nf-core/datasync \
     --outdir results
 ```
 
-
 The `test` profile supplies a small samplesheet and `rclone` configuration automatically. It also enables `--rclone_dry_run`, so no files are actually transferred. This makes it useful for exploring the `rclone/` output folders and `multiqc/multiqc_report.html`; remember that post-copy comparison reports describe whatever is already present at the destination because the dry run does not write transfer data.
-
 
 To run the pipeline on your own data, create a samplesheet containing one transfer per row:
 
