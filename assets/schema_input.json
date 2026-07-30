@@ -13,21 +13,30 @@
                 "errorMessage": "Sample name must be provided and cannot contain spaces",
                 "meta": ["id"]
             },
-            "fastq_1": {
+            "input": {
                 "type": "string",
-                "format": "file-path",
-                "exists": true,
-                "pattern": "^([\\S\\s]*\\/)?[^\\s\\/]+\\.f(ast)?q\\.gz$",
-                "errorMessage": "FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
+                "pattern": "^\\S+$",
+                "errorMessage": "Input path must be provided and cannot contain spaces"
             },
-            "fastq_2": {
+            "output_path": {
+                "type": "string",
+                "pattern": "^\\S+$",
+                "errorMessage": "Output path for rclone copy must be provided and cannot contain spaces"
+            },
+            "checksum_md5": {
                 "type": "string",
                 "format": "file-path",
-                "exists": true,
-                "pattern": "^([\\S\\s]*\\/)?[^\\s\\/]+\\.f(ast)?q\\.gz$",
-                "errorMessage": "FastQ file for reads 2 cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
+                "pattern": "^\\S+\\.(csv|tsv)$",
+                "errorMessage": "Checksum_md5 cannot contain spaces"
+            },
+            "checksum_sha": {
+                "type": "string",
+                "format": "file-path",
+                "pattern": "^\\S+\\.(csv|tsv)$",
+                "errorMessage": "Checksum_sha cannot contain spaces"
             }
         },
-        "required": ["sample", "fastq_1"]
+        "required": ["sample", "input", "output_path"],
+        "anyOf": [{ "required": ["checksum_md5"] }, { "required": ["checksum_sha"] }]
     }
 }
