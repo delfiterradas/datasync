@@ -20,6 +20,7 @@ Initial release of nf-core/datasync, created with the [nf-core](https://nf-co.re
 - [[#49](https://github.com/nf-core/datasync/pull/49)] - Install `RCLONE_CHECK` and `RCLONE_CHECKSUM` modules from nf-core ([@delfiterradas](https://github.com/delfiterradas), review by [@atrigila](https://github.com/atrigila) and [@antoniasaracco](https://github.com/antoniasaracco)).
 
 ### `Fixed`
+- [[#73](https://github.com/nf-core/datasync/pull/73)] - Create tmp `files_to_copy.tx` avoiding error with write permissions in work directory ([@delfiterradas](https://github.com/delfiterradas), review by [@atrigila](https://github.com/atrigila) and [@antoniasaracco](https://github.com/antoniasaracco)).
 
 ### `Dependencies`
 
