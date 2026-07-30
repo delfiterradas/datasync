@@ -38,6 +38,15 @@ workflow DATASYNC {
     ch_samplesheet = ch_samplesheet.multiMap {
         meta, input_path, output_path, md5, sha ->
 
+            if (sha && input_path.contains('://')) {
+                if (params.download) {
+                    log.warn("The `--download` parameter is enabled. RCLONE_CHECKSUM will download remote files. Make sure this is what you want, as it may incur substantial cloud costs !")
+                } else {
+                    log.error("A SHA checksum file was provided, but `--download` is not enabled. Rclone cannot verify SHA checksums for remote files without downloading them. Enable `--download` to proceed.")
+                    System.exit(1)
+                }
+            }
+
             def source = file(input_path)
 
             def source_uri = source.toUriString()
