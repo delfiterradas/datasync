@@ -32,7 +32,7 @@ At least one checksum manifest is required on every row. If both are supplied, b
 
 For a directory input, the source root is the directory named in the samplesheet. For example, if the samplesheet `input` is `/data/run_001` and one file in that directory is `/data/run_001/reads/sample_R1.fastq.gz`, the checksum manifest path must be `reads/sample_R1.fastq.gz`. Do not write `/data/run_001/reads/sample_R1.fastq.gz` in the manifest. For a single-file input, use the input file name as the manifest path.
 
-Checksum manifests may use a `.tsv` or `.csv` filename extension, but their contents are not tab-separated or comma-separated tables and must not include a header. Each record is plain text with the hash and path separated by exactly two spaces. The required fields are:
+Checksum manifests may use a `.tsv`, `.txt`, `.md5` or `.sha256` filename extension, but their contents are not tab-separated or comma-separated tables and must not include a header. Each record is plain text with the hash and path separated by exactly **two spaces**. The required fields are:
 
 | Field | Required | Description                                                                                     |
 | ----- | -------- | ----------------------------------------------------------------------------------------------- |
@@ -115,6 +115,30 @@ region = eu-central-1
 The corresponding input values could be `source_s3:incoming/run_001` and `institutional_s3:project/run_002`. Provider-specific settings vary: consult the [`rclone` S3 documentation](https://rclone.org/s3/) and your storage provider's endpoint, region, addressing-style, and credential documentation rather than copying example values unchanged.
 
 The pipeline also accepts an `s3://bucket/path` source or destination. In that form, ensure credentials and provider settings are available to both Nextflow and `rclone` in the execution environment. A named remote such as `source_s3:bucket/path` makes the selected configuration section explicit and is preferable when a config file contains multiple S3 providers.
+
+## SHA checksum verification for remote inputs
+
+When validating files stored on cloud storage providers (e.g. S3, azure, google cloud), only MD5 hashes are typically available through the storage provider. SHA checksums are not exposed by the remote API, so they cannot be verified directly.
+
+In order to validate SHA checksums for remote inputs, `rclone checksum` must download each file and compute its SHA checksum locally. If a `checksum_sha` file is provided for remote inputs, the `--download` parameter must be enabled. Otherwise, SHA checksum verification cannot be performed and the pipeline will terminate with an error.
+
+> [!NOTE]
+> Providing `--download` does not force all files to be downloaded. It is only used when verifying SHA checksum files for remote source directories.
+
+> [!WARNING]
+> Enabling `--download` may incur substantial cloud data transfer and egress costs, particularly when validating large datasets. Make sure this is the intended behaviour before running the pipeline.
+
+## Copying only successfully validated files
+
+By default, the pipeline will copy all files in the source directory, regardless of whether they were successfully validated against the provided checksum or not.
+
+However, it is possible to restrict copying of files to only the ones that successfully pass checksum validation by enabling the `--copy_matching_only` parameter:
+
+- If only an MD5 checksum file is provided, only files that successfully match their MD5 checksum will be copied.
+- If only a SHA checksum file is provided, only files that successfully match their SHA checksum will be copied.
+- If both MD5 and SHA checksum files are provided, the pipeline will copy only files that successfully pass **both** checksum validations.
+
+Files that fail checksum validation, are missing, or cannot be verified are excluded from the copy operation when this parameter is enabled.
 
 ## Destination layout
 
