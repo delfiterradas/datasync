@@ -60,6 +60,12 @@
                     "description": "Only copy files that matched their provided input checksums.",
                     "fa_icon": "fas fa-eye",
                     "help_text": "If set, the pipeline will only copy files that were correctly validated and will skip any file that did not match their input checksum."
+                },
+                "download": {
+                    "type": "boolean",
+                    "description": "Download remote files for sha256 checksum verification in `RCLONE_CHECKSUM`.",
+                    "fa_icon": "fas fa-eye",
+                    "help_text": "If set, `RCLONE_CHECKSUM` will download remote files for any sample for which a SHA256 file was provided."
                 }
             }
         },

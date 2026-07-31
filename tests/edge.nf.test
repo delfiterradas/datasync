@@ -12,6 +12,7 @@ nextflow_pipeline {
             params {
                 input = "https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/datasync/test-data/samplesheet_edge.csv"
                 outdir = "$outputDir"
+                download = true
             }
         }
 
@@ -41,6 +42,7 @@ nextflow_pipeline {
                 input = "https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/datasync/test-data/samplesheet_edge.csv"
                 outdir = "$outputDir"
                 copy_matching_only = true
+                download = true
             }
         }
 
@@ -60,6 +62,20 @@ nextflow_pipeline {
                     stable_content
                 ).match() }
             )
+        }
+    }
+
+    test("-profile test remote source with SHA256 checksums - fail") {
+
+        when {
+            params {
+                input = "https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/datasync/test-data/samplesheet_edge.csv"
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            assert workflow.failed
         }
     }
 }

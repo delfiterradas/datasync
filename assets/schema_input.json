@@ -26,13 +26,13 @@
             "checksum_md5": {
                 "type": "string",
                 "format": "file-path",
-                "pattern": "^\\S+\\.(csv|tsv)$",
+                "pattern": "^\\S+\\.(tsv|txt|md5)$",
                 "errorMessage": "Checksum_md5 cannot contain spaces"
             },
             "checksum_sha": {
                 "type": "string",
                 "format": "file-path",
-                "pattern": "^\\S+\\.(csv|tsv)$",
+                "pattern": "^\\S+\\.(tsv|txt|sha256)$",
                 "errorMessage": "Checksum_sha cannot contain spaces"
             }
         },
