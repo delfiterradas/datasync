@@ -123,7 +123,7 @@ When validating files stored on cloud storage providers (e.g. S3, azure, google 
 In order to validate SHA256 checksums for remote inputs, `rclone checksum` must download each file and compute its SHA256 checksum locally. If a `checksum_sha` file is provided for remote inputs, the `--download` parameter must be enabled. Otherwise, SHA checksum verification cannot be performed and the pipeline will terminate with an error.
 
 > [!NOTE]
-> Providing `--download` does not force all files to be downloaded. It is only used when verifying SHA checksum files for remote source directories.
+> Providing `--download` does not force all files to be downloaded in all modules. It is only used when verifying SHA256 checksum files for remote source directories in `RCLONE_CHECKSUM`.
 
 > [!WARNING]
 > Enabling `--download` may incur substantial cloud data transfer and egress costs, particularly when validating large datasets. Make sure this is the intended behaviour before running the pipeline.
