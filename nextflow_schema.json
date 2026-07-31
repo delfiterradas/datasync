@@ -63,7 +63,7 @@
                 },
                 "download": {
                     "type": "boolean",
-                    "description": "Download remote files for sha256 checksum verification.",
+                    "description": "Download remote files for sha256 checksum verification in `RCLONE_CHECKSUM`.",
                     "fa_icon": "fas fa-eye",
                     "help_text": "If set, rclone checksum will download remote files for any sample for which a shasum file was provided."
                 }
