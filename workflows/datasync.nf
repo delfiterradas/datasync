@@ -42,7 +42,7 @@ workflow DATASYNC {
                 if (params.download) {
                     log.warn("The `--download` parameter is enabled. `RCLONE_CHECKSUM` will download remote files. Make sure this is what you want, as it may incur substantial cloud costs !")
                 } else {
-                    log.error("A SHA checksum file was provided, but `--download` is not enabled. Rclone cannot verify SHA checksums for remote files without downloading them. Enable `--download` to proceed.")
+                    log.error("A SHA checksum file was provided, but `--download` is not enabled. `RCLONE_CHECKSUM` cannot verify SHA256 checksums for remote files without downloading them. Enable `--download` to proceed.")
                     System.exit(1)
                 }
             }
