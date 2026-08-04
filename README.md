@@ -23,9 +23,6 @@
 
 ## Introduction
 
-> [!WARNING]
-> nf-core/datasync is under active development and is not yet recommended for production data transfers. Validate its behaviour with representative data before relying on it.
-
 **nf-core/datasync** is a Nextflow pipeline for copying files and directories between storage locations and documenting their integrity. For every row in an input samplesheet, the pipeline:
 
 1. validates the source against a supplied MD5 and/or SHA-256 checksum manifest using [`rclone checksum`](https://rclone.org/commands/rclone_checksum/);
@@ -90,7 +87,11 @@ nf-core/datasync was originally written by Alexander Peltzer.
 
 We thank the following people for their extensive assistance in the development of this pipeline:
 
-<!-- TODO nf-core: If applicable, make list of people who have also contributed -->
+Julian Schwab
+Gregor Sturm
+Antonia Saracco
+Delfina Terradas
+Anabella Trigila
 
 ## Contributions and Support
 
@@ -102,8 +103,6 @@ For further information or help, don't hesitate to get in touch on the [Slack `#
 
 <!-- TODO nf-core: Add citation for pipeline after first release. Uncomment lines below and update Zenodo doi and badge at the top of this file. -->
 <!-- If you use nf-core/datasync for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->
-
-<!-- TODO nf-core: Add bibliography of tools and data used in your pipeline -->
 
 An extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.
 
