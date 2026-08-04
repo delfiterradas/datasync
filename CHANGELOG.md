@@ -23,6 +23,7 @@ Initial release of nf-core/datasync, created with the [nf-core](https://nf-co.re
 
 ### `Fixed`
 
+- [[#75](https://github.com/nf-core/datasync/pull/75)] - Fixed linting issues reported by nf-core and Nextflow, and updated `rclone` modules and nf-tests to sort generated report files for deterministic snapshots ([@atrigila](https://github.com/atrigila), review by [@delfiterradas](https://github.com/delfiterradas) and [@antoniasaracco](https://github.com/antoniasaracco)).
 - [[#73](https://github.com/nf-core/datasync/pull/73)] - Create tmp `files_to_copy.tx` avoiding error with write permissions in work directory ([@delfiterradas](https://github.com/delfiterradas), review by [@atrigila](https://github.com/atrigila) and [@antoniasaracco](https://github.com/antoniasaracco)).
 
 ### `Dependencies`
