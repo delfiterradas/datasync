@@ -12,12 +12,12 @@
                     },
                     "rclone/check": {
                         "branch": "master",
-                        "git_sha": "a554e54c63c3f03f91c88a18ece7b89eca5a5212",
+                        "git_sha": "fef5b8209601b7746f9705f63e5856cd2b5be708",
                         "installed_by": ["modules"]
                     },
                     "rclone/checksum": {
                         "branch": "master",
-                        "git_sha": "a554e54c63c3f03f91c88a18ece7b89eca5a5212",
+                        "git_sha": "fef5b8209601b7746f9705f63e5856cd2b5be708",
                         "installed_by": ["modules"]
                     },
                     "rclone/copy": {
