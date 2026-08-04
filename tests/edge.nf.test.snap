@@ -64,13 +64,28 @@
                 "multiqc_rclone_check.txt:md5,4b2a6990836593f69e8e81a82c3daf42",
                 "multiqc_rclone_checksum_md5.txt:md5,cf92203df21f04ddf8315fc606812e0b",
                 "multiqc_rclone_checksum_sha.txt:md5,8d38305a4ad03c7ea18aa9827d34a396",
-                "multiqc_samplesheet.txt:md5,bbfc817ff43c49cde14a2b33f46b5ae5"
+                "multiqc_samplesheet.txt:md5,bbfc817ff43c49cde14a2b33f46b5ae5",
+                "Illumina_annotation_incorrect.combined.txt:md5,bbb93addf748c7c6cbe5ad1e25bf54bb",
+                "Illumina_annotation_incorrect.match.txt:md5,eb40be996bfbcf8070103efaa6bfa4c5",
+                "Illumina_annotation_missing.combined.txt:md5,bbb93addf748c7c6cbe5ad1e25bf54bb",
+                "Illumina_annotation_missing.match.txt:md5,eb40be996bfbcf8070103efaa6bfa4c5",
+                "Illumina_annotation_incorrect.combined.txt:md5,34ecbd1fa8f707c75898ee45cadf45d6",
+                "Illumina_annotation_incorrect.differ.txt:md5,e5fdf362a1dc4ac877f92ee769e47fd8",
+                "Illumina_annotation_incorrect.exit_code.txt:md5,b026324c6904b2a9cb4b88d6d61c81d1",
+                "Illumina_annotation_incorrect.match.txt:md5,df576e44dfe5a24521997ef162cba157",
+                "Illumina_annotation_missing.combined.txt:md5,62c42261ec9b9812c862bc2d5e71fd38",
+                "Illumina_annotation_missing.exit_code.txt:md5,b026324c6904b2a9cb4b88d6d61c81d1",
+                "Illumina_annotation_missing.match.txt:md5,df576e44dfe5a24521997ef162cba157",
+                "Illumina_annotation_missing.missing_on_dst.txt:md5,793e4b78c8b125e4421cb20ed0c232d5",
+                "Illumina_annotation_sha_only.combined.txt:md5,0d2bc4aeee4fded37d5cfebfadfb2fd2",
+                "Illumina_annotation_sha_only.differ.txt:md5,eb40be996bfbcf8070103efaa6bfa4c5",
+                "Illumina_annotation_sha_only.exit_code.txt:md5,b026324c6904b2a9cb4b88d6d61c81d1"
             ]
         ],
-        "timestamp": "2026-07-30T20:44:41.242808343",
+        "timestamp": "2026-08-04T13:39:20.808292484",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.1"
+            "nextflow": "26.04.0"
         }
     },
     "-profile test edge cases": {
@@ -142,13 +157,30 @@
                 "multiqc_rclone_check.txt:md5,c8f13c10aa4f0e4b356c5c08a9ae7ee9",
                 "multiqc_rclone_checksum_md5.txt:md5,cf92203df21f04ddf8315fc606812e0b",
                 "multiqc_rclone_checksum_sha.txt:md5,8d38305a4ad03c7ea18aa9827d34a396",
-                "multiqc_samplesheet.txt:md5,bbfc817ff43c49cde14a2b33f46b5ae5"
+                "multiqc_samplesheet.txt:md5,bbfc817ff43c49cde14a2b33f46b5ae5",
+                "Illumina_annotation_incorrect.combined.txt:md5,bbb93addf748c7c6cbe5ad1e25bf54bb",
+                "Illumina_annotation_incorrect.match.txt:md5,eb40be996bfbcf8070103efaa6bfa4c5",
+                "Illumina_annotation_missing.combined.txt:md5,bbb93addf748c7c6cbe5ad1e25bf54bb",
+                "Illumina_annotation_missing.match.txt:md5,eb40be996bfbcf8070103efaa6bfa4c5",
+                "Illumina_annotation_sha_only.combined.txt:md5,bbb93addf748c7c6cbe5ad1e25bf54bb",
+                "Illumina_annotation_sha_only.match.txt:md5,eb40be996bfbcf8070103efaa6bfa4c5",
+                "Illumina_annotation_incorrect.combined.txt:md5,34ecbd1fa8f707c75898ee45cadf45d6",
+                "Illumina_annotation_incorrect.differ.txt:md5,e5fdf362a1dc4ac877f92ee769e47fd8",
+                "Illumina_annotation_incorrect.exit_code.txt:md5,b026324c6904b2a9cb4b88d6d61c81d1",
+                "Illumina_annotation_incorrect.match.txt:md5,df576e44dfe5a24521997ef162cba157",
+                "Illumina_annotation_missing.combined.txt:md5,62c42261ec9b9812c862bc2d5e71fd38",
+                "Illumina_annotation_missing.exit_code.txt:md5,b026324c6904b2a9cb4b88d6d61c81d1",
+                "Illumina_annotation_missing.match.txt:md5,df576e44dfe5a24521997ef162cba157",
+                "Illumina_annotation_missing.missing_on_dst.txt:md5,793e4b78c8b125e4421cb20ed0c232d5",
+                "Illumina_annotation_sha_only.combined.txt:md5,0d2bc4aeee4fded37d5cfebfadfb2fd2",
+                "Illumina_annotation_sha_only.differ.txt:md5,eb40be996bfbcf8070103efaa6bfa4c5",
+                "Illumina_annotation_sha_only.exit_code.txt:md5,b026324c6904b2a9cb4b88d6d61c81d1"
             ]
         ],
-        "timestamp": "2026-07-30T20:44:11.000298059",
+        "timestamp": "2026-08-04T13:38:39.104449891",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.1"
+            "nextflow": "26.04.0"
         }
     }
 }
