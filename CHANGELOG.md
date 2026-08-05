@@ -23,6 +23,7 @@ Initial release of nf-core/datasync, created with the [nf-core](https://nf-co.re
 
 ### `Fixed`
 
+- [[#76](https://github.com/nf-core/datasync/pull/76)] - Remove `--one-way` from rclone/checksum confi ([@delfiterradas](https://github.com/delfiterradas), review by [@atrigila](https://github.com/atrigila) and [@antoniasaracco](https://github.com/antoniasaracco)).
 - [[#73](https://github.com/nf-core/datasync/pull/73)] - Create tmp `files_to_copy.tx` avoiding error with write permissions in work directory ([@delfiterradas](https://github.com/delfiterradas), review by [@atrigila](https://github.com/atrigila) and [@antoniasaracco](https://github.com/antoniasaracco)).
 
 ### `Dependencies`
