@@ -51,6 +51,7 @@
                 "rclone/checksum/Illumina_annotation_missing/Illumina_annotation_missing.exit_code.txt",
                 "rclone/checksum/Illumina_annotation_missing/Illumina_annotation_missing.match.txt",
                 "rclone/checksum/Illumina_annotation_missing/Illumina_annotation_missing.missing_on_dst.txt",
+                "rclone/checksum/Illumina_annotation_missing/Illumina_annotation_missing.missing_on_src.txt",
                 "rclone/checksum/Illumina_annotation_sha_only",
                 "rclone/checksum/Illumina_annotation_sha_only/Illumina_annotation_sha_only.combined.txt",
                 "rclone/checksum/Illumina_annotation_sha_only/Illumina_annotation_sha_only.differ.txt",
@@ -62,12 +63,12 @@
             [
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
                 "multiqc_rclone_check.txt:md5,4b2a6990836593f69e8e81a82c3daf42",
-                "multiqc_rclone_checksum_md5.txt:md5,cf92203df21f04ddf8315fc606812e0b",
+                "multiqc_rclone_checksum_md5.txt:md5,40ef26b67a9f5c4943a12d412f4e632f",
                 "multiqc_rclone_checksum_sha.txt:md5,8d38305a4ad03c7ea18aa9827d34a396",
                 "multiqc_samplesheet.txt:md5,bbfc817ff43c49cde14a2b33f46b5ae5"
             ]
         ],
-        "timestamp": "2026-07-30T20:44:41.242808343",
+        "timestamp": "2026-08-05T15:10:18.931695751",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.1"
@@ -128,6 +129,7 @@
                 "rclone/checksum/Illumina_annotation_missing/Illumina_annotation_missing.exit_code.txt",
                 "rclone/checksum/Illumina_annotation_missing/Illumina_annotation_missing.match.txt",
                 "rclone/checksum/Illumina_annotation_missing/Illumina_annotation_missing.missing_on_dst.txt",
+                "rclone/checksum/Illumina_annotation_missing/Illumina_annotation_missing.missing_on_src.txt",
                 "rclone/checksum/Illumina_annotation_sha_only",
                 "rclone/checksum/Illumina_annotation_sha_only/Illumina_annotation_sha_only.combined.txt",
                 "rclone/checksum/Illumina_annotation_sha_only/Illumina_annotation_sha_only.differ.txt",
@@ -140,12 +142,12 @@
             [
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
                 "multiqc_rclone_check.txt:md5,c8f13c10aa4f0e4b356c5c08a9ae7ee9",
-                "multiqc_rclone_checksum_md5.txt:md5,cf92203df21f04ddf8315fc606812e0b",
+                "multiqc_rclone_checksum_md5.txt:md5,40ef26b67a9f5c4943a12d412f4e632f",
                 "multiqc_rclone_checksum_sha.txt:md5,8d38305a4ad03c7ea18aa9827d34a396",
                 "multiqc_samplesheet.txt:md5,bbfc817ff43c49cde14a2b33f46b5ae5"
             ]
         ],
-        "timestamp": "2026-07-30T20:44:11.000298059",
+        "timestamp": "2026-08-05T15:09:41.763856779",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.1"
