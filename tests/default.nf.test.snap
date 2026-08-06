@@ -45,7 +45,9 @@
                 "rclone/checksum/Illumina_annotation/Illumina_annotation.match.txt",
                 "rclone/checksum/benchmark_bed",
                 "rclone/checksum/benchmark_bed/benchmark_bed.combined.txt",
+                "rclone/checksum/benchmark_bed/benchmark_bed.exit_code.txt",
                 "rclone/checksum/benchmark_bed/benchmark_bed.match.txt",
+                "rclone/checksum/benchmark_bed/benchmark_bed.missing_on_src.txt",
                 "rclone/copy",
                 "rclone/copy/Illumina_annotation-rclone-copy.log",
                 "rclone/copy/benchmark_bed-rclone-copy.log"
