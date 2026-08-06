@@ -42,8 +42,7 @@ workflow DATASYNC {
                 if (params.download) {
                     log.warn("The `--download` parameter is enabled. `RCLONE_CHECKSUM` will download remote files. Make sure this is what you want, as it may incur substantial cloud costs !")
                 } else {
-                    log.error("A SHA checksum file was provided, but `--download` is not enabled. `RCLONE_CHECKSUM` cannot verify SHA256 checksums for remote files without downloading them. Enable `--download` to proceed.")
-                    System.exit(1)
+                    throw new IllegalArgumentException("A SHA checksum file was provided, but `--download` is not enabled. `RCLONE_CHECKSUM` cannot verify SHA256 checksums for remote files without downloading them. Enable `--download` to proceed.")
                 }
             }
 
@@ -100,7 +99,7 @@ workflow DATASYNC {
     if(params.copy_matching_only) {
         // Compute expected group size per meta.id from the input
         ch_with_size = ch_checksum
-            .map { meta, checksum, hash, source -> [ meta.subMap(meta.keySet() - 'check_format'), 1 ] }
+            .map { meta, _checksum, _hash, _source -> [ meta.subMap(meta.keySet() - 'check_format'), 1 ] }
             .groupTuple()
             .map { meta, ones -> tuple(meta, ones.size()) }
 
@@ -112,7 +111,7 @@ workflow DATASYNC {
             .groupTuple()
             .map{ meta, files ->
                 def common = files
-                    .collect { it.readLines() }
+                    .collect { file_to_copy -> file_to_copy.readLines() }
                     .inject { a, b -> a.intersect(b) }
 
                 def copy_files = java.nio.file.Files.createTempFile(
@@ -138,7 +137,7 @@ workflow DATASYNC {
     // Wait for file copy to finish before running RCLONE_CHECK
     ch_rclone_check = ch_samplesheet.rclone
         .join(RCLONE_COPY.out.log)
-        .map { meta, input, output, log -> [ meta, input, output ] }
+        .map { meta, input, output, _log -> [ meta, input, output ] }
 
     //
     // File transfer validation
@@ -192,7 +191,7 @@ workflow DATASYNC {
     //
     // MODULE: MultiQC
     //
-    ch_multiqc_files = ch_multiqc_files.mix(Channel.fromPath(params.input).collectFile(name: 'samplesheet.csv'))
+    ch_multiqc_files = ch_multiqc_files.mix(channel.fromPath(params.input).collectFile(name: 'samplesheet.csv'))
     ch_multiqc_files = ch_multiqc_files.mix(ch_collated_versions)
     def ch_summary_params = paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")
     def ch_workflow_summary = channel.value(paramsSummaryMultiqc(ch_summary_params))
