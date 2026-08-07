@@ -173,6 +173,28 @@ def validateInputParameters() {
 }
 
 //
+// Create exit code summary
+//
+def createExitSummary(meta, exit_file, module) {
+    def code_map = [
+        "0":  "0 - Success",
+        "1":  "1 - Error",
+        "2":  "2 - Syntax or usage error",
+        "3":  "3 - Directory not found",
+        "4":  "4 - File not found",
+        "5":  "5 - Temporary error",
+        "6":  "6 - Less serious error",
+        "7":  "7 - Fatal error",
+        "8":  "8 - Transfer limit exceeded",
+        "9":  "9 - No files transferred",
+        "10": "10 - Duration limit exceeded"
+    ]
+    def exit_code = exit_file.text.trim()
+    def code = code_map.get(exit_code, exit_code)
+
+    [meta, "${meta.id}:${module}\t${meta.id}\t${module}\t${code}"]
+}
+//
 // Parse Rclone check and checksum combined.txt file
 //
 def parseRcloneCheck(meta, check_file) {

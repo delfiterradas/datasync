@@ -12,6 +12,7 @@ include { paramsSummaryMultiqc                     } from '../subworkflows/nf-co
 include { softwareVersionsToYAML                   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText                   } from '../subworkflows/local/utils_nfcore_datasync_pipeline'
 include { parseRcloneCheck                         } from '../subworkflows/local/utils_nfcore_datasync_pipeline'
+include { createExitSummary                        } from '../subworkflows/local/utils_nfcore_datasync_pipeline'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -156,6 +157,24 @@ workflow DATASYNC {
             sort: false
         ) { meta, check ->
             return [ "${meta.id}_rclone_check_mqc.tsv", check ]
+        }
+    )
+
+    ch_multiqc_files = ch_multiqc_files.mix(
+        RCLONE_CHECK.out.exit_code
+            .map { meta, exit_file -> [ meta, exit_file, "CHECK" ] }
+            .mix(RCLONE_CHECKSUM.out.exit_code
+                .map { meta, exit_file -> [ meta, exit_file, "CHECKSUM" ] }
+            )
+            .map { meta, exit_file, module ->
+                createExitSummary(meta, exit_file, module)
+            }
+        .collectFile(
+            seed: "Row\tSample\tModule\tExit code",
+            sort: false,
+            newLine: true
+        ) { meta, exit_code ->
+            return [ "rclone_exit_codes.tsv", exit_code ]
         }
     )
 
