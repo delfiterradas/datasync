@@ -66,7 +66,7 @@
                 "multiqc_rclone_check.txt:md5,4b2a6990836593f69e8e81a82c3daf42",
                 "multiqc_rclone_checksum_md5.txt:md5,40ef26b67a9f5c4943a12d412f4e632f",
                 "multiqc_rclone_checksum_sha.txt:md5,8d38305a4ad03c7ea18aa9827d34a396",
-                "multiqc_rclone_exit_codes.txt:md5,ced662f083d7fbc2e5838b4697bcd8db",
+                "multiqc_rclone_exit_codes.txt:md5,e72c745debdc6ed04aa9b13b068d897c",
                 "multiqc_samplesheet.txt:md5,bbfc817ff43c49cde14a2b33f46b5ae5",
                 "Illumina_annotation_incorrect_check.combined.txt:md5,bbb93addf748c7c6cbe5ad1e25bf54bb",
                 "Illumina_annotation_incorrect_check.match.txt:md5,eb40be996bfbcf8070103efaa6bfa4c5",
@@ -86,7 +86,7 @@
                 "Illumina_annotation_sha_only_checksum_SHA256.exit_code.txt:md5,b026324c6904b2a9cb4b88d6d61c81d1"
             ]
         ],
-        "timestamp": "2026-08-07T17:35:07.085224284",
+        "timestamp": "2026-08-07T18:09:48.856944607",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.1"
@@ -163,7 +163,7 @@
                 "multiqc_rclone_check.txt:md5,c8f13c10aa4f0e4b356c5c08a9ae7ee9",
                 "multiqc_rclone_checksum_md5.txt:md5,40ef26b67a9f5c4943a12d412f4e632f",
                 "multiqc_rclone_checksum_sha.txt:md5,8d38305a4ad03c7ea18aa9827d34a396",
-                "multiqc_rclone_exit_codes.txt:md5,ced662f083d7fbc2e5838b4697bcd8db",
+                "multiqc_rclone_exit_codes.txt:md5,e72c745debdc6ed04aa9b13b068d897c",
                 "multiqc_samplesheet.txt:md5,bbfc817ff43c49cde14a2b33f46b5ae5",
                 "Illumina_annotation_incorrect_check.combined.txt:md5,bbb93addf748c7c6cbe5ad1e25bf54bb",
                 "Illumina_annotation_incorrect_check.match.txt:md5,eb40be996bfbcf8070103efaa6bfa4c5",
@@ -185,7 +185,7 @@
                 "Illumina_annotation_sha_only_checksum_SHA256.exit_code.txt:md5,b026324c6904b2a9cb4b88d6d61c81d1"
             ]
         ],
-        "timestamp": "2026-08-07T17:34:27.914054654",
+        "timestamp": "2026-08-07T18:08:58.211993458",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.1"
