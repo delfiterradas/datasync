@@ -1,4 +1,5 @@
 /* Keep the internal row identifier available to MultiQC without displaying it. */
+#rclone_exit_codes-section-plot_table .rowheader,
 #rclone_checksum_md5-plot_table .rowheader,
 #rclone_checksum_sha-plot_table .rowheader,
 #rclone_check-plot_table .rowheader {
@@ -7,6 +8,7 @@
 
 /* Distinguish major sections from their result subsections. */
 #samplesheet,
+#rclone_exit_codes,
 #source_path_checksum_validation,
 #file_transfer_integrity_check {
   font-size: 2rem;
@@ -34,6 +36,7 @@
   width: 1%;
 }
 
+#rclone_exit_codes-section-plot_table .File .val,
 #rclone_checksum_md5-plot_table .File .val,
 #rclone_checksum_sha-plot_table .File .val,
 #rclone_check-plot_table .File .val {
@@ -41,6 +44,7 @@
   white-space: normal;
 }
 
+#rclone_exit_codes-section-plot_table_container .mqc-table-responsive,
 #rclone_checksum_md5-plot_table_container .mqc-table-responsive,
 #rclone_checksum_sha-plot_table_container .mqc-table-responsive,
 #rclone_check-plot_table_container .mqc-table-responsive {

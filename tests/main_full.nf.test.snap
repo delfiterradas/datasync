@@ -26,6 +26,7 @@
                 "multiqc/multiqc_data/multiqc_rclone_check.txt",
                 "multiqc/multiqc_data/multiqc_rclone_checksum_md5.txt",
                 "multiqc/multiqc_data/multiqc_rclone_checksum_sha.txt",
+                "multiqc/multiqc_data/multiqc_rclone_exit_codes.txt",
                 "multiqc/multiqc_data/multiqc_samplesheet.txt",
                 "multiqc/multiqc_data/multiqc_software_versions.txt",
                 "multiqc/multiqc_data/multiqc_sources.txt",
@@ -35,14 +36,16 @@
                 "rclone",
                 "rclone/check",
                 "rclone/check/demultiplex",
-                "rclone/check/demultiplex/demultiplex.combined.txt",
-                "rclone/check/demultiplex/demultiplex.match.txt",
+                "rclone/check/demultiplex/demultiplex_check.combined.txt",
+                "rclone/check/demultiplex/demultiplex_check.match.txt",
                 "rclone/checksum",
                 "rclone/checksum/demultiplex",
-                "rclone/checksum/demultiplex/demultiplex.combined.txt",
-                "rclone/checksum/demultiplex/demultiplex.exit_code.txt",
-                "rclone/checksum/demultiplex/demultiplex.match.txt",
-                "rclone/checksum/demultiplex/demultiplex.missing_on_src.txt",
+                "rclone/checksum/demultiplex/demultiplex_checksum_MD5.combined.txt",
+                "rclone/checksum/demultiplex/demultiplex_checksum_MD5.exit_code.txt",
+                "rclone/checksum/demultiplex/demultiplex_checksum_MD5.match.txt",
+                "rclone/checksum/demultiplex/demultiplex_checksum_MD5.missing_on_src.txt",
+                "rclone/checksum/demultiplex/demultiplex_checksum_SHA256.combined.txt",
+                "rclone/checksum/demultiplex/demultiplex_checksum_SHA256.match.txt",
                 "rclone/copy",
                 "rclone/copy/demultiplex-rclone-copy.log"
             ],
@@ -51,17 +54,22 @@
                 "multiqc_rclone_check.txt:md5,03a73f087a286ec6580aada2a5db2e7c",
                 "multiqc_rclone_checksum_md5.txt:md5,a68bd0275b5b6cb62ec966b68121b0e1",
                 "multiqc_rclone_checksum_sha.txt:md5,03a73f087a286ec6580aada2a5db2e7c",
+                "multiqc_rclone_exit_codes.txt:md5,9bf4a8961b2d370bb06a09ccf65e0f7e",
                 "multiqc_samplesheet.txt:md5,00788a52d1a014c12ac4ed554b0b44ca",
-                "demultiplex.combined.txt:md5,3ae32d27ed8a8e14c3b9b954e23c3839",
-                "demultiplex.match.txt:md5,902e4715d579b7f43a5463a220df8db0",
-                "demultiplex.combined.txt:md5,7c44b320b7f629aaade5c1b6395d6c9b",
-                "demultiplex.match.txt:md5,644b95db936b45b931143faefb15be7f"
+                "demultiplex_check.combined.txt:md5,3ae32d27ed8a8e14c3b9b954e23c3839",
+                "demultiplex_check.match.txt:md5,902e4715d579b7f43a5463a220df8db0",
+                "demultiplex_checksum_MD5.combined.txt:md5,9250a5e20244b4beb397eab1a2003c3a",
+                "demultiplex_checksum_MD5.exit_code.txt:md5,b026324c6904b2a9cb4b88d6d61c81d1",
+                "demultiplex_checksum_MD5.match.txt:md5,644b95db936b45b931143faefb15be7f",
+                "demultiplex_checksum_MD5.missing_on_src.txt:md5,b9f072c9e776951c6759590a8259f765",
+                "demultiplex_checksum_SHA256.combined.txt:md5,3ae32d27ed8a8e14c3b9b954e23c3839",
+                "demultiplex_checksum_SHA256.match.txt:md5,902e4715d579b7f43a5463a220df8db0"
             ]
         ],
-        "timestamp": "2026-08-04T13:48:52.775725114",
+        "timestamp": "2026-08-07T18:14:55.558259399",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.0"
+            "nextflow": "26.04.1"
         }
     }
 }

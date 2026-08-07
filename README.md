@@ -41,7 +41,6 @@ Pass an `rclone` configuration with `--rclone_config` whenever a source or desti
 ## Quick start
 
 > [!NOTE]
-
 > If you are new to Nextflow and nf-core, see the [nf-core environment setup guide](https://nf-co.re/docs/get_started/environment_setup/overview). Nextflow 25.10.4 or later is required.
 
 To explore the pipeline outputs before preparing your own data, run the bundled `test` profile with a container profile:
@@ -87,11 +86,11 @@ nf-core/datasync was originally written by Alexander Peltzer.
 
 We thank the following people for their extensive assistance in the development of this pipeline:
 
-Julian Schwab
-Gregor Sturm
-Antonia Saracco
-Delfina Terradas
-Anabella Trigila
+- Julian Schwab
+- Gregor Sturm
+- Antonia Saracco
+- Delfina Terradas
+- Anabella Trigila
 
 ## Contributions and Support
 

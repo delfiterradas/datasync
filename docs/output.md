@@ -96,10 +96,19 @@ Empty category files mean that `rclone` reported no entries in that category. Th
 
 The MultiQC report consolidates:
 
+- validation summary containing `rclone checksum` and `rclone check` exit codes;
 - checksum validation status for MD5 and/or SHA-256 manifests generated from `rclone checksum`;
 - post-copy source-to-destination validation status generated from `rclone check`;
 - the validated samplesheet and workflow parameter summary; and
 - pipeline and tool versions.
+
+### Validation summary
+
+This section summarises the exit codes reported by the `rclone checksum` and `rclone check` modules for each sample. Use this table to quickly identify if any errors occurred in the source integrity or post-transfer checks. A more detailed file-by-file breakdown is provided in the following sections.
+
+Exit codes are reported using their corresponding rclone descriptions to make it easier to identify and troubleshoot any validation problems. A full list of exit codes and their meanings can be found in the [rclone documentation](https://rclone.org/docs/#list-of-exit-codes).
+
+![nf-core/multiqc validation summary](images/datasync-multiqc-exit-code-table.png)
 
 ### `rclone checksum` section (source integrity checks)
 

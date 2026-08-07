@@ -17,6 +17,7 @@ disable_version_detection: true
 custom_content:
   order:
     - samplesheet
+    - rclone_exit_codes
     - rclone_checksum_md5
     - rclone_checksum_sha
     - rclone_check
@@ -40,6 +41,61 @@ custom_data:
         title: MD5 checksum file
       checksum_sha:
         title: Sha256 checksum file
+
+  rclone_exit_codes:
+    section_name: "Validation Summary"
+    description: >
+      This table summarises the exit codes returned by `RCLONE_CHECK` and `RCLONE_CHECKSUM` for each processed sample. Reviewing these exit codes
+      can help identify files that were not successfully validated or where unexpected errors occurred during integrity checking
+    plot_type: "table"
+    file_format: "tsv"
+    headers:
+      Row:
+        title: Row
+        hidden: true
+      Sample:
+        title: Sample ID
+        description: "Sample name from the input samplesheet"
+      Module:
+        title: Module
+      Exit code:
+        title: Exit Code
+        description: "Exit code reported by the corresponding Rclone module for each processed Sample ID"
+        cond_formatting_rules:
+          success:
+            - s_eq: "0 - Success"
+          error:
+            - s_eq: "1 - Error"
+          syntax_error:
+            - s_eq: "2 - Syntax or usage error"
+          directory_not_found:
+            - s_eq: "3 - Directory not found"
+          file_not_found:
+            - s_eq: "4 - File not found"
+          temporary_error:
+            - s_eq: "5 - Temporary error"
+          less_serious_error:
+            - s_eq: "6 - Less serious error"
+          fatal_error:
+            - s_eq: "7 - Fatal error"
+          transfer_limit_exceeded:
+            - s_eq: "8 - Transfer limit exceeded"
+          no_files_transferred:
+            - s_eq: "9 - No files transferred"
+          duration_limit_exceeded:
+            - s_eq: "10 - Duration limit exceeded"
+        cond_formatting_colours:
+          - success: "#5cb85c"
+          - error: "#d9534f"
+          - syntax_error: "#f0ad4e"
+          - directory_not_found: "#f0ad4e"
+          - file_not_found: "#f0ad4e"
+          - temporary_error: "#5bc0de"
+          - less_serious_error: "#5bc0de"
+          - fatal_error: "#8b0000"
+          - transfer_limit_exceeded: "#9370db"
+          - no_files_transferred: "#808080"
+          - duration_limit_exceeded: "#6f42c1"
 
   rclone_checksum_md5:
     parent_id: source_path_checksum_validation
@@ -197,6 +253,8 @@ custom_data:
 sp:
   samplesheet:
     fn: "samplesheet.csv"
+  rclone_exit_codes:
+    fn: "rclone_exit_codes.tsv"
   rclone_checksum_md5:
     fn: "*_md5_rclone_checksum_mqc.tsv"
   rclone_checksum_sha:
