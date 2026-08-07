@@ -45,7 +45,7 @@ custom_data:
   rclone_exit_codes:
     section_name: "Validation Summary"
     description: >
-      This table summarizes the exit codes returned by `RCLONE_CHECK` and `RCLONE_CHECKSUM` for each processed sample. Reviewing these exit codes
+      This table summarises the exit codes returned by `RCLONE_CHECK` and `RCLONE_CHECKSUM` for each processed sample. Reviewing these exit codes
       can help identify files that were not successfully validated or where unexpected errors occurred during integrity checking
     plot_type: "table"
     file_format: "tsv"
