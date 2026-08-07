@@ -164,7 +164,7 @@ workflow DATASYNC {
         RCLONE_CHECK.out.exit_code
             .map { meta, exit_file -> [ meta, exit_file, "CHECK" ] }
             .mix(RCLONE_CHECKSUM.out.exit_code
-                .map { meta, exit_file -> [ meta, exit_file, "CHECKSUM" ] }
+                .map { meta, exit_file -> [ meta, exit_file, "CHECKSUM_${meta.check_format.toUpperCase()}" ] }
             )
             .map { meta, exit_file, module ->
                 createExitSummary(meta, exit_file, module)
