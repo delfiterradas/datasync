@@ -12,7 +12,7 @@
                     "rclone": "1.65.0-DEV"
                 },
                 "Workflow": {
-                    "nf-core/datasync": "v1.0dev"
+                    "nf-core/datasync": "v1.0.0"
                 }
             },
             [
@@ -86,10 +86,10 @@
                 "Illumina_annotation_sha_only_checksum_SHA256.exit_code.txt:md5,b026324c6904b2a9cb4b88d6d61c81d1"
             ]
         ],
-        "timestamp": "2026-08-07T18:09:48.856944607",
+        "timestamp": "2026-08-18T14:13:27.670540243",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.1"
+            "nextflow": "26.04.6"
         }
     },
     "-profile test edge cases": {
@@ -105,7 +105,7 @@
                     "rclone": "1.65.0-DEV"
                 },
                 "Workflow": {
-                    "nf-core/datasync": "v1.0dev"
+                    "nf-core/datasync": "v1.0.0"
                 }
             },
             [
@@ -185,10 +185,10 @@
                 "Illumina_annotation_sha_only_checksum_SHA256.exit_code.txt:md5,b026324c6904b2a9cb4b88d6d61c81d1"
             ]
         ],
-        "timestamp": "2026-08-07T18:08:58.211993458",
+        "timestamp": "2026-08-18T14:12:50.690727768",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.1"
+            "nextflow": "26.04.6"
         }
     }
 }
