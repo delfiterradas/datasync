@@ -8,7 +8,7 @@ template:
   name: datasync
   org: nf-core
   outdir: .
-  version: 1.0dev
+  version: 1.0.0
 lint:
   multiqc_config: false
   files_exist:
