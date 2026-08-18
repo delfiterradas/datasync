@@ -173,7 +173,7 @@ workflow DATASYNC {
             seed: "Row\tSample\tModule\tExit code",
             sort: false,
             newLine: true
-        ) { meta, exit_code ->
+        ) { _meta, exit_code ->
             return [ "rclone_exit_codes.tsv", exit_code ]
         }
     )
