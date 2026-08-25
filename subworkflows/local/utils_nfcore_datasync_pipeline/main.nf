@@ -174,7 +174,7 @@ def validateInputParameters() {
     def samples = samplesheetToList(params.input, "${projectDir}/assets/schema_input.json")
 
     def requires_download = samples.any { meta, input_path, output_path, md5, sha ->
-        sha && input_path.contains('://')
+        sha && (input_path ==~ /^[a-zA-Z][a-zA-Z0-9+.-]*:.*/)
     }
 
     if (requires_download && params.download) {
