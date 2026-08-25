@@ -137,7 +137,7 @@ workflow DATASYNC {
 
     // Wait for file copy to finish before running RCLONE_CHECK
     ch_rclone_check = ch_samplesheet.rclone
-        .join(RCLONE_COPY.out.log)
+        .join(RCLONE_COPY.out.log, remainder: true)
         .map { meta, input, output, _log -> [ meta, input, output ] }
 
     //
