@@ -40,7 +40,9 @@ process RCLONE_CHECK {
         --error ${prefix}.error.txt \\
         --checkers $task.cpus \\
         ${source} \\
-        ${destination} || echo \$? > ${prefix}.exit_code.txt
+        ${destination} \
+        && echo 0 > ${prefix}.exit_code.txt \
+        || echo \$? > ${prefix}.exit_code.txt
 
     sort -k2 ${prefix}.combined.txt -o ${prefix}.combined.txt
     sort ${prefix}.differ.txt -o ${prefix}.differ.txt

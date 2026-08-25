@@ -42,7 +42,9 @@ process RCLONE_CHECKSUM {
         --checkers $task.cpus \\
         $hash \\
         $sumfile \\
-        ${destination} || echo \$? > ${prefix}.exit_code.txt
+        ${destination} \
+        && echo 0 > ${prefix}.exit_code.txt \
+        || echo \$? > ${prefix}.exit_code.txt
 
     sort -k2 ${prefix}.combined.txt -o ${prefix}.combined.txt
     sort ${prefix}.differ.txt -o ${prefix}.differ.txt
