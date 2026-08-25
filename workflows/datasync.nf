@@ -107,6 +107,10 @@ workflow DATASYNC {
                     .collect { file_to_copy -> file_to_copy.readLines() }
                     .inject { a, b -> a.intersect(b) }
 
+                if (!common) {
+                    return null
+                }
+
                 def copy_files = java.nio.file.Files.createTempFile(
                     "${meta.id}_files_to_copy_",
                     ".txt"
@@ -115,6 +119,7 @@ workflow DATASYNC {
 
                 tuple(meta, copy_files)
             }
+            .filter { it != null }
 
         ch_rclone_copy = ch_samplesheet.rclone
             .join(files_to_copy)
