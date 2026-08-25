@@ -170,6 +170,28 @@ workflow PIPELINE_COMPLETION {
 // Check and validate pipeline parameters
 //
 def validateInputParameters() {
+
+    def samples = samplesheetToList(params.input, "${projectDir}/assets/schema_input.json")
+
+    def requires_download = samples.any { meta, input_path, output_path, md5, sha ->
+        sha && input_path.contains('://')
+    }
+
+    if (requires_download && params.download) {
+        log.warn(
+            "The `--download` parameter is enabled. `RCLONE_CHECKSUM` will download remote files. " +
+            "Make sure this is what you want, as it may incur substantial cloud costs!"
+        )
+    }
+
+    if (requires_download && !params.download) {
+        log.error(
+            "A SHA checksum file was provided for one or more remote files, but `--download` " +
+            "is not enabled. `RCLONE_CHECKSUM` cannot verify SHA256 checksums for remote files " +
+            "without downloading them. Enable `--download` to proceed."
+        )
+        exit 1
+    }
 }
 
 //
