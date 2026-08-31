@@ -263,7 +263,7 @@ def toolCitationText() {
 
 def toolBibliographyText() {
     def reference_text = [
-            "<li>Craig-Wood, N. (2023). Rclone: Rsync for cloud storage (Vers. 1.65.0). Computer software. https://rclone.org</li>",
+            "<li>Craig-Wood, N. (2023). Rclone: Rsync for cloud storage (Vers. 1.74.3). Computer software. https://rclone.org</li>",
             "<li>Ewels, P., Magnusson, M., Lundin, S., & Käller, M. (2016). MultiQC: summarize analysis results for multiple tools and samples in a single report. Bioinformatics, 32(19), 3047–3048. doi: /10.1093/bioinformatics/btw354</li>"
         ].join(' ').trim()
 
