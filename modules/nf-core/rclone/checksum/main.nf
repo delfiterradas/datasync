@@ -30,6 +30,14 @@ process RCLONE_CHECKSUM {
     def configArg = rclone_config ? "--config ${rclone_config}" : ''
 
     """
+    touch \\
+        ${prefix}.combined.txt \\
+        ${prefix}.differ.txt \\
+        ${prefix}.missing_on_dst.txt \\
+        ${prefix}.missing_on_src.txt \\
+        ${prefix}.match.txt \\
+        ${prefix}.error.txt
+
     rclone checksum ${configArg} \\
         --copy-links \\
         $args \\
@@ -42,8 +50,8 @@ process RCLONE_CHECKSUM {
         --checkers $task.cpus \\
         $hash \\
         $sumfile \\
-        ${destination} \
-        && echo 0 > ${prefix}.exit_code.txt \
+        ${destination} \\
+        && echo 0 > ${prefix}.exit_code.txt \\
         || echo \$? > ${prefix}.exit_code.txt
 
     sort -k2 ${prefix}.combined.txt -o ${prefix}.combined.txt

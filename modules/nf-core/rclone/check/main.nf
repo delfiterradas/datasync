@@ -30,6 +30,14 @@ process RCLONE_CHECK {
     def configArg = rclone_config ? "--config ${rclone_config}" : ''
 
     """
+    touch \\
+        ${prefix}.combined.txt \\
+        ${prefix}.differ.txt \\
+        ${prefix}.missing_on_dst.txt \\
+        ${prefix}.missing_on_src.txt \\
+        ${prefix}.match.txt \\
+        ${prefix}.error.txt
+
     rclone check ${configArg} \\
         $args \\
         --combined ${prefix}.combined.txt \\
@@ -40,8 +48,8 @@ process RCLONE_CHECK {
         --error ${prefix}.error.txt \\
         --checkers $task.cpus \\
         ${source} \\
-        ${destination} \
-        && echo 0 > ${prefix}.exit_code.txt \
+        ${destination} \\
+        && echo 0 > ${prefix}.exit_code.txt \\
         || echo \$? > ${prefix}.exit_code.txt
 
     sort -k2 ${prefix}.combined.txt -o ${prefix}.combined.txt
