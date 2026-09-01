@@ -17,12 +17,18 @@
             "input": {
                 "type": "string",
                 "pattern": "^\\S+$",
-                "errorMessage": "Input path must be provided and cannot contain spaces"
+                "not": {
+                    "pattern": "^[a-zA-Z][a-zA-Z0-9_.+-]*:(?!//).*$"
+                },
+                "errorMessage": "Input must be a local path or URI such as s3://bucket/path; rclone remote:path syntax is not supported"
             },
             "output_path": {
                 "type": "string",
                 "pattern": "^\\S+$",
-                "errorMessage": "Output path for rclone copy must be provided and cannot contain spaces"
+                "not": {
+                    "pattern": "^[a-zA-Z][a-zA-Z0-9_.+-]*:(?!//).*$"
+                },
+                "errorMessage": "Output path must be a local path or URI such as s3://bucket/path; rclone remote:path syntax is not supported"
             },
             "checksum_md5": {
                 "type": "string",

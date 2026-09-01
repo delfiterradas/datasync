@@ -30,11 +30,11 @@
 3. compares the copied data with the source using [`rclone check`](https://rclone.org/commands/rclone_check/); and
 4. produces detailed `rclone` status files and a consolidated MultiQC report.
 
-Sources and destinations may be local paths, HTTP(S) URLs, or rclone-supported remote storage such as Amazon S3, S3-compatible object storage, or Azure Blob Storage.
+Sources may be local paths, HTTP(S) URLs, or object-storage URIs. Destinations may be local paths or object-storage URIs such as Amazon S3, S3-compatible storage, or Azure Blob Storage; rclone's HTTP backend is read-only.
 
 The current tested use case for this pipeline is transfer between S3 buckets.
 
-Pass an `rclone` configuration with `--rclone_config` whenever a source or destination needs a configured remote, endpoint, or credentials. A single configuration file can contain separate named remotes for multiple providers; for non-S3 layouts, design and validate the provider-specific configuration using the upstream [rclone documentation](https://rclone.org/docs/).
+Pass an `rclone` configuration with `--rclone_config` whenever a source or destination URI needs credentials or provider settings. Samplesheet paths use local paths or standard URIs such as `s3://bucket/path`, not rclone's `remote:path` syntax. For non-S3 layouts, design and validate the provider-specific configuration using the upstream [rclone documentation](https://rclone.org/docs/).
 
 ![nf-core/datasync metro map](docs/images/datasync-metromap.png)
 
