@@ -7,6 +7,7 @@ include { MULTIQC                                  } from '../modules/nf-core/mu
 include { RCLONE_COPY                              } from '../modules/nf-core/rclone/copy/main'
 include { RCLONE_CHECK                             } from '../modules/nf-core/rclone/check/main'
 include { RCLONE_CHECKSUM                          } from '../modules/nf-core/rclone/checksum/main'
+include { CREATE_FILTER_LIST                       } from '../modules/local/create_filter_list/main'
 include { paramsSummaryMap                         } from 'plugin/nf-schema'
 include { paramsSummaryMultiqc                     } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { softwareVersionsToYAML                   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
@@ -92,37 +93,34 @@ workflow DATASYNC {
     if(params.copy_matching_only) {
         // Compute expected group size per meta.id from the input
         ch_with_size = ch_checksum
-            .map { meta, _checksum, _hash, _source -> [ meta.subMap(meta.keySet() - 'check_format'), 1 ] }
+            .map { meta, _checksum, _hash, _source ->
+                [ meta.subMap(meta.keySet() - 'check_format'), 1 ]
+            }
             .groupTuple()
             .map { meta, ones -> tuple(meta, ones.size()) }
 
-        files_to_copy = RCLONE_CHECKSUM.out.match.map {
+        ch_files_to_copy = RCLONE_CHECKSUM.out.match
+            .map {
                 meta, match -> [ meta.subMap(meta.keySet() - 'check_format'), match ]
             }
             .combine(ch_with_size, by: 0)
-            .map { meta, match, size -> tuple(groupKey(meta, size), match) }
+            .map { meta, match, size ->
+                tuple(groupKey(meta, size), match)
+            }
             .groupTuple()
-            .map{ meta, files ->
+            .map { meta, files ->
                 def common = files
                     .collect { file_to_copy -> file_to_copy.readLines() }
                     .inject { a, b -> a.intersect(b) }
 
-                if (!common) {
-                    return null
-                }
-
-                def copy_files = java.nio.file.Files.createTempFile(
-                    "${meta.id}_files_to_copy_",
-                    ".txt"
-                )
-                copy_files.text = common.join('\n') + '\n'
-
-                tuple(meta, copy_files)
+                common ? tuple(meta, common) : null
             }
             .filter { it != null }
 
+        CREATE_FILTER_LIST(ch_files_to_copy)
+
         ch_rclone_copy = ch_samplesheet.rclone
-            .join(files_to_copy)
+            .join(CREATE_FILTER_LIST.out)
     } else {
         ch_rclone_copy = ch_samplesheet.rclone.map { meta, source, destination -> [ meta, source, destination, [] ] }
     }
