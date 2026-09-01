@@ -30,9 +30,12 @@ process RCLONE_COPY {
     def http_url_arg = ''
 
     if (source_string ==~ /^https?:\/\/.*/) {
-        def matcher = (source_string =~ /^(https?:\/\/[^\/]+)(\/.*)$/)
+        def matcher = (source_string =~ /^(https?:\/\/[^\/]+)(\/.*)?$/)
+        if (!matcher.matches()) {
+            throw new IllegalArgumentException("Invalid HTTP(S) source '${source_string}' for sample '${meta.id}'.")
+        }
         http_url_arg = "--http-url '${matcher[0][1]}'"
-        rclone_source = ":http:${matcher[0][2].replaceFirst('^/', '')}"
+        rclone_source = ":http:${(matcher[0][2] ?: '/').replaceFirst('^/', '')}"
     } else {
         rclone_source = source_string.replaceFirst('^([a-zA-Z][a-zA-Z0-9+.-]*)://', '$1:')
     }
