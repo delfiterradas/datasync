@@ -40,19 +40,20 @@ workflow DATASYNC {
     ch_samplesheet = ch_samplesheet.multiMap {
         meta, input_path, output_path, md5, sha ->
 
+            def normalized_input_path = input_path.toString().replaceFirst('^([a-zA-Z][a-zA-Z0-9+.-]*)://', '$1:')
+            def normalized_output_path = output_path.toString().replaceFirst('^([a-zA-Z][a-zA-Z0-9+.-]*)://', '$1:')
+
             def source = file(input_path)
 
-            def source_uri = source.toUriString()
-
             def rclone_destination = source.isFile()
-                ? output_path.toString().replaceAll('/+$', '')
-                : "${output_path.toString().replaceAll('/+$', '')}/${source.name}"
+                ? normalized_output_path.replaceAll('/+$', '')
+                : "${normalized_output_path.replaceAll('/+$', '')}/${source.name}"
 
             def rclone_check = source.isFile()
-                ? input_path.replaceFirst('/[^/]+$', '')
-                : input_path.toString().replaceAll('/+$', '')
+                ? normalized_input_path.replaceFirst('/[^/]+$', '')
+                : normalized_input_path.replaceAll('/+$', '')
 
-            rclone:   [ meta, source_uri, rclone_destination ]
+            rclone:   [ meta, normalized_input_path, rclone_destination ]
             checksum: [ meta, md5, sha, rclone_check ]
     }
 
