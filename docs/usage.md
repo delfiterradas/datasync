@@ -23,10 +23,12 @@ Each row describes an independent transfer. The header names are fixed; columns 
 | Column         | Required            | Description                                                                                                                                                                                                                             |
 | -------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `sample`       | Yes                 | Unique identifier used in task labels and output report names. It must not contain whitespace. Use a unique value for each row to prevent published report files from colliding.                                                        |
-| `input`        | Yes                 | Source file or directory. This can be a local path, HTTP(S) URL, or object-storage URI such as `s3://bucket/prefix`. Rclone-specific `remote:path` syntax is not accepted. Whitespace is not allowed. |
-| `output_path`  | Yes                 | Destination directory. Use a local path such as `/archive/runs` or an object-storage URI such as `s3://bucket/prefix`. Rclone-specific `remote:path` syntax is not accepted. Whitespace is not allowed. |
+| `input`        | Yes                 | Source file or directory. Use a local path or object-storage URI such as `s3://bucket/prefix`. HTTP(S) URLs and rclone-specific `remote:path` syntax are not supported. Whitespace is not allowed. |
+| `output_path`  | Yes                 | Destination directory. Use a local path such as `/archive/runs` or an object-storage URI such as `s3://bucket/prefix`. HTTP(S) URLs and rclone-specific `remote:path` syntax are not supported. Whitespace is not allowed. |
 | `checksum_md5` | One checksum column | Path or URL to an MD5 checksum manifest used to validate `input` before copying. The manifest format is described below. Leave empty when using SHA-256 only.                                                                           |
 | `checksum_sha` | One checksum column | Path or URL to a SHA-256 checksum manifest used to validate `input` before copying. The manifest format is described below. Leave empty when using MD5 only.                                                                            |
+
+HTTP(S) URLs are not currently supported for `input` or `output_path`. The pipeline validates checksum manifests before copying and verifies the copied content afterwards; HTTP checksum behavior is not yet defined and tested for this workflow. Download HTTP-hosted data locally before including it in a samplesheet.
 
 At least one checksum manifest is required on every row. If both are supplied, both validations run. Checksum files must use the format accepted by [`rclone checksum`](https://rclone.org/commands/rclone_checksum/): one checksum record per line with the hash value followed by two spaces and then the file path. Paths must be relative to the source root from the `input` column, not absolute paths.
 
@@ -44,7 +46,7 @@ Example samplesheet:
 ```csv title="samplesheet.csv"
 sample,input,output_path,checksum_md5,checksum_sha
 run_001,/data/run_001,s3://archive/runs,/data/checksums/run_001_md5.tsv,
-reference,https://example.org/reference.fa,/data/references,,/data/checksums/reference_sha256.tsv
+reference,/data/reference.fa,/data/references,,/data/checksums/reference_sha256.tsv
 run_002,/data/run_002,s3://archive/runs,/data/checksums/run_002_md5.tsv,/data/checksums/run_002_sha256.tsv
 ```
 
