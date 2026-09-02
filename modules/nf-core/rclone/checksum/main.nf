@@ -29,6 +29,19 @@ process RCLONE_CHECKSUM {
     prefix = task.ext.prefix ?: "${meta.id}"
     def configArg = rclone_config ? "--config ${rclone_config}" : ''
 
+    def destinationString = destination.toString()
+    def normalizedDestination = destinationString.replaceFirst('^([a-zA-Z][a-zA-Z0-9+.-]*)://', '$1:')
+    def destinationHttpUrlArg = ''
+
+    if (destinationString ==~ /^https?:\/\/.*/) {
+        def destinationMatcher = (destinationString =~ /^(https?:\/\/[^\/]+)(\/.*)?$/)
+        if (!destinationMatcher.matches()) {
+            throw new IllegalArgumentException("Invalid HTTP(S) destination '${destinationString}' for sample '${meta.id}'.")
+        }
+        destinationHttpUrlArg = "--http-url '${destinationMatcher[0][1]}'"
+        normalizedDestination = ":http:${(destinationMatcher[0][2] ?: '/').replaceFirst('^/', '')}"
+    }
+
     """
     touch \\
         ${prefix}.combined.txt \\
@@ -40,6 +53,7 @@ process RCLONE_CHECKSUM {
 
     rclone checksum ${configArg} \\
         --copy-links \\
+        ${destinationHttpUrlArg} \\
         $args \\
         --combined ${prefix}.combined.txt \\
         --differ ${prefix}.differ.txt \\
@@ -50,7 +64,7 @@ process RCLONE_CHECKSUM {
         --checkers $task.cpus \\
         $hash \\
         $sumfile \\
-        ${destination} \\
+        "${normalizedDestination}" \\
         && echo 0 > ${prefix}.exit_code.txt \\
         || echo \$? > ${prefix}.exit_code.txt
 
