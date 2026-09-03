@@ -20,13 +20,13 @@ Supply a comma-separated samplesheet with `--input`:
 
 Each row describes an independent transfer. The header names are fixed; columns may be in any order.
 
-| Column         | Required            | Description                                                                                                                                                                                                                             |
-| -------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sample`       | Yes                 | Unique identifier used in task labels and output report names. It must not contain whitespace. Use a unique value for each row to prevent published report files from colliding.                                                        |
-| `input`        | Yes                 | Source file or directory. Use a local path or object-storage URI such as `s3://bucket/prefix`. HTTP(S) URLs and rclone-specific `remote:path` syntax are not supported. Whitespace is not allowed. |
+| Column         | Required            | Description                                                                                                                                                                                                                |
+| -------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sample`       | Yes                 | Unique identifier used in task labels and output report names. It must not contain whitespace. Use a unique value for each row to prevent published report files from colliding.                                           |
+| `input`        | Yes                 | Source file or directory. Use a local path or object-storage URI such as `s3://bucket/prefix`. HTTP(S) URLs and rclone-specific `remote:path` syntax are not supported. Whitespace is not allowed.                         |
 | `output_path`  | Yes                 | Destination directory. Use a local path such as `/archive/runs` or an object-storage URI such as `s3://bucket/prefix`. HTTP(S) URLs and rclone-specific `remote:path` syntax are not supported. Whitespace is not allowed. |
-| `checksum_md5` | One checksum column | Path or URL to an MD5 checksum manifest used to validate `input` before copying. The manifest format is described below. Leave empty when using SHA-256 only.                                                                           |
-| `checksum_sha` | One checksum column | Path or URL to a SHA-256 checksum manifest used to validate `input` before copying. The manifest format is described below. Leave empty when using MD5 only.                                                                            |
+| `checksum_md5` | One checksum column | Path or URL to an MD5 checksum manifest used to validate `input` before copying. The manifest format is described below. Leave empty when using SHA-256 only.                                                              |
+| `checksum_sha` | One checksum column | Path or URL to a SHA-256 checksum manifest used to validate `input` before copying. The manifest format is described below. Leave empty when using MD5 only.                                                               |
 
 HTTP(S) URLs are not currently supported for `input` or `output_path`. The pipeline validates checksum manifests before copying and verifies the copied content afterwards; HTTP checksum behavior is not yet defined and tested for this workflow. Download HTTP-hosted data locally before including it in a samplesheet.
 
