@@ -154,9 +154,9 @@ A typical local-to-cloud run is:
 nextflow run nf-core/datasync \
     -r <VERSION> \
     -profile docker \
-    --input /data/samplesheet.csv \
-    --outdir /data/datasync-results \
-    --rclone_config /secure/rclone.conf
+    --input ./data/samplesheet.csv \
+    --outdir ./data/datasync-results \
+    --rclone_config ./secure/rclone.conf
 ```
 
 `--outdir` stores logs, integrity reports, MultiQC, and execution metadata. It does **not** override the transfer destinations in the samplesheet.
@@ -167,9 +167,9 @@ To inspect the proposed copy without writing destination data:
 nextflow run nf-core/datasync \
     -r <VERSION> \
     -profile docker \
-    --input /data/samplesheet.csv \
-    --outdir /data/datasync-dry-run \
-    --rclone_config /secure/rclone.conf \
+    --input ./data/samplesheet.csv \
+    --outdir ./data/datasync-dry-run \
+    --rclone_config ./secure/rclone.conf \
     --rclone_dry_run
 ```
 
