@@ -100,7 +100,7 @@ workflow DATASYNC {
 
                 common ? tuple(meta, common) : null
             }
-            .filter { it != null }
+            .filter { common -> common != null }
 
         CREATE_FILTER_LIST(ch_files_to_copy)
 
