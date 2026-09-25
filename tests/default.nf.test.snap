@@ -64,18 +64,18 @@
                 "multiqc_samplesheet.txt:md5,373d903a41ab29bd26db35a3041626e4"
             ],
             [
-                "rclone/check_after/Illumina_annotation/Illumina_annotation_check.combined.txt:lines,15",
-                "rclone/check_after/Illumina_annotation/Illumina_annotation_check.match.txt:lines,15",
-                "rclone/check_after/benchmark_bed/benchmark_bed_check.combined.txt:lines,1",
-                "rclone/check_after/benchmark_bed/benchmark_bed_check.match.txt:lines,1",
-                "rclone/checksum_before/Illumina_annotation/Illumina_annotation_checksum_MD5.combined.txt:lines,15",
-                "rclone/checksum_before/Illumina_annotation/Illumina_annotation_checksum_MD5.match.txt:lines,15",
-                "rclone/checksum_before/benchmark_bed/benchmark_bed_checksum_MD5.combined.txt:lines,10",
-                "rclone/checksum_before/benchmark_bed/benchmark_bed_checksum_MD5.match.txt:lines,1",
-                "rclone/checksum_before/benchmark_bed/benchmark_bed_checksum_MD5.missing_on_src.txt:lines,9"
+                "Illumina_annotation_check.combined.txt:lines,15",
+                "Illumina_annotation_check.match.txt:lines,15",
+                "benchmark_bed_check.combined.txt:lines,1",
+                "benchmark_bed_check.match.txt:lines,1",
+                "Illumina_annotation_checksum_MD5.combined.txt:lines,15",
+                "Illumina_annotation_checksum_MD5.match.txt:lines,15",
+                "benchmark_bed_checksum_MD5.combined.txt:lines,10",
+                "benchmark_bed_checksum_MD5.match.txt:lines,1",
+                "benchmark_bed_checksum_MD5.missing_on_src.txt:lines,9"
             ]
         ],
-        "timestamp": "2026-09-24T19:40:39.867871956",
+        "timestamp": "2026-09-25T20:57:06.12156578",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"

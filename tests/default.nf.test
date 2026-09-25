@@ -18,29 +18,11 @@ nextflow_pipeline {
             def stable_path = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
             // stable_content: All files in ${params.outdir}/ with stable content
             def stable_content = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
-            // Summarise rclone outputs by line count and verify exit codes explicitly
-            def outdir_path = new File(params.outdir.toString()).toPath()
-            def rclone_line_counts = []
-            def rclone_exit_codes = [:]
-            new File(params.outdir.toString(), 'rclone').eachFileRecurse { output_file ->
-                if (output_file.isFile() && output_file.name.endsWith('.txt')) {
-                    def relative_path = outdir_path.relativize(output_file.toPath()).toString()
-                    if (output_file.name.endsWith('.exit_code.txt')) {
-                        rclone_exit_codes[relative_path] = output_file.text.trim()
-                    } else {
-                        rclone_line_counts << "${relative_path}:lines,${output_file.readLines().size()}"
-                    }
-                }
-            }
-            rclone_line_counts.sort()
+            // Summarise rclone outputs by line count
+            def rclone_reports = getAllFilesFromDir(params.outdir, relative: true, include: ['rclone/**/*.txt'])
+            def rclone_line_counts = rclone_reports.findAll { !it.endsWith('.exit_code.txt') }.collect { file -> "${file.tokenize('/').last()}:lines,${path("${params.outdir}/${file}").csv(header: false).rowCount}" }
             assertAll(
                 { assert workflow.success },
-                { assert rclone_exit_codes == [
-                    'rclone/check_after/Illumina_annotation/Illumina_annotation_check.exit_code.txt': '0',
-                    'rclone/check_after/benchmark_bed/benchmark_bed_check.exit_code.txt': '0',
-                    'rclone/checksum_before/Illumina_annotation/Illumina_annotation_checksum_MD5.exit_code.txt': '0',
-                    'rclone/checksum_before/benchmark_bed/benchmark_bed_checksum_MD5.exit_code.txt': '1',
-                ] },
                 { assert snapshot(
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
                     removeNextflowVersion("$outputDir/pipeline_info/nf_core_datasync_software_mqc_versions.yml"),

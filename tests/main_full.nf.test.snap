@@ -60,16 +60,16 @@
                 "multiqc_samplesheet.txt:md5,00788a52d1a014c12ac4ed554b0b44ca"
             ],
             [
-                "rclone/check_after/demultiplex/demultiplex_check.combined.txt:lines,538",
-                "rclone/check_after/demultiplex/demultiplex_check.match.txt:lines,538",
-                "rclone/checksum_before/demultiplex/demultiplex_checksum_MD5.combined.txt:lines,538",
-                "rclone/checksum_before/demultiplex/demultiplex_checksum_MD5.match.txt:lines,502",
-                "rclone/checksum_before/demultiplex/demultiplex_checksum_MD5.missing_on_src.txt:lines,36",
-                "rclone/checksum_before/demultiplex/demultiplex_checksum_SHA256.combined.txt:lines,538",
-                "rclone/checksum_before/demultiplex/demultiplex_checksum_SHA256.match.txt:lines,538"
+                "demultiplex_check.combined.txt:lines,538",
+                "demultiplex_check.match.txt:lines,538",
+                "demultiplex_checksum_MD5.combined.txt:lines,538",
+                "demultiplex_checksum_MD5.match.txt:lines,502",
+                "demultiplex_checksum_MD5.missing_on_src.txt:lines,36",
+                "demultiplex_checksum_SHA256.combined.txt:lines,538",
+                "demultiplex_checksum_SHA256.match.txt:lines,538"
             ]
         ],
-        "timestamp": "2026-09-24T19:45:47.394224218",
+        "timestamp": "2026-09-25T21:10:24.321051089",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
