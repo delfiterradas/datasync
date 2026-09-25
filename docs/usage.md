@@ -55,9 +55,9 @@ rclone md5sum --config ./secure/rclone.conf s3:bucket/prefix > run_001_md5.txt
 
 Checksum manifests may use a `.tsv`, `.txt`, `.md5` or `.sha256` filename extension, but their contents are not tab-separated or comma-separated tables and must not include a header. Each record is plain text with the hash and path separated by exactly **two spaces**. The required fields are:
 
-| Field | Required | Description                                                                                     |
-| ----- | -------- | ----------------------------------------------------------------------------------------------- |
-| Hash  | Yes      | MD5 hash for `checksum_md5` files or SHA-256 hash for `checksum_sha` files.                     |
+| Field | Required | Description                                                                                                    |
+| ----- | -------- | -------------------------------------------------------------------------------------------------------------- |
+| Hash  | Yes      | MD5 hash for `checksum_md5` files or SHA-256 hash for `checksum_sha` files.                                    |
 | Path  | Yes      | Path relative to a directory `input`, or the file name (without parent directories) for a single-file `input`. |
 
 Example samplesheet:
