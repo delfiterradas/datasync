@@ -21,6 +21,7 @@ nextflow_pipeline {
             def stable_path = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
             // stable_content: All files in ${params.outdir}/ with stable content
             def stable_content = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            def nextflow_log = path("${launchDir}/meta/nextflow.log").text
             // Summarise rclone outputs by line count and verify exit codes explicitly
             def outdir_path = new File(params.outdir.toString()).toPath()
             def rclone_line_counts = []
@@ -38,6 +39,8 @@ nextflow_pipeline {
             rclone_line_counts.sort()
             assertAll(
                 { assert workflow.success },
+                { assert nextflow_log.contains("The `--download` parameter is enabled") },
+                { assert nextflow_log.contains("it may incur substantial cloud costs") },
                 { assert rclone_exit_codes == [
                     'rclone/check_after/Illumina_annotation_incorrect/Illumina_annotation_incorrect_check.exit_code.txt': '0',
                     'rclone/check_after/Illumina_annotation_missing/Illumina_annotation_missing_check.exit_code.txt': '0',
@@ -125,7 +128,12 @@ nextflow_pipeline {
         }
 
         then {
-            assert workflow.failed
+            def nextflow_log = path("${launchDir}/meta/nextflow.log").text
+            assertAll(
+                { assert workflow.failed },
+                { assert nextflow_log.contains("A SHA checksum file was provided for one or more remote files") },
+                { assert nextflow_log.contains("Enable `--download` to proceed") }
+            )
         }
     }
 }
